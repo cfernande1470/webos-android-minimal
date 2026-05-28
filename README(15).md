@@ -1,0 +1,609 @@
+# webos-android-minimal
+
+Minimal Android USB sidecar bootstrap for rooted LG webOS TVs.
+
+This repository is the cleaned-up continuation of the earlier [`webos-dirty-binder`](https://github.com/cfernande1470/webos-dirty-binder) experiments. The old repository was intentionally noisy: it kept staged Binder FD probes, smoke tests, debug tags, multiple intermediate scripts, and a long trail of kernel-patch milestones. This repository keeps only the pieces needed to reproduce the currently validated result:
+
+```text
+binder
+hwbinder
+vndbinder
+
+vndservicemanager: alive
+servicemanager: alive
+hwservicemanager: alive
+
+FINAL_USB_3DOMAIN_BINDER_OK
+FINAL_USB_INSTALL_OK
+```
+
+The current goal is not to boot a full Android UI yet. The goal is to bring up the minimum Android 13 userspace foundation on top of the existing webOS kernel:
+
+- compile a compatible Binder kernel module for the LG webOS 4.4 kernel;
+- load Binder without replacing the TV kernel, rootfs, TV service partitions, or boot chain;
+- create the three Android Binder domains: `/dev/binder`, `/dev/hwbinder`, `/dev/vndbinder`;
+- assemble an Android rootfs from Waydroid arm64 system/vendor images on USB storage;
+- fix Android dynamic linker/APEX visibility inside the chroot;
+- generate linkerconfig and property-area state far enough for the service managers;
+- start the real Android `servicemanager`, `hwservicemanager`, and `vndservicemanager`.
+
+## Safety warning
+
+This project is for rooted LG webOS development devices only.
+
+Do **not** overwrite system partitions such as kernel, rootfs, TV service, boot, recovery, or webOS application partitions. The installer is designed to work from USB storage and runtime mounts only.
+
+The default USB mountpoint used by this repo is:
+
+```text
+/media/internal/android-usb
+```
+
+That path is used only as a persistent mountpoint. The script verifies that the actual filesystem mounted there is the selected USB block device, normally `/dev/sda1`. The Android images, rootfs, data, cache, logs, sidecar binaries, and Binder module all live on the USB filesystem.
+
+## Tested setup
+
+Validated target:
+
+```text
+LG webOS TV
+Linux 4.4.84-229.1.kavir.2
+aarch64
+```
+
+Validated control host:
+
+```text
+NanoPi R3S
+Debian/Ubuntu-like userspace
+SSH access to root@TV_IP
+```
+
+Validated Android userspace image family:
+
+```text
+Waydroid Android 13 arm64-only system image
+Waydroid Android 13 arm64-only vendor image
+```
+
+## Repository layout
+
+```text
+kernel/
+  binder.c
+  binder_webos_exports.h
+  config-lg-c1-o20-4.4.84
+
+src/
+  property_service_ack_shim.c
+
+scripts/
+  build-binder.sh
+  build-property-shim.sh
+
+install.sh
+.gitignore
+README.md
+```
+
+### `kernel/binder.c`
+
+A vendored Binder source file based on the working final state from the earlier experimental repository.
+
+The old project generated this file through many staged patches and injectors. This minimal repo does not replay those patch stages. It keeps the final known-good source directly, so a clean clone can build the module without pulling the old project.
+
+### `kernel/binder_webos_exports.h`
+
+Small compatibility header used by the Binder module to call non-exported kernel functions via symbol addresses passed at `insmod` time.
+
+The installer resolves the required addresses from `/proc/kallsyms` on the TV and passes them into the module as parameters.
+
+### `scripts/build-binder.sh`
+
+Downloads Linux `4.4.84`, applies the saved LG/webOS kernel config, installs the vendored Binder source, and builds only `drivers/android/binder.ko`.
+
+It also patches the old kernel `dtc` build issue seen with modern GCC toolchains by removing the duplicate `yylloc` definition and using `HOSTCFLAGS=-fcommon`.
+
+The output module is:
+
+```text
+dist/binder.ko
+```
+
+### `src/property_service_ack_shim.c`
+
+Minimal static aarch64 helper that creates `/dev/socket/property_service` inside the Android rootfs and ACKs property writes.
+
+This is not a full Android property service implementation. It is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write.
+
+### `install.sh`
+
+Single entry point. It builds the module and shim, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, and starts the three Android service managers.
+
+## Quick start
+
+Install local build dependencies on the control host:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  curl xz-utils bc bison flex libssl-dev libelf-dev \
+  make gcc git python3 unzip openssh-client
+```
+
+Clone and run:
+
+```bash
+git clone git@github.com:cfernande1470/webos-android-minimal.git
+cd webos-android-minimal
+
+TV_IP=192.168.2.121 \
+USB=/media/internal/android-usb \
+ANDROID_USB_PART=/dev/sda1 \
+FORMAT_USB=1 \
+CONFIRM_FORMAT_USB=YES \
+./install.sh
+```
+
+Expected final result:
+
+```text
+FINAL_USB_3DOMAIN_BINDER_OK
+FINAL_USB_INSTALL_OK
+```
+
+To run again without reformatting the USB:
+
+```bash
+TV_IP=192.168.2.121 \
+USB=/media/internal/android-usb \
+ANDROID_USB_PART=/dev/sda1 \
+FORMAT_USB=0 \
+./install.sh
+```
+
+## USB formatting guard
+
+Formatting is disabled unless both variables are present:
+
+```bash
+FORMAT_USB=1
+CONFIRM_FORMAT_USB=YES
+```
+
+The script refuses to format arbitrary paths. It only accepts USB-like block devices such as:
+
+```text
+/dev/sda
+/dev/sda1
+/dev/sdb
+/dev/sdb1
+```
+
+It also checks that the selected mountpoint is actually backed by the selected USB device before writing Android files.
+
+## Current boot flow
+
+High-level flow:
+
+```text
+control host
+  ├── build Linux 4.4.84 Binder module
+  ├── build static property_service_ack_shim
+  └── SSH to TV
+        ├── optionally format USB ext4
+        ├── mount USB at /media/internal/android-usb
+        ├── copy binder.ko and shim
+        ├── download Android system/vendor images to USB
+        ├── extract system.img and vendor.img
+        ├── mount system/vendor/rootfs/data/cache/proc/sys/dev
+        ├── resolve non-exported kernel symbols from /proc/kallsyms
+        ├── insmod binder.ko with symbol parameters
+        ├── create /dev/binder, /dev/hwbinder, /dev/vndbinder
+        ├── mount Android APEX/linker paths correctly
+        ├── generate linkerconfig
+        ├── seed Android property area enough for bring-up
+        ├── start property socket ACK shim
+        ├── start vndservicemanager
+        ├── start servicemanager
+        └── start hwservicemanager
+```
+
+## Binder module notes
+
+The TV kernel already contains enough Binder-era infrastructure to make this possible, but not in a directly reusable Android form. The module therefore uses a small set of runtime symbol parameters for non-exported kernel helpers:
+
+```text
+sym_get_vm_area
+sym_map_kernel_range_noflush
+sym_zap_page_range
+sym___alloc_fd
+sym___fd_install
+sym___close_fd
+sym_get_files_struct
+sym_put_files_struct
+sym___lock_task_sighand
+```
+
+The installer resolves these on the TV with `/proc/kallsyms` and passes them to `insmod`.
+
+The module exposes:
+
+```text
+/dev/binder
+/dev/hwbinder
+/dev/vndbinder
+```
+
+These correspond to the three Android Binder domains used by:
+
+```text
+/system/bin/servicemanager
+/system/bin/hwservicemanager
+/vendor/bin/vndservicemanager
+```
+
+## Binder FD transfer fix
+
+A major milestone from the earlier repository was real `BINDER_TYPE_FD` support.
+
+The important rule discovered during the FD work was that Binder FD installation must target Binder's target process file table directly. The successful path uses the Binder target process state rather than `current->files` or a task-derived file table.
+
+Conceptually:
+
+```c
+file = fget(fp->handle);
+target_fd = __alloc_fd(target_proc->files, 0, 1024, O_CLOEXEC);
+__fd_install(target_proc->files, target_fd, file);
+fp->handle = target_fd;
+```
+
+This is why the module still has an internal `fd_path_mode` module parameter. It is no longer a public staged-debug workflow; it is simply the selected file-descriptor transfer path used by the working module.
+
+The old repository carried this history as staged FD probes, smoke tests, and debug labels. This repository keeps the working implementation and removes those development harnesses from the normal install path.
+
+## APEX/linker issue and fix
+
+Android 13 binaries use:
+
+```text
+/system/bin/linker64 -> /apex/com.android.runtime/bin/linker64
+```
+
+If `/apex` is missing, empty, or accidentally covered by `tmpfs`, chroot execution fails with a misleading error:
+
+```text
+chroot: can't execute '/system/bin/toybox': No such file or directory
+```
+
+The file exists, but its interpreter does not.
+
+The installer now ensures that `/apex/com.android.runtime/bin/linker64` is visible before starting Android binaries. It validates this with a minimal `toybox true` check and rechecks APEX again immediately before starting the service managers.
+
+## Property service shim
+
+The current property-service support is intentionally small.
+
+`property_service_ack_shim` creates:
+
+```text
+/dev/socket/property_service
+```
+
+inside the Android rootfs and returns success for property writes.
+
+This is enough for the current service-manager baseline, but it is not a complete Android property service. A future milestone should replace this shim with either:
+
+- a minimal write-through property service compatible with Android 13 property protocols; or
+- a controlled mini-init that owns property service and service lifecycle correctly.
+
+## What is working now
+
+The current clean installer validates:
+
+```text
+USB ext4 storage
+Android system.img/vendor.img download and extraction
+Android rootfs assembly on USB
+/system mount
+/vendor mount
+/apex visibility for Android linker
+/data on USB
+/cache on USB
+/proc mount
+/sys mount
+/dev bind/device preparation
+binder.ko build and load
+/dev/binder
+/dev/hwbinder
+/dev/vndbinder
+/system/bin/servicemanager alive
+/system/bin/hwservicemanager alive
+/vendor/bin/vndservicemanager alive
+```
+
+A successful run ends with:
+
+```text
+--- android services ---
+vndservicemanager: <pid>
+servicemanager: <pid>
+hwservicemanager: <pid>
+FINAL_USB_3DOMAIN_BINDER_OK
+
+FINAL_USB_INSTALL_OK
+```
+
+## What this repository intentionally removed
+
+The old experimental repository was useful for discovery, but it had accumulated many intermediate artifacts. This minimal repo removes the normal dependency on:
+
+- staged Binder FD debug scripts;
+- smoke-test harnesses;
+- repeated patch injectors;
+- legacy `dirty` naming;
+- intermediate milestone tags in output;
+- artifact fallback logic;
+- `/tmp/android-usb` as the default persistent path.
+
+The default persistent mountpoint is now:
+
+```text
+/media/internal/android-usb
+```
+
+## Relationship to other repositories
+
+### Previous Binder research repository
+
+```text
+https://github.com/cfernande1470/webos-dirty-binder
+```
+
+That repository documents the discovery path: Binder mmap, FD passing, three Binder domains, linkerconfig, property-area probing, and early HAL experiments.
+
+This repository is the cleaned installer-first result extracted from that research.
+
+### Wayland/webOS app repository
+
+```text
+https://github.com/cfernande1470/webos-wayland
+```
+
+The Wayland project proves the native webOS app/display side: SAM-launched native app, Wayland surface creation, input, and EGL/GLES rendering on the TV compositor.
+
+Long term, the Android sidecar work here and the native Wayland work there can converge into a controlled Android-on-webOS app experiment: Android services and framework components running as a sidecar, with rendering/input integrated through the already working webOS/Wayland path.
+
+## Milestones reached
+
+### 1. Binder module builds outside the TV
+
+The control host can build `binder.ko` for the LG webOS kernel version:
+
+```text
+4.4.84-229.1.kavir.2
+```
+
+The build is isolated to `drivers/android/binder.ko`.
+
+### 2. Non-exported kernel symbols are resolved at load time
+
+The module no longer requires kernel partition changes. The installer reads `/proc/kallsyms` and passes the required addresses into `insmod`.
+
+### 3. Binder mmap works
+
+The Binder memory mapping path works far enough for real Android service-manager processes to start.
+
+### 4. Real Binder FD transfer works
+
+The FD path was fixed by installing received FDs into `target_proc->files`.
+
+### 5. Binder multi-device works
+
+The module exposes:
+
+```text
+/dev/binder
+/dev/hwbinder
+/dev/vndbinder
+```
+
+### 6. Android rootfs on USB works
+
+Android system and vendor images are downloaded and mounted from USB. `/data` and `/cache` also live on USB.
+
+### 7. Android APEX/linker visibility works
+
+The installer keeps `/apex/com.android.runtime/bin/linker64` visible and validates it before launching Android binaries.
+
+### 8. Three Android service managers are alive
+
+The final validated service baseline is:
+
+```text
+vndservicemanager
+servicemanager
+hwservicemanager
+```
+
+## Future milestones
+
+### M1: Replace property ACK shim
+
+Implement a real minimal Android property-service bridge or mini-init-managed property service.
+
+Current state: ACK-only shim.
+
+Desired state:
+
+```text
+setprop/getprop behavior compatible enough for broader Android services
+persistent property area lifecycle
+clean shutdown/restart
+```
+
+### M2: Make Android init lifecycle explicit
+
+Current script uses only enough Android init behavior to seed property/linker state.
+
+Future work:
+
+- controlled mini-init;
+- bounded Android init phases;
+- service supervision;
+- deterministic stop/restart scripts.
+
+### M3: HAL bring-up beyond service managers
+
+Next low-risk HAL/service probes:
+
+```text
+memtrack
+graphics allocator / mapper
+power
+sensors stub behavior
+input-related services
+```
+
+Each HAL should be tested as a bounded process first, not as part of a full Android boot.
+
+### M4: Binder service registration checks
+
+Add clean diagnostics for:
+
+```text
+service list
+hwservice list
+vndservice list
+addService/getService smoke
+FD transfer smoke against real servicemanager
+```
+
+These should be optional diagnostics, not part of the default installer.
+
+### M5: Zygote only after HAL/property baseline
+
+Do not jump directly to zygote/system_server until enough of the service-manager, property, linkerconfig, and HAL baseline is stable.
+
+### M6: Android UI path through native webOS Wayland
+
+Wayland/EGL already works in the separate `webos-wayland` repository. A future UI milestone should investigate how Android rendering can be bridged to the webOS app lifecycle instead of trying to draw from an unmanaged SSH-launched process.
+
+Possible directions:
+
+- Android sidecar services only;
+- native webOS host app for display/input;
+- controlled surface bridge;
+- later SurfaceFlinger experiments only after the service/HAL baseline is ready.
+
+### M7: Packaging and recovery
+
+Add:
+
+```text
+./scripts/status.sh
+./scripts/stop.sh
+./scripts/clean-mounts.sh
+./scripts/collect-logs.sh
+```
+
+The installer is currently the main entry point. Operational scripts should be split out once the base remains stable.
+
+## Troubleshooting
+
+### `chroot: can't execute ... No such file or directory`
+
+Check the Android linker:
+
+```bash
+ssh root@192.168.2.121 '
+ROOT=/media/internal/android-usb/android-rootfs
+ls -l "$ROOT/system/bin/linker64"
+ls -l "$ROOT/apex/com.android.runtime/bin/linker64"
+chroot "$ROOT" /system/bin/toybox true && echo TOYBOX_OK || echo TOYBOX_FAIL
+'
+```
+
+If `/apex/com.android.runtime/bin/linker64` is missing, APEX is not mounted correctly.
+
+### Service managers exit quickly
+
+Check logs:
+
+```bash
+ssh root@192.168.2.121 '
+LOGDIR=/media/internal/android-usb/android-sidecar/logs
+for f in vndservicemanager servicemanager hwservicemanager property_service_ack_shim; do
+  echo "### $f"
+  cat "$LOGDIR/$f.log" 2>/dev/null || true
+done
+'
+```
+
+### USB mountpoint is wrong
+
+Check that `/media/internal/android-usb` is backed by the USB device:
+
+```bash
+ssh root@192.168.2.121 'grep android-usb /proc/mounts && df -h /media/internal/android-usb'
+```
+
+Expected:
+
+```text
+/dev/sda1 /media/internal/android-usb ext4 ...
+```
+
+### Reboot to clear stale mounts
+
+During development, stale loop mounts can make debugging confusing. A reboot clears them:
+
+```bash
+ssh root@192.168.2.121 'sync; reboot'
+```
+
+Then rerun the installer.
+
+## Development notes
+
+The repository is intentionally minimal, but not yet production-polished.
+
+Keep generated files out of Git:
+
+```text
+build/
+dist/
+*.img
+*.zip
+```
+
+Use:
+
+```bash
+git status
+```
+
+before pushing.
+
+## GitHub
+
+Repository:
+
+```text
+git@github.com:cfernande1470/webos-android-minimal.git
+```
+
+Push to `main`:
+
+```bash
+git branch -M main
+git remote remove origin 2>/dev/null || true
+git remote add origin git@github.com:cfernande1470/webos-android-minimal.git
+git push -u origin main
+```
+
+## License
+
+No license has been selected yet.
+
+Add a `LICENSE` file before treating this as a reusable open-source project. MIT is a reasonable default for the shell/C userspace helper portions, but the vendored Linux Binder-derived source follows the kernel licensing constraints indicated by the source/module metadata.

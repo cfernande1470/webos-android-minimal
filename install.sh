@@ -1,0 +1,506 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+TV_IP="${TV_IP:-192.168.2.121}"
+TV_USER="${TV_USER:-root}"
+
+USB="${USB:-/media/internal/android-usb}"
+ROOTFS="$USB/android-rootfs"
+SIDE="$USB/android-sidecar"
+LOGDIR="$SIDE/logs"
+
+ANDROID_USB_PART="${ANDROID_USB_PART:-/dev/sda1}"
+FORMAT_USB="${FORMAT_USB:-0}"
+CONFIRM_FORMAT_USB="${CONFIRM_FORMAT_USB:-NO}"
+
+SYSTEM_URL="${SYSTEM_URL:-https://sourceforge.net/projects/waydroid/files/images/system/lineage/waydroid_arm64_only/lineage-20.0-20260403-VANILLA-waydroid_arm64_only-system.zip/download}"
+VENDOR_URL="${VENDOR_URL:-https://sourceforge.net/projects/waydroid/files/images/vendor/waydroid_arm64_only/lineage-20.0-20260403-MAINLINE-waydroid_arm64_only-vendor.zip/download}"
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
+
+log(){ printf '\n== %s ==\n' "$*"; }
+die(){ echo "ERROR: $*" >&2; exit 1; }
+remote(){ ssh "$TV_USER@$TV_IP" "$@"; }
+
+log "compilar binder.ko"
+./scripts/build-binder.sh
+
+log "compilar property shim"
+./scripts/build-property-shim.sh
+
+KO="$ROOT/dist/binder.ko"
+SHIM="$ROOT/build/property_service_ack_shim-aarch64-static"
+
+test -f "$KO" || die "no existe $KO"
+test -f "$SHIM" || die "no existe $SHIM"
+
+log "preparar USB"
+ssh "$TV_USER@$TV_IP" \
+  "USB='$USB' ANDROID_USB_PART='$ANDROID_USB_PART' FORMAT_USB='$FORMAT_USB' CONFIRM_FORMAT_USB='$CONFIRM_FORMAT_USB' sh -s" <<'REMOTE'
+set -eu
+
+die(){ echo "ERROR: $*" >&2; exit 1; }
+
+mkdir -p "$USB"
+
+echo "--- block devices ---"
+cat /proc/partitions || true
+
+killall servicemanager 2>/dev/null || true
+killall hwservicemanager 2>/dev/null || true
+killall vndservicemanager 2>/dev/null || true
+killall property_service_ack_shim 2>/dev/null || true
+
+cleanup_android_mounts() {
+  for base in /tmp/android-usb /mnt/android-usb /media/internal/android-usb "$USB"; do
+    [ -n "$base" ] || continue
+    for m in \
+      "$base/android-rootfs/linkerconfig" \
+      "$base/android-rootfs/apex" \
+      "$base/android-rootfs/dev" \
+      "$base/android-rootfs/sys" \
+      "$base/android-rootfs/proc" \
+      "$base/android-rootfs/cache" \
+      "$base/android-rootfs/data" \
+      "$base/android-rootfs/vendor" \
+      "$base/android-rootfs/system" \
+      "$base/android-mounts/vendor_raw" \
+      "$base/android-mounts/system_raw" \
+      "$base"
+    do
+      umount -l "$m" 2>/dev/null || true
+    done
+  done
+
+  awk -v dev="$ANDROID_USB_PART" '$1==dev{print $2}' /proc/mounts | while read -r mp; do
+    [ -n "$mp" ] && umount -l "$mp" 2>/dev/null || true
+  done
+}
+
+cleanup_android_mounts
+mkdir -p "$USB"
+
+if [ "$FORMAT_USB" = "1" ]; then
+  [ "$CONFIRM_FORMAT_USB" = "YES" ] || die "FORMAT_USB=1 requiere CONFIRM_FORMAT_USB=YES"
+
+  case "$ANDROID_USB_PART" in
+    /dev/sd[a-z]|/dev/sd[a-z][0-9]) ;;
+    *) die "por seguridad solo formateo /dev/sdX o /dev/sdXN: $ANDROID_USB_PART" ;;
+  esac
+
+  [ -b "$ANDROID_USB_PART" ] || die "no existe $ANDROID_USB_PART"
+
+  rootdev="$(awk '$2=="/"{print $1; exit}' /proc/mounts || true)"
+  [ "$rootdev" != "$ANDROID_USB_PART" ] || die "$ANDROID_USB_PART parece rootfs"
+
+  killall servicemanager 2>/dev/null || true
+  killall hwservicemanager 2>/dev/null || true
+  killall vndservicemanager 2>/dev/null || true
+  killall property_service_ack_shim 2>/dev/null || true
+
+  for m in \
+    "$USB/android-rootfs/linkerconfig" \
+    "$USB/android-rootfs/apex" \
+    "$USB/android-rootfs/dev" \
+    "$USB/android-rootfs/sys" \
+    "$USB/android-rootfs/proc" \
+    "$USB/android-rootfs/cache" \
+    "$USB/android-rootfs/data" \
+    "$USB/android-rootfs/vendor" \
+    "$USB/android-rootfs/system" \
+    "$USB/android-mounts/vendor_raw" \
+    "$USB/android-mounts/system_raw" \
+    "$USB"
+  do
+    umount -l "$m" 2>/dev/null || true
+  done
+
+  echo "FORMATEANDO $ANDROID_USB_PART"
+  mkfs.ext4 -F -L ANDROIDUSB "$ANDROID_USB_PART"
+fi
+
+if ! grep -q " $USB " /proc/mounts; then
+  mount "$ANDROID_USB_PART" "$USB"
+fi
+
+fs="$(awk -v mp="$USB" '$2==mp{print $3; exit}' /proc/mounts)"
+dev="$(awk -v mp="$USB" '$2==mp{print $1; exit}' /proc/mounts)"
+
+[ "$fs" = "ext4" ] || die "$USB debe ser ext4, es $fs"
+[ "$dev" = "$ANDROID_USB_PART" ] || die "$USB no está montado desde $ANDROID_USB_PART, sino desde $dev"
+
+case "$dev" in
+  /dev/sd[a-z]|/dev/sd[a-z][0-9]) ;;
+  *) die "$USB no parece USB /dev/sdX: $dev" ;;
+esac
+
+mkdir -p "$USB/android-sidecar/modules" "$USB/android-sidecar/bin" "$USB/android-sidecar/logs" "$USB/android-sidecar/run"
+df -h "$USB"
+REMOTE
+
+log "copiar binarios"
+remote "mkdir -p '$SIDE/modules' '$SIDE/bin' '$LOGDIR' '$SIDE/run'"
+remote "cat > '$SIDE/modules/binder.ko'" < "$KO"
+remote "cat > '$SIDE/bin/property_service_ack_shim' && chmod +x '$SIDE/bin/property_service_ack_shim'" < "$SHIM"
+
+log "instalar Android USB"
+ssh "$TV_USER@$TV_IP" \
+  "USB='$USB' ROOTFS='$ROOTFS' SIDE='$SIDE' LOGDIR='$LOGDIR' SYSTEM_URL='$SYSTEM_URL' VENDOR_URL='$VENDOR_URL' sh -s" <<'REMOTE'
+set -eu
+
+die(){ echo "ERROR: $*" >&2; exit 1; }
+log(){ printf '\n-- %s --\n' "$*"; }
+
+DOWN="$USB/android-downloads"
+IMAGES="$USB/android-images"
+MOUNTS="$USB/android-mounts"
+DATA="$USB/android-data"
+CACHE="$USB/android-cache"
+
+mkdir -p "$DOWN" "$IMAGES" "$MOUNTS/system_raw" "$MOUNTS/vendor_raw" "$ROOTFS" "$DATA" "$CACHE" "$LOGDIR" "$SIDE/run"
+
+download(){
+  url="$1"
+  out="$2"
+  [ -f "$out" ] && { echo "SKIP $(basename "$out")"; return 0; }
+  if command -v curl >/dev/null 2>&1; then
+    curl -L --fail --retry 3 -o "$out" "$url"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -O "$out" "$url"
+  else
+    die "falta curl/wget en la TV"
+  fi
+}
+
+extract_img(){
+  zip="$1"
+  img="$2"
+  name="$3"
+  [ -f "$img" ] && { echo "SKIP $(basename "$img")"; return 0; }
+  rm -rf "$DOWN/extract-$name"
+  mkdir -p "$DOWN/extract-$name"
+  unzip -o "$zip" -d "$DOWN/extract-$name" >/dev/null
+  found="$(find "$DOWN/extract-$name" -name "$name.img" -type f | head -n 1)"
+  [ -n "$found" ] || die "no encuentro $name.img dentro de $zip"
+  mv "$found" "$img"
+  rm -rf "$DOWN/extract-$name"
+}
+
+log "imagenes"
+download "$SYSTEM_URL" "$DOWN/system.zip"
+download "$VENDOR_URL" "$DOWN/vendor.zip"
+extract_img "$DOWN/system.zip" "$IMAGES/system.img" system
+extract_img "$DOWN/vendor.zip" "$IMAGES/vendor.img" vendor
+ls -lh "$IMAGES/system.img" "$IMAGES/vendor.img"
+
+log "binder"
+sym(){
+  n="$1"
+  awk -v n="$n" '$3==n{print "0x"$1; exit}' /proc/kallsyms
+}
+
+if ! grep -q ' binder$' /proc/misc || ! grep -q ' hwbinder$' /proc/misc || ! grep -q ' vndbinder$' /proc/misc; then
+  rmmod binder 2>/dev/null || true
+
+  ARGS=""
+  for n in get_vm_area map_kernel_range_noflush zap_page_range __alloc_fd __fd_install __close_fd get_files_struct put_files_struct __lock_task_sighand; do
+    v="$(sym "$n" || true)"
+    [ -n "$v" ] || die "no encuentro símbolo kernel: $n"
+    case "$n" in
+      get_vm_area) p=sym_get_vm_area ;;
+      map_kernel_range_noflush) p=sym_map_kernel_range_noflush ;;
+      zap_page_range) p=sym_zap_page_range ;;
+      __alloc_fd) p=sym___alloc_fd ;;
+      __fd_install) p=sym___fd_install ;;
+      __close_fd) p=sym___close_fd ;;
+      get_files_struct) p=sym_get_files_struct ;;
+      put_files_struct) p=sym_put_files_struct ;;
+      __lock_task_sighand) p=sym___lock_task_sighand ;;
+    esac
+    ARGS="$ARGS $p=$v"
+  done
+
+  insmod "$SIDE/modules/binder.ko" $ARGS fd_path_mode=7 debug_mask=0
+fi
+
+grep -E 'binder|hwbinder|vndbinder' /proc/misc
+
+minor(){
+  n="$1"
+  awk -v n="$n" '$2==n{print $1; exit}' /proc/misc
+}
+
+BINDER_MINOR="$(minor binder)"
+HWBINDER_MINOR="$(minor hwbinder)"
+VNDBINDER_MINOR="$(minor vndbinder)"
+
+test -n "$BINDER_MINOR"
+test -n "$HWBINDER_MINOR"
+test -n "$VNDBINDER_MINOR"
+
+rm -f /dev/binder /dev/hwbinder /dev/vndbinder
+mknod /dev/binder c 10 "$BINDER_MINOR"
+mknod /dev/hwbinder c 10 "$HWBINDER_MINOR"
+mknod /dev/vndbinder c 10 "$VNDBINDER_MINOR"
+chmod 666 /dev/binder /dev/hwbinder /dev/vndbinder
+
+log "rootfs"
+killall servicemanager 2>/dev/null || true
+killall hwservicemanager 2>/dev/null || true
+killall vndservicemanager 2>/dev/null || true
+killall property_service_ack_shim 2>/dev/null || true
+
+for m in \
+  "$ROOTFS/linkerconfig" \
+  "$ROOTFS/apex" \
+  "$ROOTFS/dev" \
+  "$ROOTFS/sys" \
+  "$ROOTFS/proc" \
+  "$ROOTFS/cache" \
+  "$ROOTFS/data" \
+  "$ROOTFS/vendor" \
+  "$ROOTFS/system" \
+  "$MOUNTS/vendor_raw" \
+  "$MOUNTS/system_raw"
+do
+  umount -l "$m" 2>/dev/null || true
+done
+
+mkdir -p "$ROOTFS/system" "$ROOTFS/vendor" "$ROOTFS/apex" "$ROOTFS/data" "$ROOTFS/cache" "$ROOTFS/proc" "$ROOTFS/sys" "$ROOTFS/dev" "$ROOTFS/linkerconfig"
+mkdir -p "$MOUNTS/system_raw" "$MOUNTS/vendor_raw"
+
+mount -o loop,ro "$IMAGES/system.img" "$MOUNTS/system_raw"
+mount -o loop,ro "$IMAGES/vendor.img" "$MOUNTS/vendor_raw"
+
+SYSTEM_SRC=""
+VENDOR_SRC=""
+
+if [ -f "$MOUNTS/system_raw/system/bin/servicemanager" ]; then
+  SYSTEM_SRC="$MOUNTS/system_raw/system"
+elif [ -f "$MOUNTS/system_raw/bin/servicemanager" ]; then
+  SYSTEM_SRC="$MOUNTS/system_raw"
+fi
+
+if [ -f "$MOUNTS/vendor_raw/vendor/bin/vndservicemanager" ]; then
+  VENDOR_SRC="$MOUNTS/vendor_raw/vendor"
+elif [ -f "$MOUNTS/vendor_raw/bin/vndservicemanager" ]; then
+  VENDOR_SRC="$MOUNTS/vendor_raw"
+elif [ -f "$MOUNTS/system_raw/vendor/bin/vndservicemanager" ]; then
+  VENDOR_SRC="$MOUNTS/system_raw/vendor"
+fi
+
+if [ -z "$SYSTEM_SRC" ]; then
+  echo "--- system_raw layout ---"
+  find "$MOUNTS/system_raw" -maxdepth 3 -type f \( -name servicemanager -o -name hwservicemanager \) -print || true
+  find "$MOUNTS/system_raw" -maxdepth 2 -type d -print | head -n 80 || true
+  die "no encuentro servicemanager/hwservicemanager en system.img"
+fi
+
+if [ -z "$VENDOR_SRC" ]; then
+  echo "--- vendor_raw layout ---"
+  find "$MOUNTS/vendor_raw" -maxdepth 4 -type f -name vndservicemanager -print || true
+  find "$MOUNTS/vendor_raw" -maxdepth 2 -type d -print | head -n 80 || true
+  die "no encuentro vndservicemanager en vendor.img"
+fi
+
+echo "SYSTEM_SRC=$SYSTEM_SRC"
+echo "VENDOR_SRC=$VENDOR_SRC"
+
+mount -o bind "$SYSTEM_SRC" "$ROOTFS/system"
+mount -o bind "$VENDOR_SRC" "$ROOTFS/vendor"
+
+# BEGIN MINIMAL_APEX_SETUP
+# Android 13 Waydroid suele traer APEX como paquetes .apex.
+# /system/bin/linker64 apunta a /apex/com.android.runtime/bin/linker64,
+# así que hay que montar apex_payload.img antes de ejecutar nada en chroot.
+echo "--- apex ---"
+
+awk -v p="$ROOTFS/apex/" '$2 ~ "^"p {print $2}' /proc/mounts | sort -r | while read -r m; do
+  umount -l "$m" 2>/dev/null || true
+done
+
+umount -l "$ROOTFS/apex" 2>/dev/null || true
+mkdir -p "$ROOTFS/apex" "$SIDE/apex-images"
+
+if [ -x "$ROOTFS/system/apex/com.android.runtime/bin/linker64" ]; then
+  :
+  mount -o bind "$ROOTFS/system/apex" "$ROOTFS/apex"
+else
+  :
+
+  apex_count=0
+
+  for f in "$ROOTFS/system/apex"/*.apex; do
+    [ -f "$f" ] || continue
+
+    base="$(basename "$f" .apex)"
+    name="${base%%@*}"
+    img="$SIDE/apex-images/$name.img"
+    mp="$ROOTFS/apex/$name"
+
+    mkdir -p "$mp"
+
+    if unzip -l "$f" 2>/dev/null | grep -q 'apex_payload.img'; then
+      unzip -p "$f" apex_payload.img > "$img"
+    else
+      echo "WARN: $f no contiene apex_payload.img"
+      continue
+    fi
+
+    umount -l "$mp" 2>/dev/null || true
+    mount -o loop,ro "$img" "$mp"
+    apex_count=$((apex_count + 1))
+  done
+
+  [ "$apex_count" -gt 0 ] || {
+    echo "--- system/apex listing ---"
+    find "$ROOTFS/system/apex" -maxdepth 2 -print | head -n 100 || true
+    die "no se montó ningún paquete APEX"
+  }
+fi
+
+ls -l "$ROOTFS/apex/com.android.runtime/bin/linker64" \
+  || die "falta /apex/com.android.runtime/bin/linker64"
+
+chroot "$ROOTFS" /apex/com.android.runtime/bin/linker64 /system/bin/toybox true >/dev/null 2>&1 \
+  || die "toybox no arranca con linker explícito"
+
+echo "ANDROID_APEX_OK"
+# END MINIMAL_APEX_SETUP
+
+
+# /system/bin/linker64 apunta a /apex/com.android.runtime/bin/linker64.
+# Por tanto /apex debe ser el apex real del system.img, no tmpfs.
+umount -l "$ROOTFS/apex" 2>/dev/null || true
+mkdir -p "$ROOTFS/apex"
+
+if [ -d "$ROOTFS/system/apex/com.android.runtime" ]; then
+  mount -o bind "$ROOTFS/system/apex" "$ROOTFS/apex"
+else
+  echo "--- apex debug ---"
+  find "$ROOTFS/system" -maxdepth 4 -type d -name 'com.android.runtime' -print || true
+  find "$ROOTFS/system" -maxdepth 2 -type d -name apex -print || true
+  die "no encuentro /system/apex/com.android.runtime"
+fi
+
+test -e "$ROOTFS/apex/com.android.runtime/bin/linker64" \
+  || die "falta /apex/com.android.runtime/bin/linker64"
+
+mount -o bind "$DATA" "$ROOTFS/data"
+mount -o bind "$CACHE" "$ROOTFS/cache"
+mount -t proc proc "$ROOTFS/proc"
+mount -t sysfs sysfs "$ROOTFS/sys"
+mount -o bind /dev "$ROOTFS/dev"
+
+mkdir -p "$ROOTFS/dev/socket"
+rm -f "$ROOTFS/dev/binder" "$ROOTFS/dev/hwbinder" "$ROOTFS/dev/vndbinder"
+mknod "$ROOTFS/dev/binder" c 10 "$BINDER_MINOR"
+mknod "$ROOTFS/dev/hwbinder" c 10 "$HWBINDER_MINOR"
+mknod "$ROOTFS/dev/vndbinder" c 10 "$VNDBINDER_MINOR"
+chmod 666 "$ROOTFS/dev/binder" "$ROOTFS/dev/hwbinder" "$ROOTFS/dev/vndbinder"
+
+log "property/linkerconfig"
+rm -f "$ROOTFS/dev/socket/property_service"
+nohup "$SIDE/bin/property_service_ack_shim" "$ROOTFS/dev/socket/property_service" \
+  </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
+
+sleep 1
+[ -S "$ROOTFS/dev/socket/property_service" ] || die "no se creó property_service socket"
+
+mount -t tmpfs tmpfs "$ROOTFS/linkerconfig" 2>/dev/null || true
+
+chroot "$ROOTFS" /system/bin/linkerconfig \
+  >"$ROOTFS/linkerconfig/ld.config.txt" \
+  2>"$LOGDIR/linkerconfig.stderr.log" || true
+
+rm -rf "$ROOTFS/dev/__properties__" 2>/dev/null || true
+
+chroot "$ROOTFS" /system/bin/init second_stage \
+  >"$LOGDIR/init.second_stage.property.log" 2>&1 &
+
+INITPID="$!"
+sleep 5
+kill "$INITPID" 2>/dev/null || true
+sleep 1
+kill -9 "$INITPID" 2>/dev/null || true
+
+chroot "$ROOTFS" /system/bin/linkerconfig \
+  >"$ROOTFS/linkerconfig/ld.config.txt" \
+  2>"$LOGDIR/linkerconfig.after-property.stderr.log" || true
+
+log "service managers"
+
+echo "--- apex listo ---"
+umount -l "$ROOTFS/apex" 2>/dev/null || true
+mkdir -p "$ROOTFS/apex"
+
+if [ -x "$ROOTFS/system/apex/com.android.runtime/bin/linker64" ]; then
+  mount -o bind "$ROOTFS/system/apex" "$ROOTFS/apex"
+else
+  echo "--- apex debug before managers ---"
+  find "$ROOTFS/system/apex" -maxdepth 3 -print | head -n 120 || true
+  die "no encuentro com.android.runtime antes de arrancar managers"
+fi
+
+ls -l "$ROOTFS/apex/com.android.runtime/bin/linker64" \
+  || die "falta linker64 antes de managers"
+
+chroot "$ROOTFS" /apex/com.android.runtime/bin/linker64 /system/bin/toybox true >/dev/null 2>&1 \
+  || die "toybox no arranca justo antes de managers"
+
+echo "--- managers ---"
+ls -l "$ROOTFS/system/bin/servicemanager" || true
+ls -l "$ROOTFS/system/bin/hwservicemanager" || true
+ls -l "$ROOTFS/vendor/bin/vndservicemanager" || true
+ls -l "$ROOTFS/apex/com.android.runtime/bin/linker64" || true
+
+chroot "$ROOTFS" /system/bin/toybox true
+
+nohup chroot "$ROOTFS" /vendor/bin/vndservicemanager \
+  </dev/null >"$LOGDIR/vndservicemanager.log" 2>&1 &
+echo $! > "$SIDE/run/vndservicemanager.pid"
+
+sleep 2
+
+nohup chroot "$ROOTFS" /system/bin/servicemanager \
+  </dev/null >"$LOGDIR/servicemanager.log" 2>&1 &
+echo $! > "$SIDE/run/servicemanager.pid"
+
+sleep 2
+
+nohup chroot "$ROOTFS" /system/bin/hwservicemanager \
+  </dev/null >"$LOGDIR/hwservicemanager.log" 2>&1 &
+echo $! > "$SIDE/run/hwservicemanager.pid"
+
+sleep 5
+
+echo "--- binder devices ---"
+grep -E 'binder|hwbinder|vndbinder' /proc/misc
+ls -l /dev/binder /dev/hwbinder /dev/vndbinder
+ls -l "$ROOTFS/dev/binder" "$ROOTFS/dev/hwbinder" "$ROOTFS/dev/vndbinder"
+
+echo "--- android services ---"
+ok=1
+for n in vndservicemanager servicemanager hwservicemanager; do
+  if pidof "$n" >/dev/null 2>&1; then
+    echo "$n: $(pidof "$n")"
+  else
+    echo "NO VIVO: $n"
+    ok=0
+  fi
+done
+
+if [ "$ok" != "1" ]; then
+  echo "--- logs ---"
+  tail -n 80 "$LOGDIR/vndservicemanager.log" 2>/dev/null || true
+  tail -n 80 "$LOGDIR/servicemanager.log" 2>/dev/null || true
+  tail -n 80 "$LOGDIR/hwservicemanager.log" 2>/dev/null || true
+  die "algún service manager salió"
+fi
+
+echo FINAL_USB_3DOMAIN_BINDER_OK
+REMOTE
+
+echo
+echo "FINAL_USB_INSTALL_OK"

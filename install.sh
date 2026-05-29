@@ -310,6 +310,23 @@ echo "VENDOR_SRC=$VENDOR_SRC"
 mount -o bind "$SYSTEM_SRC" "$ROOTFS/system"
 mount -o bind "$VENDOR_SRC" "$ROOTFS/vendor"
 
+echo "--- ensure Android /etc task profiles ---"
+if [ -f "$ROOTFS/system/etc/task_profiles.json" ]; then
+  if [ ! -e "$ROOTFS/etc" ]; then
+    ln -s system/etc "$ROOTFS/etc"
+  elif [ -L "$ROOTFS/etc" ]; then
+    :
+  elif [ -d "$ROOTFS/etc" ] && [ ! -f "$ROOTFS/etc/task_profiles.json" ]; then
+    mount -o bind "$ROOTFS/system/etc" "$ROOTFS/etc" 2>/dev/null || mount --bind "$ROOTFS/system/etc" "$ROOTFS/etc"
+  fi
+
+  [ -f "$ROOTFS/etc/task_profiles.json" ] || die "/etc/task_profiles.json no visible"
+  grep -q "SCHED_SP_TOP_APP" "$ROOTFS/etc/task_profiles.json" || die "SCHED_SP_TOP_APP no está en task_profiles.json"
+  echo "OK /etc/task_profiles.json"
+else
+  die "falta $ROOTFS/system/etc/task_profiles.json"
+fi
+
 # BEGIN MINIMAL_APEX_SETUP
 # Android 13 Waydroid suele traer APEX como paquetes .apex.
 # /system/bin/linker64 apunta a /apex/com.android.runtime/bin/linker64,

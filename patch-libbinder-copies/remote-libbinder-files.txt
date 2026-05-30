@@ -1,9 +1,0 @@
-/media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/apex/com.android.vndk.current/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/apex/com.android.vndk.current/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/system_ext/apex/com.android.vndk.v29/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/system_ext/apex/com.android.vndk.v30/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/system_ext/apex/com.android.vndk.v28/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
-/media/internal/android-usb/android-rootfs/system/lib64/libbinder_ndk.so
-/media/internal/android-usb/android-rootfs/system/lib64/libbinder_rpc_unstable.so

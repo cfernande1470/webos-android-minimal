@@ -41,6 +41,7 @@ ZYGOTE_WRAP="$ROOT/build/zygote_socket_wrap-aarch64-static"
 RUNTIME_PATCH="$ROOT/patch-libandroid-runtime-zssystemserver.sh"
 ZYGOTE_LAUNCH="$ROOT/try-zygote-start-system-server-v2.sh"
 RUNTIME_STATE_LIB="$ROOT/scripts/runtime-state.sh"
+HAL_START="$ROOT/scripts/start-hal-services.sh"
 
 test -f "$KO" || die "no existe $KO"
 test -f "$SHIM" || die "no existe $SHIM"
@@ -48,9 +49,11 @@ test -f "$ZYGOTE_WRAP" || die "no existe $ZYGOTE_WRAP"
 test -f "$RUNTIME_PATCH" || die "no existe $RUNTIME_PATCH"
 test -f "$ZYGOTE_LAUNCH" || die "no existe $ZYGOTE_LAUNCH"
 test -f "$RUNTIME_STATE_LIB" || die "no existe $RUNTIME_STATE_LIB"
+test -f "$HAL_START" || die "no existe $HAL_START"
 
 remote "mkdir -p '$SIDE/bin'"
 remote "cat > '$SIDE/bin/runtime-state.sh' && chmod +x '$SIDE/bin/runtime-state.sh'" < "$RUNTIME_STATE_LIB"
+remote "cat > '$SIDE/bin/start-hal-services.sh' && chmod +x '$SIDE/bin/start-hal-services.sh'" < "$HAL_START"
 
 log "validar scripts zygote/system_server reproducibles"
 
@@ -532,6 +535,7 @@ cat >> "$PROP_PATCH" <<'PROPS'
 # webos-android-minimal zygote compatibility
 ro.zygote.disable_gl_preload=true
 ro.hardware.egl=mesa
+ro.hardware.memtrack=waydroid
 PROPS
 
 mount --bind "$PROP_PATCH" "$PROP_TARGET" \
@@ -981,6 +985,10 @@ if [ "$ok" != "1" ]; then
 fi
 
 echo FINAL_USB_3DOMAIN_BINDER_OK
+
+log "hal services"
+runtime_state hal-services
+LOCAL_RUN=1 "$SIDE/bin/start-hal-services.sh"
 
 log "zygote/system_server"
 runtime_state zygote-system-server

@@ -10,6 +10,13 @@ SIDE="${SIDE:-$USB/android-sidecar}"
 PROBEDIR="${PROBEDIR:-$SIDE/probes}"
 LOGDIR="${LOGDIR:-$SIDE/logs}"
 
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+HAL_START="${HAL_START:-$ROOT/scripts/start-hal-services.sh}"
+
+if [ -x "$HAL_START" ]; then
+  TV_IP="$TV_IP" TV_USER="$TV_USER" USB="$USB" ROOTFS="$ROOTFS" SIDE="$SIDE" LOGDIR="$LOGDIR" "$HAL_START"
+fi
+
 ssh "$TV_USER@$TV_IP" \
   "USB='$USB' ROOTFS='$ROOTFS' SIDE='$SIDE' PROBEDIR='$PROBEDIR' LOGDIR='$LOGDIR' sh -s" <<'REMOTE'
 set -eu
@@ -44,6 +51,33 @@ wait_pid() {
   wait "$pid"
 }
 
+wait_service_state() {
+  name="$1"
+  launcher_pid="$2"
+  deadline="$3"
+  while [ "$(date +%s)" -lt "$deadline" ]; do
+    service_pid="$(pidof "$name" 2>/dev/null || true)"
+    if [ -n "$service_pid" ]; then
+      printf 'pid:%s\n' "$service_pid"
+      return 0
+    fi
+    if ! kill -0 "$launcher_pid" 2>/dev/null; then
+      rc=0
+      wait "$launcher_pid" 2>/dev/null || rc=$?
+      printf 'exit:%s\n' "$rc"
+      return 0
+    fi
+    sleep 1
+  done
+  service_pid="$(pidof "$name" 2>/dev/null || true)"
+  if [ -n "$service_pid" ]; then
+    printf 'pid:%s\n' "$service_pid"
+    return 0
+  fi
+  printf 'timeout\n'
+  return 124
+}
+
 probe_one() {
   label="$1"
   bin="$2"
@@ -62,32 +96,33 @@ probe_one() {
 
   : > "$log"
   nohup env -i $(service_env) chroot "$ROOTFS" "$bin" >"$log" 2>&1 &
-  pid=$!
+  launcher_pid=$!
   deadline=$(( $(date +%s) + 20 ))
-
-  if wait_pid "$pid" "$deadline"; then
-    say "$label: exited cleanly"
-    tail -n 30 "$log" 2>/dev/null || true
-    return 0
+  if service_state="$(wait_service_state "$(basename "$bin")" "$launcher_pid" "$deadline")"; then
+    case "$service_state" in
+      pid:*)
+        say "$label: alive (${service_state#pid:})"
+        return 0
+        ;;
+      exit:0)
+        say "$label: exited cleanly"
+        return 0
+        ;;
+      exit:*)
+        say "$label: failed"
+        tail -n 30 "$log" 2>/dev/null || true
+        return 1
+        ;;
+    esac
   fi
 
-  rc=$?
-  if [ "$rc" -eq 124 ]; then
-    say "$label: alive after timeout"
-    if kill -0 "$pid" 2>/dev/null; then
-      kill "$pid" 2>/dev/null || true
-      sleep 1
-      kill -9 "$pid" 2>/dev/null || true
-    fi
-    tail -n 30 "$log" 2>/dev/null || true
-    return 0
-  fi
-
-  say "$label: failed"
+  say "$label: alive after timeout"
   tail -n 30 "$log" 2>/dev/null || true
+  return 0
 }
 
 say "runtime.state: $(cat "$SIDE/run/runtime.state" 2>/dev/null || echo missing)"
+
 probe_one memtrack "/vendor/bin/hw/android.hardware.memtrack@1.0-service"
 probe_one power "/vendor/bin/hw/android.hardware.power@1.0-service.waydroid"
 probe_one graphics_allocator_2_0 "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service"

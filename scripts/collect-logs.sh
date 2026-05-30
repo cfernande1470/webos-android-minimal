@@ -45,6 +45,9 @@ fi
     [ -n "$p" ] && echo "$n: $p"
   done
   echo
+  echo "--- runtime.timeline ---"
+  cat "$SIDE/run/runtime.timeline" 2>/dev/null || true
+  echo
   echo "--- mounts ---"
   cat /proc/mounts
   echo

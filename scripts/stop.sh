@@ -73,6 +73,11 @@ kill_pidfile "$SIDE/run/servicemanager.pid"
 kill_pidfile "$SIDE/run/hwservicemanager.pid"
 kill_pidfile "$SIDE/run/vndservicemanager.pid"
 kill_pidfile "$SIDE/run/property_service_ack_shim.pid"
+kill_pidfile "$SIDE/run/memtrack.pid"
+kill_pidfile "$SIDE/run/power.pid"
+kill_pidfile "$SIDE/run/graphics_allocator_2_0.pid"
+kill_pidfile "$SIDE/run/graphics_allocator_4_0.pid"
+kill_pidfile "$SIDE/run/light.pid"
 
 sleep 1
 kill_name system_server
@@ -99,7 +104,12 @@ rm -f \
   "$SIDE/run/vndservicemanager.pid" \
   "$SIDE/run/zygote_socket_wrap.pid" \
   "$SIDE/run/zygote64.pid" \
-  "$SIDE/run/system_server.pid" 2>/dev/null || true
+  "$SIDE/run/system_server.pid" \
+  "$SIDE/run/memtrack.pid" \
+  "$SIDE/run/power.pid" \
+  "$SIDE/run/graphics_allocator_2_0.pid" \
+  "$SIDE/run/graphics_allocator_4_0.pid" \
+  "$SIDE/run/light.pid" 2>/dev/null || true
 
 rm -f \
   "$ROOTFS/dev/socket/property_service" \

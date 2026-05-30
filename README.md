@@ -546,6 +546,7 @@ input-related services
 Each HAL should be tested as a bounded process first, not as part of a full Android boot.
 
 `probe-services.sh` is the first diagnostic for this lane.
+`start-hal-services.sh` is the bounded launcher for the resident HALs.
 `smoke-hal-services.sh` is the first bounded HAL launch test for this lane.
 
 Graphics and UI are not the final target in this repo. The compositor path should move to the separate [`webos-wayland`](https://github.com/cfernande1470/webos-wayland/) project and a native webOS app named `android` that either launches the Android sidecar or serves as an APK compatibility layer on webOS.
@@ -560,7 +561,7 @@ Current probe baseline:
 Current HAL smoke baseline:
 
 - `memtrack`, `power`, `graphics.allocator@2.0`, `graphics.allocator@4.0`, and `light` can be launched and stay resident on the current runtime;
-- `sensors` exits cleanly as a bounded probe;
+- `sensors` exits cleanly as a bounded probe and is treated as a successful oneshot check;
 - `graphics.composer@2.1` is not part of the Android sidecar baseline; that path belongs to the separate Wayland/webOS app work.
 
 ### M4: Binder service registration checks

@@ -53,6 +53,11 @@ show_pidfile vndservicemanager "$SIDE/run/vndservicemanager.pid"
 show_pidfile zygote_socket_wrap "$SIDE/run/zygote_socket_wrap.pid"
 show_pidfile zygote64 "$SIDE/run/zygote64.pid"
 show_pidfile system_server "$SIDE/run/system_server.pid"
+show_pidfile memtrack "$SIDE/run/memtrack.pid"
+show_pidfile power "$SIDE/run/power.pid"
+show_pidfile graphics_allocator_2_0 "$SIDE/run/graphics_allocator_2_0.pid"
+show_pidfile graphics_allocator_4_0 "$SIDE/run/graphics_allocator_4_0.pid"
+show_pidfile light "$SIDE/run/light.pid"
 
 say "--- live pids ---"
 for n in property_service_ack_shim servicemanager hwservicemanager vndservicemanager zygote64 app_process64 system_server zygote_socket_wrap \

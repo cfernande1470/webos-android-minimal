@@ -1,0 +1,145 @@
+--- hard cleanup old android zygotes/wrappers ---
+
+--- sanity files ---
+-rwxr-xr-x    1 root     root        782632 May 29 22:06 /media/internal/android-usb/android-sidecar/bin/ptrace_bt_wrap
+-rwxr-xr-x    1 root     root        710584 May 29 21:24 /media/internal/android-usb/android-sidecar/zygote_socket_wrap
+-rw-r--r--    1 root     root        156186 May 29 21:54 /media/internal/android-usb/android-rootfs/linkerconfig/ld.config.txt
+
+--- sanity patches ---
+abort call @ 0x1ca198:  1f 20 03 d5
+task call  @ 0x1ca1b0:  20 00 80 52
+task tbz   @ 0x1ca208:  1f 20 03 d5
+
+--- classpath ---
+BOOTCLASSPATH length: 1624
+SYSTEMSERVERCLASSPATH length: 463
+
+--- ptrace start-system-server zygote ---
+
+--- important ---
+17:=== CRASH pid=11287 sig=6 ===
+18:pc=0x7f738c4a00 sp=0x7feafe6d60 fp/x29=0x7feafe6e00 lr/x30=0x7f738c49d4 pstate=0x0
+51:--- owners ---
+52:pc=0x7f738c4a00 map_off=0x43a00 file_off=0x8aa00 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+53:lr=0x7f738c49d4 map_off=0x439d4 file_off=0x8a9d4 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+55:--- frame chain x29 ---
+56:#0  fp=0x7feafe6e00 ret=0x7ed4e0a740 ret=0x7ed4e0a740 map_off=0x40a740 file_off=0x60a740 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+57:#1  fp=0x7feafe6e50 ret=0x7f6c519eac ret=0x7f6c519eac map_off=0x4eac file_off=0x16eac r-xp /media/internal/android-usb/android-rootfs/system/lib64/libbase.so
+58:#2  fp=0x7feafe6ed0 ret=0x7f6c519454 ret=0x7f6c519454 map_off=0x4454 file_off=0x16454 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libbase.so
+59:#3  fp=0x7feafe6f20 ret=0x7ed4cbe390 ret=0x7ed4cbe390 map_off=0x2be390 file_off=0x4be390 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+60:#4  fp=0x7feafe6f60 ret=0x7f66276414 ret=0x7f66276414 map_off=0x10c414 file_off=0x1c7414 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+61:#5  fp=0x7feafe6fc0 ret=0x7f6627be84 ret=0x7f6627be84 map_off=0x111e84 file_off=0x1cce84 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+62:#6  fp=0x7feafe8210 ret=0x7f66278710 ret=0x7f66278710 map_off=0x10e710 file_off=0x1c9710 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+63:#7  fp=0x7feafe8360 ret=0x70f1010c ret=0x70f1010c map_off=0x2410c file_off=0x1cd10c r-xp /media/internal/android-usb/android-rootfs/system/framework/arm64/boot-framework.oat
+75:0x7f60f42000-0x7f60f4libc: Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 11287 (main), pid 11287 (main)
+77:Zygote: Zygote failed to write to system_server FD: No such file or directory
+79:Zygote: Exit zygote because system server (pid 11287) has terminated
+85:=== END CRASH ===
+94:pid 11288 signaled sig=9
+95:pid 11290 signaled sig=9
+96:pid 11289 signaled sig=9
+97:pid 11291 signaled sig=9
+98:pid 11282 signaled sig=9
+
+--- tail ---
+ptrace event=4 pid=11282 newpid=11282
+ptrace event=4 pid=11282 newpid=11282
+ptrace event=3 pid=11282 newpid=11283
+ptrace event=3 pid=11282 newpid=11284
+ptrace event=3 pid=11282 newpid=11285
+ptrace event=3 pid=11282 newpid=11286
+pid 11283 exited rc=0
+pid 11284 exited rc=0
+pid 11286 exited rc=0
+pid 11285 exited rc=0
+ptrace event=1 pid=11282 newpid=11287
+ptrace event=3 pid=11282 newpid=11288
+ptrace event=3 pid=11282 newpid=11289
+ptrace event=3 pid=11282 newpid=11290
+ptrace event=3 pid=11282 newpid=11291
+
+=== CRASH pid=11287 sig=6 ===
+pc=0x7f738c4a00 sp=0x7feafe6d60 fp/x29=0x7feafe6e00 lr/x30=0x7f738c49d4 pstate=0x0
+x0 =0x0000000000000000
+x1 =0x0000000000002c17
+x2 =0x0000000000000006
+x3 =0x0000007feafe6d80
+x4 =0x0000007f872db000
+x5 =0x0000007f872db000
+x6 =0x0000007f872db000
+x7 =0x0000000000000000
+x8 =0x00000000000000f0
+x9 =0x0000007f73861a70
+x10=0x0000000000000001
+x11=0x0000007f738d2e18
+x12=0xfff10800000000e0
+x13=0x0000000000000001
+x14=0x0000000001cd59f8
+x15=0x003b9aca00000000
+x16=0x0000007f7393aa40
+x17=0x0000007f73914c80
+x18=0x0000007f8665c000
+x19=0x0000000000002c17
+x20=0x0000000000002c17
+x21=0x00000000ffffffff
+x22=0x0000007f8601a000
+x23=0x0000000000000001
+x24=0x0000007ed5216000
+x25=0x0000000000000001
+x26=0x0000007f6611d924
+x27=0x0000007f662c1320
+x28=0x0000000000000000
+x29=0x0000007feafe6e00
+x30=0x0000007f738c49d4
+
+--- owners ---
+pc=0x7f738c4a00 map_off=0x43a00 file_off=0x8aa00 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+lr=0x7f738c49d4 map_off=0x439d4 file_off=0x8a9d4 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+
+--- frame chain x29 ---
+#0  fp=0x7feafe6e00 ret=0x7ed4e0a740 ret=0x7ed4e0a740 map_off=0x40a740 file_off=0x60a740 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+#1  fp=0x7feafe6e50 ret=0x7f6c519eac ret=0x7f6c519eac map_off=0x4eac file_off=0x16eac r-xp /media/internal/android-usb/android-rootfs/system/lib64/libbase.so
+#2  fp=0x7feafe6ed0 ret=0x7f6c519454 ret=0x7f6c519454 map_off=0x4454 file_off=0x16454 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libbase.so
+#3  fp=0x7feafe6f20 ret=0x7ed4cbe390 ret=0x7ed4cbe390 map_off=0x2be390 file_off=0x4be390 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+#4  fp=0x7feafe6f60 ret=0x7f66276414 ret=0x7f66276414 map_off=0x10c414 file_off=0x1c7414 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+#5  fp=0x7feafe6fc0 ret=0x7f6627be84 ret=0x7f6627be84 map_off=0x111e84 file_off=0x1cce84 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+#6  fp=0x7feafe8210 ret=0x7f66278710 ret=0x7f66278710 map_off=0x10e710 file_off=0x1c9710 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+#7  fp=0x7feafe8360 ret=0x70f1010c ret=0x70f1010c map_off=0x2410c file_off=0x1cd10c r-xp /media/internal/android-usb/android-rootfs/system/framework/arm64/boot-framework.oat
+stop: next_fp=0x717cf248
+
+--- executable maps of interest ---
+0x6fc92000-0x6fcd5000 off=0xe000 r-xp /media/internal/android-usb/android-rootfs/system/framework/arm64/boot-core-libart.oat
+0x558130e000-0x558130f000 off=0x2000 r-xp /media/internal/android-usb/android-rootfs/system/bin/app_process64
+0x7ec5600000-0x7ec5928000 off=0x200000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart-compiler.so
+0x7ec6171000-0x7ec6175000 off=0x4000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libopenjdkjvm.so
+0x7ec619f000-0x7ec61bc000 off=0x18000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libopenjdk.so
+0x7ed4a00000-0x7ed4f38000 off=0x200000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+0x7ed5299000-0x7ed529d000 off=0x4000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libartpalette-system.so
+0x7ed6e79000-0x7ed6e7a000 off=0x2000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libartpalette.so
+0x7f60f42000-0x7f60f4libc: Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 11287 (main), pid 11287 (main)
+libc: failed to restore dumpable: Invalid argument
+Zygote: Zygote failed to write to system_server FD: No such file or directory
+Zygote: Process 11287 exited cleanly (1)
+Zygote: Exit zygote because system server (pid 11287) has terminated
+3000 off=0x1000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime_lazy.so
+0x7f6616a000-0x7f662ab000 off=0xbb000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+0x7f73881000-0x7f73935000 off=0x47000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+0x7f8575d000-0x7f85780000 off=0x1b000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libartbase.so
+0x7f87314000-0x7f873f8000 off=0x37000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/bin/linker64
+=== END CRASH ===
+ptrace event=3 pid=11287 newpid=11292
+ptrace event=3 pid=11292 newpid=11293
+ptrace event=4 pid=11293 newpid=11293
+ptrace event=1 pid=11293 newpid=11294
+pid 11294 exited rc=1
+pid 11293 exited rc=0
+pid 11292 exited rc=1
+pid 11287 exited rc=1
+pid 11288 signaled sig=9
+pid 11290 signaled sig=9
+pid 11289 signaled sig=9
+pid 11291 signaled sig=9
+pid 11282 signaled sig=9
+
+--- remaining android-ish ---
+PID=4114 COMM=WebAppMgr CMD=/usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic 

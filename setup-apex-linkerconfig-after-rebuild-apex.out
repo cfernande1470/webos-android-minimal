@@ -1,0 +1,183 @@
+--- recuperar /apex base visible ---
+-rwxr-xr-x    1 root     2000       1782376 Apr  3 07:36 /media/internal/android-usb/android-rootfs/apex/com.android.runtime/bin/linker64
+
+--- limpiar bind sources anteriores ---
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.wifi
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.vndk.current
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.uwb
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.tzdata
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.tethering
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.sdkext
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.scheduling
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.runtime
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.resolv
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.permission
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.os.statsd
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.ondevicepersonalization
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.neuralnetworks
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.mediaprovider
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.media.swcodec
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.media
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.ipsec
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.i18n
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.extservices
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.conscrypt
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.btservices
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.art
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.appsearch
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.adservices
+umount /media/internal/android-usb/android-sidecar/apex-bindsrc/com.android.adbd
+
+--- capturar APEX reales como bind sources ---
+APEX com.android.adbd
+APEX com.android.adservices
+APEX com.android.appsearch
+APEX com.android.art
+APEX com.android.btservices
+APEX com.android.conscrypt
+APEX com.android.extservices
+APEX com.android.i18n
+APEX com.android.ipsec
+APEX com.android.media
+APEX com.android.media.swcodec
+APEX com.android.mediaprovider
+APEX com.android.neuralnetworks
+APEX com.android.ondevicepersonalization
+APEX com.android.os.statsd
+APEX com.android.permission
+APEX com.android.resolv
+APEX com.android.runtime
+APEX com.android.scheduling
+APEX com.android.sdkext
+APEX com.android.tethering
+APEX com.android.tzdata
+APEX com.android.uwb
+APEX com.android.vndk.current
+APEX com.android.vndk.v33
+APEX com.android.wifi
+
+--- montar /apex overlay escribible ---
+
+--- crear /apex/apex-info-list.xml Android 13 compatible ---
+-rw-r--r--    1 root     root          6975 May 30 11:31 /media/internal/android-usb/android-rootfs/apex/apex-info-list.xml
+  <apex-info moduleName="com.android.art" modulePath="/apex/com.android.art" preinstalledModulePath="/system/apex/com.android.art" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="false"/>
+  <apex-info moduleName="com.android.runtime" modulePath="/apex/com.android.runtime" preinstalledModulePath="/system/apex/com.android.runtime" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="false"/>
+  <apex-info moduleName="com.android.vndk.current" modulePath="/apex/com.android.vndk.current" preinstalledModulePath="/system/apex/com.android.vndk.current" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="true"/>
+
+--- validar rutas preinstalledModulePath ---
+OK   com.android.adbd /system/apex/com.android.adbd
+OK   com.android.adservices /system/apex/com.android.adservices
+OK   com.android.appsearch /system/apex/com.android.appsearch
+OK   com.android.art /system/apex/com.android.art
+OK   com.android.btservices /system/apex/com.android.btservices
+OK   com.android.conscrypt /system/apex/com.android.conscrypt
+OK   com.android.extservices /system/apex/com.android.extservices
+OK   com.android.i18n /system/apex/com.android.i18n
+OK   com.android.ipsec /system/apex/com.android.ipsec
+OK   com.android.media /system/apex/com.android.media
+OK   com.android.media.swcodec /system/apex/com.android.media.swcodec
+OK   com.android.mediaprovider /system/apex/com.android.mediaprovider
+OK   com.android.neuralnetworks /system/apex/com.android.neuralnetworks
+OK   com.android.ondevicepersonalization /system/apex/com.android.ondevicepersonalization
+OK   com.android.os.statsd /system/apex/com.android.os.statsd
+OK   com.android.permission /system/apex/com.android.permission
+OK   com.android.resolv /system/apex/com.android.resolv
+OK   com.android.runtime /system/apex/com.android.runtime
+OK   com.android.scheduling /system/apex/com.android.scheduling
+OK   com.android.sdkext /system/apex/com.android.sdkext
+OK   com.android.tethering /system/apex/com.android.tethering
+OK   com.android.tzdata /system/apex/com.android.tzdata
+OK   com.android.uwb /system/apex/com.android.uwb
+OK   com.android.vndk.current /system/apex/com.android.vndk.current
+OK   com.android.vndk.v33 /apex/com.android.vndk.v33
+OK   com.android.wifi /system/apex/com.android.wifi
+
+
+--- fix missing product/system_ext/vndk.v33 before linkerconfig ---
+--- vndk alias check ---
+drwxr-xr-x    4 root     root          4096 Apr  3 07:36 /media/internal/android-usb/android-rootfs/apex/com.android.vndk.current
+drwxr-xr-x    4 root     root          4096 Apr  3 07:36 /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33
+drwxr-xr-x    2 root     root          4096 May 30 11:05 /media/internal/android-usb/android-rootfs/odm
+drwxr-xr-x    2 root     root          4096 May 30 11:05 /media/internal/android-usb/android-rootfs/product
+drwxr-xr-x    2 root     root          4096 May 30 11:05 /media/internal/android-usb/android-rootfs/system_ext
+drwxr-xr-x   11 root     root          4096 Apr  3 08:44 /media/internal/android-usb/android-rootfs/vendor
+--- regenerar /linkerconfig ---
+umount linkerconfig layer: tmpfs /media/internal/android-usb/android-rootfs/linkerconfig tmpfs rw,nosuid,nodev,noexec,relatime,mode=755 0 0
+umount linkerconfig layer: tmpfs /media/internal/android-usb/android-rootfs/linkerconfig tmpfs rw,relatime,size=16384k,mode=755 0 0
+--- ejecutar linkerconfig ---
+
+--- linkerconfig rc/log ---
+rc=0
+
+--- comprobar ld.config.txt ---
+-rw-r--r--    1 root     root        156186 May 30 11:31 /media/internal/android-usb/android-rootfs/linkerconfig/ld.config.txt
+
+--- comprobar namespaces APEX ---
+29:additional.namespaces = com_android_adbd,com_android_appsearch,com_android_art,com_android_btservices,com_android_conscrypt,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,com_android_uwb,rs,sphal,vndk
+133:namespace.default.links = com_android_adbd,com_android_i18n,default,com_android_art,com_android_resolv,com_android_tethering,com_android_neuralnetworks,com_android_os_statsd
+142:namespace.default.link.com_android_art.shared_libs = libdexfile.so
+143:namespace.default.link.com_android_art.shared_libs += libjdwp.so
+144:namespace.default.link.com_android_art.shared_libs += libnativebridge.so
+145:namespace.default.link.com_android_art.shared_libs += libnativehelper.so
+146:namespace.default.link.com_android_art.shared_libs += libnativeloader.so
+147:namespace.default.link.com_android_art.shared_libs += libsigchain.so
+198:namespace.com_android_art.isolated = true
+199:namespace.com_android_art.visible = true
+200:namespace.com_android_art.search.paths = /apex/com.android.art/${LIB}
+201:namespace.com_android_art.permitted.paths = /apex/com.android.art/${LIB}
+202:namespace.com_android_art.permitted.paths += /system/${LIB}
+203:namespace.com_android_art.permitted.paths += /data
+204:namespace.com_android_art.permitted.paths += /apex/com.android.art/javalib
+205:namespace.com_android_art.asan.search.paths = /apex/com.android.art/${LIB}
+206:namespace.com_android_art.asan.permitted.paths = /apex/com.android.art/${LIB}
+207:namespace.com_android_art.asan.permitted.paths += /data/asan/system/${LIB}
+208:namespace.com_android_art.asan.permitted.paths += /system/${LIB}
+209:namespace.com_android_art.asan.permitted.paths += /data/asan/data
+29:additional.namespaces = com_android_adbd,com_android_appsearch,com_android_art,com_android_btservices,com_android_conscrypt,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,com_android_uwb,rs,sphal,vndk
+398:namespace.com_android_runtime.isolated = true
+399:namespace.com_android_runtime.visible = true
+400:namespace.com_android_runtime.search.paths = /apex/com.android.runtime/${LIB}
+401:namespace.com_android_runtime.permitted.paths = /apex/com.android.runtime/${LIB}
+402:namespace.com_android_runtime.permitted.paths += /system/${LIB}
+403:namespace.com_android_runtime.asan.search.paths = /apex/com.android.runtime/${LIB}
+404:namespace.com_android_runtime.asan.permitted.paths = /apex/com.android.runtime/${LIB}
+405:namespace.com_android_runtime.asan.permitted.paths += /data/asan/system/${LIB}
+406:namespace.com_android_runtime.asan.permitted.paths += /system/${LIB}
+407:namespace.com_android_runtime.links = com_android_art,default
+408:namespace.com_android_runtime.link.com_android_art.shared_libs = libdexfile.so
+409:namespace.com_android_runtime.link.default.shared_libs = liblog.so
+410:namespace.com_android_runtime.link.default.shared_libs += libc.so
+411:namespace.com_android_runtime.link.default.shared_libs += libdl.so
+412:namespace.com_android_runtime.link.default.shared_libs += libdl_android.so
+413:namespace.com_android_runtime.link.default.shared_libs += libm.so
+414:namespace.com_android_runtime.link.default.shared_libs += libclang_rt.asan-aarch64-android.so:libclang_rt.hwasan-aarch64-android.so:libclang_rt.ubsan_standalone-aarch64-android.so
+415:namespace.com_android_runtime.link.default.shared_libs += libfdtrack.so
+650:additional.namespaces = com_android_adbd,com_android_art,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,rs,system,vndk
+29:additional.namespaces = com_android_adbd,com_android_appsearch,com_android_art,com_android_btservices,com_android_conscrypt,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,com_android_uwb,rs,sphal,vndk
+259:namespace.com_android_conscrypt.isolated = true
+260:namespace.com_android_conscrypt.visible = true
+261:namespace.com_android_conscrypt.search.paths = /apex/com.android.conscrypt/${LIB}
+262:namespace.com_android_conscrypt.permitted.paths = /apex/com.android.conscrypt/${LIB}
+263:namespace.com_android_conscrypt.permitted.paths += /system/${LIB}
+264:namespace.com_android_conscrypt.asan.search.paths = /apex/com.android.conscrypt/${LIB}
+265:namespace.com_android_conscrypt.asan.permitted.paths = /apex/com.android.conscrypt/${LIB}
+266:namespace.com_android_conscrypt.asan.permitted.paths += /data/asan/system/${LIB}
+267:namespace.com_android_conscrypt.asan.permitted.paths += /system/${LIB}
+29:additional.namespaces = com_android_adbd,com_android_appsearch,com_android_art,com_android_btservices,com_android_conscrypt,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,com_android_uwb,rs,sphal,vndk
+133:namespace.default.links = com_android_adbd,com_android_i18n,default,com_android_art,com_android_resolv,com_android_tethering,com_android_neuralnetworks,com_android_os_statsd
+137:namespace.default.link.com_android_i18n.shared_libs = libandroidicu.so
+138:namespace.default.link.com_android_i18n.shared_libs += libicu.so
+139:namespace.default.link.com_android_i18n.shared_libs += libicui18n.so
+140:namespace.default.link.com_android_i18n.shared_libs += libicuuc.so
+185:namespace.com_android_appsearch.links = default,com_android_i18n
+197:namespace.com_android_appsearch.link.com_android_i18n.shared_libs = libicu.so
+212:namespace.com_android_art.links = default,com_android_adbd,com_android_i18n,com_android_os_statsd
+229:namespace.com_android_art.link.com_android_i18n.shared_libs = libicu.so
+
+--- sanity getprop ---
+ro.hardware.egl=mesa
+ro.board.platform=waydroid
+ro.zygote.disable_gl_preload=true
+ro.vendor.api_level=28
+
+--- OK: linkerconfig con namespaces APEX ---

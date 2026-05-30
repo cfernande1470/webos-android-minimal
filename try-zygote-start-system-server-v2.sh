@@ -8,6 +8,10 @@ mkdir -p "$LOGDIR"
 
 echo "--- cleanup old zygotes/wrappers ---"
 killall -9 ptrace_bt_wrap ptrace_fatal_msg_wrap app_process64 zygote64 system_server zygote_socket_wrap 2>/dev/null || true
+for name in zygote64 app_process64 system_server app_process zygote_socket_wrap; do
+  pids="$(pidof "$name" 2>/dev/null || true)"
+  [ -n "$pids" ] && kill -9 $pids 2>/dev/null || true
+done
 sleep 1
 rm -f "$ROOTFS/dev/socket/zygote" "$ROOTFS/dev/socket/usap_pool_primary" 2>/dev/null || true
 
@@ -54,6 +58,19 @@ od -An -tx1 -j $((0x1d9afc)) -N 8 "$TGT"
 echo
 echo "--- classpath ---"
 ENVFILE="$ROOTFS/data/system/environ/classpath"
+
+if [ ! -s "$ENVFILE" ]; then
+  echo "classpath env missing; running derive_classpath" >&2
+  mkdir -p "$ROOTFS/data/system/environ"
+
+  if [ -x "$ROOTFS/system/bin/derive_classpath" ]; then
+    chroot "$ROOTFS" /system/bin/derive_classpath /data/system/environ/classpath \
+      >"$LOGDIR/derive_classpath.launcher.log" 2>&1 || true
+  elif [ -x "$ROOTFS/apex/com.android.runtime/bin/derive_classpath" ]; then
+    chroot "$ROOTFS" /apex/com.android.runtime/bin/derive_classpath /data/system/environ/classpath \
+      >"$LOGDIR/derive_classpath.launcher.log" 2>&1 || true
+  fi
+fi
 
 BOOTCLASSPATH="$(sed -n \
   -e 's/^[[:space:]]*export[[:space:]]\+BOOTCLASSPATH[[:space:]]\+//p' \
@@ -119,13 +136,26 @@ LD_PATH="$LD_PATH:/apex/com.android.i18n/lib64"
 for d in "$ROOTFS"/apex/*/lib64; do
   [ -d "$d" ] || continue
   rel="${d#$ROOTFS}"
+
+  # system_server must not see vendor/VNDK libbinder first.
+  # Mixing system libbinder and VNDK libbinder causes:
+  #   Parcel Expecting header VNDR but found SYST. Mixing copies of libbinder?
+  case "$rel" in
+    /apex/com.android.vndk.current/lib64|/apex/com.android.vndk.v*/lib64)
+      echo "skip VNDK from zygote/system_server LD_PATH: $rel" >&2
+      continue
+      ;;
+  esac
+
   case ":$LD_PATH:" in
     *":$rel:"*) ;;
     *) LD_PATH="$LD_PATH:$rel" ;;
   esac
 done
 
-LD_PATH="$LD_PATH:/vendor/lib64:/odm/lib64"
+# Do not add /vendor/lib64 or /odm/lib64 to system_server LD_LIBRARY_PATH.
+# Vendor processes/managers get their own linker namespace separately.
+# LD_PATH="$LD_PATH:/vendor/lib64:/odm/lib64"
 
 echo "--- LD_PATH ---"
 echo "$LD_PATH"
@@ -157,7 +187,12 @@ nohup env -i \
       start-system-server \
   >"$LOG" 2>&1 &
 
-sleep 8
+i=0
+while [ "$i" -lt 45 ]; do
+  pidof system_server >/dev/null 2>&1 && break
+  i=$((i + 1))
+  sleep 1
+done
 
 echo
 echo "--- pids ---"

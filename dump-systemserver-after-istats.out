@@ -1,0 +1,813 @@
+system_server_pid=28007
+--- prepare logdw capture ---
+cap_pid=29225
+--- send SIGQUIT ---
+--- look for ANR/traces files ---
+/media/internal/android-usb/android-rootfs/data/misc/critical-events/critical_event_log.pb
+/media/internal/android-usb/android-rootfs/data/misc/odrefresh/odrefresh-metrics.txt
+
+--- logdw stack focused ---
+gmjHHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+lmjlsystem_server Thread[2,tid=28012,WaitingInMainSignalCatcherLoop,Thread*=0x7fa2fe5800,peer=0x133c01b8,"Signal Catcher"]: reacting to signal 3 
+Cmd line: system_server
+Total time waiting for GC to complete: 2.900us
+Native bytes total: 4106792 registered: 64720
+Total native bytes at last GC: 5529504
+DALVIK THREADS (21):
+  native: #00 pc 0000000000554874  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #01 pc 00000000006526a4  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #02 pc 000000000066f0ac  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #03 pc 0000000000668fe8  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #04 pc 00000000006682c8  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #05 pc 0000000000667a88  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #06 pc 000000000061ba74  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #07 pc 000000000062fb98  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #08 pc 000000000062ec44  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???) 
+lmjsystem_server   native: #09 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #10 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+"main" prio=5 tid=1 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x73060478 self=0x7fa2fe3c00
+  native: #00 pc 0000000000086fd0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008a388  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000009c4b4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 00000000000a5be0  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 0000000000054d58  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #05 pc 00000000000568b8  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #06 pc 000000000000c294  /media/internal/android-usb/android-rootfs/system/lib64/android.hardware.memtrack@1.0.so (???)
+  native: #07 pc 0000000000003338  /system/lib64/libmemtrackproxy.so (aidl::android::hardware::memtrack::MemtrackProxy::MemtrackProxy()+100) (BuildId: 1155f9576172a1b494c41a0a438abfe0)
+  native: #08 pc 0000000000074f48  /system/lib64/libandroid_servers.so (android::android_server_SystemServer_startMemtrackProxyService(_JNIEnv*, _jobject*)+44) (BuildId: e16d18fc70a5a18d11604be508968cf9)
+  at com.android.server.SystemServer.startMemtrackProxyService(Native method)
+  at com.android.server.SystemServer.startBootstrapServices(SystemServer.java:1117)
+  at com.android.server.SystemServer.run(SystemServer.java:938)
+  at com.android.server.SystemServer.main(SystemServer.java:650)
+  at java.lang.reflect.Method.invoke(Native method)
+  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+"perfetto_hprof_listener" prio=10 tid=3 Native (still starting up)
+  native: #00 pc 00000000000db104  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000001d840  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libperfetto_hprof.so (???)
+  native: #02 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+"ADB-JDWP Connection Control Thread" daemon prio=0 tid=4 WaitingInMainDebuggerLoop
+  native: #00 pc 0000000000086fd0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008a388  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000009c4b4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???) 
+lmj4system_server   native: #03 pc 000000000000f470  /media/internal/android-usb/android-rootfs/apex/com.android.adbd/lib64/libadbconnection_client.so (???)
+  native: #04 pc 000000000000c53c  /media/internal/android-usb/android-rootfs/apex/com.android.adbd/lib64/libadbconnection_client.so (???)
+  native: #05 pc 000000000000968c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #06 pc 000000000000993c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #07 pc 00000000000080ac  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+"HeapTaskDaemon" daemon prio=5 tid=5 WaitingForTaskProcessor
+  native: #00 pc 0000000000086fcc  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000280b84  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #02 pc 00000000003b232c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #03 pc 00000000003b2c60  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  at dalvik.system.VMRuntime.runHeapTasks(Native method)
+"ReferenceQueueDaemon" daemon prio=5 tid=6 Waiting
+  at java.lang.Object.wait(Native method)
+  - waiting on <0x0bf577f0> (a java.lang.Class<java.lang.ref.ReferenceQueue>)
+  at java.lang.Object.wait(Object.java:442)
+  at java.lang.Object.wait(Object.java:568)
+"FinalizerDaemon" daemon prio=5 tid=7 Waiting
+  at java.lang.Object.wait(Native method)
+  - waiting on <0x05af6169> (a java.lang.Object)
+  at java.lang.Object.wait(Object.java:442)
+"FinalizerWatchdogDaemon" daemon prio=5 tid=8 Waiting
+  at java.lang.Object.wait(Native method) 
+lmjjsystem_server   - waiting on <0x0b90a7ee> (a java.lang.Daemons$FinalizerWatchdogDaemon)
+  at java.lang.Object.wait(Object.java:442)
+  at java.lang.Object.wait(Object.java:568)
+"binder:28007_1" prio=5 tid=9 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0410 self=0x7ef0f0c800
+  native: #00 pc 00000000000db3e4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000009455c  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000005d85c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #03 pc 000000000005db38  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 000000000005e444  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #05 pc 000000000008b00c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #06 pc 0000000000012f18  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #07 pc 00000000000c8918  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0488 self=0x7ef0f0e400
+  at java.lang.Thread.sleep(Native method)
+  at com.android.server.SystemServer.lambda$spawnFdLeakCheckThread$0(SystemServer.java:628)
+  at com.android.server.SystemServer$$ExternalSyntheticLambda0.run(unavailable:6)
+"android.fg" prio=5 tid=11 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0520 self=0x7e9758f000
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+"android.ui" prio=5 tid=12 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0600 self=0x7e97590c00 
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+  at com.android.server.UiThread.run(UiThread.java:45)
+"android.io" prio=5 tid=13 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c06e0 self=0x7e97592800
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+"android.display" prio=5 tid=14 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c07c0 self=0x7e97594400
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+"android.anim" prio=5 tid=15 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c08a0 self=0x7e975a1000
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???) 
+lmjsystem_server   native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+"android.anim.lf" prio=5 tid=16 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0980 self=0x7e975a2c00
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+"watchdog" prio=5 tid=17 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0a60 self=0x7e975a4800
+  native: #00 pc 0000000000086fcc  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008b6d0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 00000000000f0638  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 00000000000f0354  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #04 pc 0000000000095974  /media/internal/android-usb/android-rootfs/system/lib64/libc++.so (???)
+  native: #05 pc 0000000000054c10  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #06 pc 00000000000568b8  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #07 pc 000000000014cba4  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.HwBinder.getService(Native method)
+  at android.os.HwBinder.getService(HwBinder.java:81)
+  at android.hidl.manager.V1_0.IServiceManager.getService(IServiceManager.java:90)
+  at android.hidl.manager.V1_0.IServiceManager.getService(IServiceManager.java:100)
+  at com.android.server.Watchdog.addInterestingHidlPids(Watchdog.java:671)
+  at com.android.server.Watchdog.getInterestingNativePids(Watchdog.java:706)
+  at com.android.server.Watchdog.logWatchog(Watchdog.java:888)
+  at com.android.server.Watchdog.run(Watchdog.java:804)
+  at com.android.server.Watchdog.$r8$lambda$W7y-nlYuEBh_r4--InIAt97WYPU(unavailable:0)
+  at com.android.server.Watchdog$$ExternalSyntheticLambda0.run(unavailable:2)
+"system-server-init-thread1" prio=5 tid=18 Waiting
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0af0 self=0x7e975a6400
+  at jdk.internal.misc.Unsafe.park(Native method) 
+lmj0nsystem_server   - waiting on an unknown object
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2081)
+  at com.android.internal.util.ConcurrentUtils$1$1.run(ConcurrentUtils.java:65)
+"android.bg" prio=5 tid=19 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0c68 self=0x7e975b6000
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+"CriticalEventLogIO" prio=5 tid=20 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x12c80f38 self=0x7e975b7c00
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+"binder:28007_2" prio=5 tid=21 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x12d40020 self=0x7e975b9800
+  native: #00 pc 00000000000db3e4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000009455c  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000005d85c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #03 pc 000000000005db38  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 000000000005e444  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #05 pc 000000000008b00c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #06 pc 0000000000012f18  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #07 pc 00000000000c8918  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???) 
+lmj8system_server   native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+gmjT2HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+gmjCHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+gmj 	HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+gmjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+gmjLvHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- raw logdw tail ---
+
+--- packet bytes=101 time=1780094594.401220120 ---
+gmjHHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=20 time=1780094594.647095480 ---
+}mjh&q
+
+--- packet bytes=55 time=1780094594.647227080 ---
+}mjh&Installer installd not found; trying again 
+
+--- packet bytes=153 time=1780094595.258826000 ---
+lmjlsystem_server Thread[2,tid=28012,WaitingInMainSignalCatcherLoop,Thread*=0x7fa2fe5800,peer=0x133c01b8,"Signal Catcher"]: reacting to signal 3 
+
+--- packet bytes=27 time=1780094595.258922460 ---
+lmjMmsystem_server 
+
+--- packet bytes=69 time=1780094595.326926960 ---
+lmj{libc failed to connect to tombstoned: Connection refused 
+
+--- packet bytes=4041 time=1780094595.327218920 ---
+lmjisystem_server ----- pid 28007 at 2026-05-29 22:43:15.258840700+0000 -----
+Cmd line: system_server
+Build fingerprint: 'waydroid/lineage_waydroid_arm64_only/waydroid_arm64_only:13/TQ3A.230901.001/eng.aleast.20260403.072834:userdebug/test-keys'
+ABI: 'arm64'
+Build type: optimized
+Zygote loaded classes=21849 post zygote classes=177
+Dumping registered class loaders
+#0 dalvik.system.PathClassLoader: [], parent #1
+#1 java.lang.BootClassLoader: [], no parent
+#2 dalvik.system.PathClassLoader: [/system/framework/org.lineageos.platform.jar:/system/framework/services.jar!classes2.dex:/system/framework/services.jar], parent #1
+Done dumping class loaders
+Classes initialized: 0 in 0
+Intern table: 36605 strong; 625 weak
+JNI: CheckJNI is off; globals=740 (plus 58 weak)
+Libraries: /system/lib64/libandroid_servers.so libandroid.so libcompiler_rt.so libframework-connectivity-tiramisu-jni.so libicu_jni.so libjavacore.so libjavacrypto.so libjnigraphics.so libopenjdk.so libstats_jni.so libwebviewchromium_loader.so (11)
+Heap: 95% free, 1149KB/25MB; 39033 objects
+Dumping cumulative Gc timings
+Start Dumping Averages for 1 iterations for concurrent copying
+ScanImmuneSpaces:	Sum: 48.639ms Avg: 48.639ms
+Process mark stacks and References:	Sum: 14.299ms Avg: 14.299ms
+VisitConcurrentRoots:	Sum: 8.137ms Avg: 8.137ms
+MarkingPhase:	Sum: 5.780ms Avg: 5.780ms
+EnqueueFinalizerReferences:	Sum: 3.208ms Avg: 3.208ms
+ClearFromSpace:	Sum: 1.783ms Avg: 1.783ms
+GrayAllDirtyImmuneObjects:	Sum: 1.667ms Avg: 1.667ms
+ProcessReferences:	Sum: 1.266ms Avg: 1.266ms
+ForwardSoftReferences:	Sum: 820us Avg: 820us
+ScanCardsForSpace:	Sum: 686us Avg: 686us
+SweepSystemWeaks:	Sum: 592us Avg: 592us
+CaptureThreadRootsForMarking:	Sum: 500us Avg: 500us
+FlipOtherThreads:	Sum: 406us Avg: 406us
+VisitNonThreadRoots:	Sum: 399us Avg: 399us
+SweepLargeObjects:	Sum: 289us Avg: 289us
+RecordFree:	Sum: 269us Avg: 269us
+InitializePhase:	Sum: 227us Avg: 227us
+MarkStackAsLive:	Sum: 79us Avg: 79us
+SweepAllocSpace:	Sum: 60us Avg: 60us
+ThreadListFlip:	Sum: 55us Avg: 55us
+CopyingPhase:	Sum: 48us Avg: 48us
+(Paused)GrayAllNewlyDirtyImmuneObjects:	Sum: 48us Avg: 48us
+ReclaimPhase:	Sum: 44us Avg: 44us
+SwapBitmaps:	Sum: 43us Avg: 43us
+ResumeRunnableThreads:	Sum: 39us Avg: 39us
+MarkZygoteLargeObjects:	Sum: 34us Avg: 34us
+(Paused)ClearCards:	Sum: 15us Avg: 15us
+EmptyRBMarkBitStack:	Sum: 13us Avg: 13us
+UnBindBitmaps:	Sum: 10us Avg: 10us
+FlipThreadRoots:	Sum: 6us Avg: 6us
+(Paused)SetFromSpace:	Sum: 6us Avg: 6us
+(Paused)FlipCallback:	Sum: 5us Avg: 5us
+Sweep:	Sum: 5us Avg: 5us
+ResumeOtherThreads:	Sum: 2us Avg: 2us
+Done Dumping Averages
+concurrent copying paused:	Sum: 174us 99% C.I. 65us-109us Avg: 87us Max: 109us
+concurrent copying freed-bytes: Avg: 4444KB Max: 4444KB Min: 4444KB
+Freed-bytes histogram: 4160:1
+concurrent copying total time: 89.479ms mean time: 89.479ms
+concurrent copying freed: 77719 objects with total size 4444KB
+concurrent copying throughput: 873247/s / 48MB/s  per cpu-time: 54828433/s / 52MB/s
+concurrent copying tracing throughput: 28MB/s  per cpu-time: 30MB/s
+Average major GC reclaim bytes ratio 1.37653 over 1 GC cycles
+Average major GC copied live bytes ratio 0.598328 over 4 major GCs
+Cumulative bytes moved 3758912
+Cumulative objects moved 78815
+Peak regions allocated 31 (7936KB) / 2048 (512MB)
+Total madvise time 2.772ms
+Average minor GC reclaim bytes ratio nan over 0 GC cycles
+Average minor GC copied live bytes ratio nan over 0 minor GCs
+Cumulative bytes moved 0
+Cumulative objects moved 0
+Peak regions allocated 31 (7936KB) / 2048 (512MB)
+Total time spent in GC: 89.479ms
+Mean GC size throughput: 48MB/s per cpu-time: 51MB/s
+Mean GC object throughput: 868573 objects/s
+Total number of allocations 116752
+Total bytes allocated 5593KB
+Total bytes freed 4444KB
+Free memory 23MB
+Free memory until GC 23MB
+Free memory until OOME 510MB
+Total memory 25MB
+Max memory 512MB
+Zygote space size 940KB
+Total mutator paused time: 174us
+Total time waiting for GC to complete: 2.900us
+Total GC count: 1
+Total GC time: 89.479ms
+Total blocking GC count: 0 
+
+--- packet bytes=3994 time=1780094595.327327700 ---
+lmjTlsystem_server Total blocking GC time: 0
+Total pre-OOME GC count: 0
+Histogram of GC count per 10000 ms: 0:2
+Histogram of blocking GC count per 10000 ms: 0:2
+Native bytes total: 4106792 registered: 64720
+Total native bytes at last GC: 5529504
+/system/framework/oat/arm64/android.hidl.base-V1.0-java.odex: verify
+/system/framework/oat/arm64/android.hidl.manager-V1.0-java.odex: verify
+/system/framework/oat/arm64/android.test.base.odex: verify
+/system/framework/oat/arm64/com.android.location.provider.odex: speed
+/system/framework/oat/arm64/services.odex: speed
+/system/framework/oat/arm64/org.lineageos.platform.odex: speed
+/system/framework/oat/arm64/apex@com.android.adservices@javalib@service-adservices.jar@classes.odex: speed
+/system/framework/oat/arm64/apex@com.android.adservices@javalib@service-sdksandbox.jar@classes.odex: speed
+/system/framework/oat/arm64/apex@com.android.appsearch@javalib@service-appsearch.jar@classes.odex: speed
+/system/framework/oat/arm64/apex@com.android.art@javalib@service-art.jar@classes.odex: speed
+/system/framework/oat/arm64/apex@com.android.media@javalib@service-media-s.jar@classes.odex: speed
+/system/framework/oat/arm64/apex@com.android.permission@javalib@service-permission.jar@classes.odex: speed
+Running non JIT
+
+*** ART internal metrics ***
+  Metadata:
+    timestamp_since_start_ms: 70495
+  Metrics:
+    ClassLoadingTotalTime: count = 17173
+    ClassVerificationTotalTime: count = 27197
+    ClassVerificationCount: count = 56
+    WorldStopTimeDuringGCAvg: count = 174
+    YoungGcCount: count = 0
+    FullGcCount: count = 1
+    TotalBytesAllocated: count = 5455424
+    TotalGcCollectionTime: count = 89
+    YoungGcThroughputAvg: count = 0
+    FullGcThroughputAvg: count = 44
+    YoungGcTracingThroughputAvg: count = 0
+    FullGcTracingThroughputAvg: count = 28
+    JitMethodCompileTotalTime: count = 0
+    JitMethodCompileCount: count = 0
+    YoungGcCollectionTime: range = 0...60000, buckets: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    FullGcCollectionTime: range = 0...60000, buckets: 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    YoungGcThroughput: range = 0...10000, buckets: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    FullGcThroughput: range = 0...10000, buckets: 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    YoungGcTracingThroughput: range = 0...10000, buckets: 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    FullGcTracingThroughput: range = 0...10000, buckets: 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+*** Done dumping ART internal metrics ***
+
+suspend all histogram:	Sum: 140us 99% C.I. 4us-30us Avg: 11.666us Max: 30us
+DALVIK THREADS (21):
+"Signal Catcher" daemon prio=10 tid=2 Runnable
+  | group="system" sCount=0 ucsCount=0 flags=0 obj=0x133c01b8 self=0x7fa2fe5800
+  | sysTid=28012 nice=-20 cgrp=default sched=0/0 handle=0x7ef3efccb0
+  | state=R schedstat=( 29714505 559470 7 ) utm=2 stm=0 core=1 HZ=100
+  | stack=0x7ef3e05000-0x7ef3e07000 stackSize=991KB
+  | held mutexes= "mutator lock"(shared held)
+  native: #00 pc 0000000000554874  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #01 pc 00000000006526a4  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #02 pc 000000000066f0ac  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #03 pc 0000000000668fe8  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #04 pc 00000000006682c8  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #05 pc 0000000000667a88  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #06 pc 000000000061ba74  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #07 pc 000000000062fb98  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #08 pc 000000000062ec44  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???) 
+
+--- packet bytes=4017 time=1780094595.327437540 ---
+lmjsystem_server   native: #09 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #10 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  (no managed stack frames)
+
+"main" prio=5 tid=1 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x73060478 self=0x7fa2fe3c00
+  | sysTid=28007 nice=-2 cgrp=default sched=0/0 handle=0x7fa47264f8
+  | state=S schedstat=( 622349085 34536175 857 ) utm=55 stm=7 core=2 HZ=100
+  | stack=0x7ff3692000-0x7ff3694000 stackSize=8188KB
+  | held mutexes=
+  native: #00 pc 0000000000086fd0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008a388  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000009c4b4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 00000000000a5be0  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 0000000000054d58  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #05 pc 00000000000568b8  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #06 pc 000000000000c294  /media/internal/android-usb/android-rootfs/system/lib64/android.hardware.memtrack@1.0.so (???)
+  native: #07 pc 0000000000003338  /system/lib64/libmemtrackproxy.so (aidl::android::hardware::memtrack::MemtrackProxy::MemtrackProxy()+100) (BuildId: 1155f9576172a1b494c41a0a438abfe0)
+  native: #08 pc 0000000000074f48  /system/lib64/libandroid_servers.so (android::android_server_SystemServer_startMemtrackProxyService(_JNIEnv*, _jobject*)+44) (BuildId: e16d18fc70a5a18d11604be508968cf9)
+  at com.android.server.SystemServer.startMemtrackProxyService(Native method)
+  at com.android.server.SystemServer.startBootstrapServices(SystemServer.java:1117)
+  at com.android.server.SystemServer.run(SystemServer.java:938)
+  at com.android.server.SystemServer.main(SystemServer.java:650)
+  at java.lang.reflect.Method.invoke(Native method)
+  at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+  at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+
+"perfetto_hprof_listener" prio=10 tid=3 Native (still starting up)
+  | group="" sCount=1 ucsCount=0 flags=1 obj=0x0 self=0x7fa2fe7400
+  | sysTid=28013 nice=-20 cgrp=default sched=0/0 handle=0x7ef3dfecb0
+  | state=S schedstat=( 220390 0 6 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7ef3d07000-0x7ef3d09000 stackSize=991KB
+  | held mutexes=
+  native: #00 pc 00000000000db104  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000001d840  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libperfetto_hprof.so (???)
+  native: #02 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  (no managed stack frames)
+
+"ADB-JDWP Connection Control Thread" daemon prio=0 tid=4 WaitingInMainDebuggerLoop
+  | group="system" sCount=1 ucsCount=0 flags=1 obj=0x133c0230 self=0x7fa30bf000
+  | sysTid=28014 nice=-20 cgrp=default sched=0/0 handle=0x7ef3d00cb0
+  | state=S schedstat=( 362950 0 5 ) utm=0 stm=0 core=1 HZ=100
+  | stack=0x7ef3c09000-0x7ef3c0b000 stackSize=991KB
+  | held mutexes=
+  native: #00 pc 0000000000086fd0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008a388  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000009c4b4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???) 
+
+--- packet bytes=4038 time=1780094595.327499880 ---
+lmj4system_server   native: #03 pc 000000000000f470  /media/internal/android-usb/android-rootfs/apex/com.android.adbd/lib64/libadbconnection_client.so (???)
+  native: #04 pc 000000000000c53c  /media/internal/android-usb/android-rootfs/apex/com.android.adbd/lib64/libadbconnection_client.so (???)
+  native: #05 pc 000000000000968c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #06 pc 000000000000993c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #07 pc 00000000000080ac  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libadbconnection.so (???)
+  native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  (no managed stack frames)
+
+"HeapTaskDaemon" daemon prio=5 tid=5 WaitingForTaskProcessor
+  | group="system" sCount=1 ucsCount=0 flags=1 obj=0x133c0d48 self=0x7fa30c0c00
+  | sysTid=28015 nice=4 cgrp=default sched=0/0 handle=0x7eaa9fbcb0
+  | state=S schedstat=( 85300885 8909380 38 ) utm=8 stm=0 core=2 HZ=100
+  | stack=0x7eaa8f8000-0x7eaa8fa000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 0000000000086fcc  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000280b84  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #02 pc 00000000003b232c  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  native: #03 pc 00000000003b2c60  /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so (???)
+  at dalvik.system.VMRuntime.runHeapTasks(Native method)
+  at java.lang.Daemons$HeapTaskDaemon.runInternal(Daemons.java:609)
+  at java.lang.Daemons$Daemon.run(Daemons.java:140)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"ReferenceQueueDaemon" daemon prio=5 tid=6 Waiting
+  | group="system" sCount=1 ucsCount=0 flags=1 obj=0x133c02a8 self=0x7fa30c4400
+  | sysTid=28016 nice=4 cgrp=default sched=0/0 handle=0x7ea6442cb0
+  | state=S schedstat=( 8996395 940515 13 ) utm=0 stm=0 core=1 HZ=100
+  | stack=0x7ea633f000-0x7ea6341000 stackSize=1039KB
+  | held mutexes=
+  at java.lang.Object.wait(Native method)
+  - waiting on <0x0bf577f0> (a java.lang.Class<java.lang.ref.ReferenceQueue>)
+  at java.lang.Object.wait(Object.java:442)
+  at java.lang.Object.wait(Object.java:568)
+  at java.lang.Daemons$ReferenceQueueDaemon.runInternal(Daemons.java:232)
+  - locked <0x0bf577f0> (a java.lang.Class<java.lang.ref.ReferenceQueue>)
+  at java.lang.Daemons$Daemon.run(Daemons.java:140)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"FinalizerDaemon" daemon prio=5 tid=7 Waiting
+  | group="system" sCount=1 ucsCount=0 flags=1 obj=0x133c0320 self=0x7ef0f09000
+  | sysTid=28017 nice=4 cgrp=default sched=0/0 handle=0x7ea5338cb0
+  | state=S schedstat=( 883585 36995 11 ) utm=0 stm=0 core=1 HZ=100
+  | stack=0x7ea5235000-0x7ea5237000 stackSize=1039KB
+  | held mutexes=
+  at java.lang.Object.wait(Native method)
+  - waiting on <0x05af6169> (a java.lang.Object)
+  at java.lang.Object.wait(Object.java:442)
+  at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:203)
+  - locked <0x05af6169> (a java.lang.Object)
+  at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:224)
+  at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:300)
+  at java.lang.Daemons$Daemon.run(Daemons.java:140)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"FinalizerWatchdogDaemon" daemon prio=5 tid=8 Waiting
+  | group="system" sCount=1 ucsCount=0 flags=1 obj=0x133c0398 self=0x7ef0f0ac00
+  | sysTid=28018 nice=4 cgrp=default sched=0/0 handle=0x7ea422ecb0
+  | state=S schedstat=( 309200 3032565 10 ) utm=0 stm=0 core=2 HZ=100
+  | stack=0x7ea412b000-0x7ea412d000 stackSize=1039KB
+  | held mutexes=
+  at java.lang.Object.wait(Native method) 
+
+--- packet bytes=4044 time=1780094595.327574780 ---
+lmjjsystem_server   - waiting on <0x0b90a7ee> (a java.lang.Daemons$FinalizerWatchdogDaemon)
+  at java.lang.Object.wait(Object.java:442)
+  at java.lang.Object.wait(Object.java:568)
+  at java.lang.Daemons$FinalizerWatchdogDaemon.sleepUntilNeeded(Daemons.java:385)
+  - locked <0x0b90a7ee> (a java.lang.Daemons$FinalizerWatchdogDaemon)
+  at java.lang.Daemons$FinalizerWatchdogDaemon.runInternal(Daemons.java:365)
+  at java.lang.Daemons$Daemon.run(Daemons.java:140)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"binder:28007_1" prio=5 tid=9 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0410 self=0x7ef0f0c800
+  | sysTid=28019 nice=0 cgrp=default sched=0/0 handle=0x7ea3026cb0
+  | state=S schedstat=( 1153800 13095 10 ) utm=0 stm=0 core=1 HZ=100
+  | stack=0x7ea2f2f000-0x7ea2f31000 stackSize=991KB
+  | held mutexes=
+  native: #00 pc 00000000000db3e4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000009455c  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000005d85c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #03 pc 000000000005db38  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 000000000005e444  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #05 pc 000000000008b00c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #06 pc 0000000000012f18  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #07 pc 00000000000c8918  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  (no managed stack frames)
+
+"Thread-1" prio=5 tid=10 Sleeping
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0488 self=0x7ef0f0e400
+  | sysTid=28020 nice=0 cgrp=default sched=0/0 handle=0x7e98d3dcb0
+  | state=S schedstat=( 743120 0 2 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e98c3a000-0x7e98c3c000 stackSize=1039KB
+  | held mutexes=
+  at java.lang.Thread.sleep(Native method)
+  - sleeping on <0x0fd6348f> (a java.lang.Object)
+  at java.lang.Thread.sleep(Thread.java:450)
+  - locked <0x0fd6348f> (a java.lang.Object)
+  at java.lang.Thread.sleep(Thread.java:355)
+  at com.android.server.SystemServer.lambda$spawnFdLeakCheckThread$0(SystemServer.java:628)
+  at com.android.server.SystemServer$$ExternalSyntheticLambda0.run(unavailable:6)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"android.fg" prio=5 tid=11 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0520 self=0x7e9758f000
+  | sysTid=28021 nice=0 cgrp=default sched=0/0 handle=0x7e94451cb0
+  | state=S schedstat=( 3864205 198510 10 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e9434e000-0x7e94350000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+
+"android.ui" prio=5 tid=12 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0600 self=0x7e97590c00 
+
+--- packet bytes=3983 time=1780094595.327633060 ---
+lmjX$system_server   | sysTid=28022 nice=-2 cgrp=default sched=0/0 handle=0x7e93347cb0
+  | state=S schedstat=( 513370 0 1 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e93244000-0x7e93246000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+  at com.android.server.UiThread.run(UiThread.java:45)
+
+"android.io" prio=5 tid=13 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c06e0 self=0x7e97592800
+  | sysTid=28023 nice=0 cgrp=default sched=0/0 handle=0x7e9223dcb0
+  | state=S schedstat=( 233850 0 1 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e9213a000-0x7e9213c000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+
+"android.display" prio=5 tid=14 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c07c0 self=0x7e97594400
+  | sysTid=28024 nice=-3 cgrp=default sched=0/0 handle=0x7e91133cb0
+  | state=S schedstat=( 242060 0 1 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e91030000-0x7e91032000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+
+"android.anim" prio=5 tid=15 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c08a0 self=0x7e975a1000
+  | sysTid=28025 nice=-4 cgrp=default sched=0/0 handle=0x7e90029cb0
+  | state=S schedstat=( 318695 24180 2 ) utm=0 stm=0 core=0 HZ=100
+  | stack=0x7e8ff26000-0x7e8ff28000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???) 
+
+--- packet bytes=4031 time=1780094595.327690740 ---
+lmjsystem_server   native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+
+"android.anim.lf" prio=5 tid=16 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0980 self=0x7e975a2c00
+  | sysTid=28026 nice=-4 cgrp=default sched=0/0 handle=0x7e8ef1fcb0
+  | state=S schedstat=( 229905 0 1 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e8ee1c000-0x7e8ee1e000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+  at com.android.server.ServiceThread.run(ServiceThread.java:44)
+
+"watchdog" prio=5 tid=17 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0a60 self=0x7e975a4800
+  | sysTid=28027 nice=0 cgrp=default sched=0/0 handle=0x7e8de15cb0
+  | state=S schedstat=( 8422480 3439405 11 ) utm=0 stm=0 core=3 HZ=100
+  | stack=0x7e8dd12000-0x7e8dd14000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 0000000000086fcc  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000008b6d0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 00000000000f0638  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #03 pc 00000000000f0354  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #04 pc 0000000000095974  /media/internal/android-usb/android-rootfs/system/lib64/libc++.so (???)
+  native: #05 pc 0000000000054c10  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #06 pc 00000000000568b8  /media/internal/android-usb/android-rootfs/system/lib64/libhidlbase.so (???)
+  native: #07 pc 000000000014cba4  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.HwBinder.getService(Native method)
+  at android.os.HwBinder.getService(HwBinder.java:81)
+  at android.hidl.manager.V1_0.IServiceManager.getService(IServiceManager.java:90)
+  at android.hidl.manager.V1_0.IServiceManager.getService(IServiceManager.java:100)
+  at com.android.server.Watchdog.addInterestingHidlPids(Watchdog.java:671)
+  at com.android.server.Watchdog.getInterestingNativePids(Watchdog.java:706)
+  at com.android.server.Watchdog.logWatchog(Watchdog.java:888)
+  at com.android.server.Watchdog.run(Watchdog.java:804)
+  at com.android.server.Watchdog.$r8$lambda$W7y-nlYuEBh_r4--InIAt97WYPU(unavailable:0)
+  at com.android.server.Watchdog$$ExternalSyntheticLambda0.run(unavailable:2)
+  at java.lang.Thread.run(Thread.java:1012)
+
+"system-server-init-thread1" prio=5 tid=18 Waiting
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0af0 self=0x7e975a6400
+  | sysTid=28028 nice=-2 cgrp=default sched=0/0 handle=0x7e8cd0bcb0
+  | state=S schedstat=( 93050385 10478465 223 ) utm=9 stm=0 core=0 HZ=100
+  | stack=0x7e8cc08000-0x7e8cc0a000 stackSize=1039KB
+  | held mutexes=
+  at jdk.internal.misc.Unsafe.park(Native method) 
+
+--- packet bytes=4037 time=1780094595.327747520 ---
+lmj0nsystem_server   - waiting on an unknown object
+  at java.util.concurrent.locks.LockSupport.park(LockSupport.java:194)
+  at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2081)
+  at java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:433)
+  at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:1063)
+  at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1123)
+  at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:637)
+  at com.android.internal.util.ConcurrentUtils$1$1.run(ConcurrentUtils.java:65)
+
+"android.bg" prio=5 tid=19 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x133c0c68 self=0x7e975b6000
+  | sysTid=28029 nice=10 cgrp=default sched=0/0 handle=0x7e8bc01cb0
+  | state=S schedstat=( 32862575 9284165 181 ) utm=3 stm=0 core=0 HZ=100
+  | stack=0x7e8bafe000-0x7e8bb00000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+
+"CriticalEventLogIO" prio=5 tid=20 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x12c80f38 self=0x7e975b7c00
+  | sysTid=29155 nice=0 cgrp=default sched=0/0 handle=0x7e8aaf7cb0
+  | state=S schedstat=( 3088905 1137570 7 ) utm=0 stm=0 core=1 HZ=100
+  | stack=0x7e8a9f4000-0x7e8a9f6000 stackSize=1039KB
+  | held mutexes=
+  native: #00 pc 00000000000dc3c8  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 0000000000017444  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #02 pc 0000000000017328  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #03 pc 000000000015a74c  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???)
+  at android.os.MessageQueue.nativePollOnce(Native method)
+  at android.os.MessageQueue.next(MessageQueue.java:335)
+  at android.os.Looper.loopOnce(Looper.java:161)
+  at android.os.Looper.loop(Looper.java:288)
+  at android.os.HandlerThread.run(HandlerThread.java:67)
+
+"binder:28007_2" prio=5 tid=21 Native
+  | group="main" sCount=1 ucsCount=0 flags=1 obj=0x12d40020 self=0x7e975b9800
+  | sysTid=29166 nice=0 cgrp=default sched=0/0 handle=0x7e899edcb0
+  | state=S schedstat=( 652855 2021550 12 ) utm=0 stm=0 core=2 HZ=100
+  | stack=0x7e898f6000-0x7e898f8000 stackSize=991KB
+  | held mutexes=
+  native: #00 pc 00000000000db3e4  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #01 pc 000000000009455c  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #02 pc 000000000005d85c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #03 pc 000000000005db38  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #04 pc 000000000005e444  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #05 pc 000000000008b00c  /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so (???)
+  native: #06 pc 0000000000012f18  /media/internal/android-usb/android-rootfs/system/lib64/libutils.so (???)
+  native: #07 pc 00000000000c8918  /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so (???) 
+
+--- packet bytes=338 time=1780094595.327803000 ---
+lmj8system_server   native: #08 pc 00000000000ef3c0  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  native: #09 pc 000000000008c124  /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so (???)
+  (no managed stack frames)
+
+----- end 28007 -----
+ 
+
+--- packet bytes=69 time=1780094595.327816860 ---
+lmjFsystem_server Failed to write stack traces to tombstoned 
+
+--- packet bytes=55 time=1780094595.648574860 ---
+}mj,&Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094596.298644200 ---
+gmjT2HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094596.654132900 ---
+}mjZ&Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094597.298925680 ---
+gmjCHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094597.656055480 ---
+}mj'Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094598.299174220 ---
+gmj 	HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094598.657768220 ---
+}mj3'Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094599.299416220 ---
+gmjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094599.659576360 ---
+}mjfO'Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094600.299697080 ---
+gmjLvHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094600.664706700 ---
+}mj'Installer installd not found; trying again 
+
+--- traces tail if present ---
+
+DUMP_SYSTEMSERVER_JAVA_STACK_DONE

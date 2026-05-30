@@ -1,0 +1,36 @@
+--- kill managers ---
+--- start system servicemanager only on /dev/binder ---
+--- start hwservicemanager ---
+--- start vndservicemanager ---
+--- pids ---
+root      6853  6849  0 01:21 ?        00:00:00 /system/bin/servicemanager
+root      6855  6849  1 01:21 ?        00:00:00 /system/bin/hwservicemanager
+root      6857  6849  1 01:21 ?        00:00:00 /vendor/bin/vndservicemanager
+
+--- servicemanager maps: libbinder source ---
+servicemanager_pid=6853
+7fac7f3000-7fac7f4000 r--p 00000000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7fac7f4000-7fac7f5000 r-xp 00001000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7fac7f5000-7fac7f6000 r--p 00002000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7fac7f6000-7fac7f7000 rw-p 00002000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7fad24d000-7fad253000 r--p 00000000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7fad253000-7fad25a000 r-xp 00006000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7fad25a000-7fad25b000 r--p 0000d000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7fad281000-7fad2d3000 r--p 00000000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fad2d3000-7fad32e000 r-xp 00052000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fad32e000-7fad33c000 r--p 000ad000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fad33c000-7fad33d000 rw-p 000ba000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7faf2dc000-7faf2fc000 r--s 00000000 00:06 389300                         /media/internal/android-usb/android-rootfs/dev/__properties__/u:object_r:vndk_prop:s0
+
+--- service list smoke ---
+Found 1 services:
+0	manager: [android.os.IServiceManager]
+
+--- manager stderr ---
+### servicemanager
+### hwservicemanager
+SELinux: Loaded service_contexts from:
+    /system/etc/selinux/plat_hwservice_contexts
+    /vendor/etc/selinux/vendor_hwservice_contexts
+### vndservicemanager
+RESTART_MANAGERS_SYSTEM_BINDER_CLEAN_DONE

@@ -1,0 +1,388 @@
+--- refresh libart from TV ---
+
+--- file info ---
+zygote-symbols-post-binder/libart.so.real: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, BuildID[md5/uuid]=3756383dcd2e52039384c3dbac935f6a, not stripped
+  Class:                             ELF64
+  Type:                              DYN (Shared object file)
+  Machine:                           AArch64
+  Entry point address:               0x0
+
+--- addr2line ---
+nterp_op_invoke_interface
+crtbegin_so.c:?
+nterp_op_invoke_interface
+crtbegin_so.c:?
+
+--- nearest dynamic symbols ---
+0x0000000000204180 FUNC nterp_op_invoke_interface
+
+--- objdump around 0x2041a8 ---
+
+zygote-symbols-post-binder/libart.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000203f80 <nterp_op_invoke_virtual>:
+  203f80:	f81f0336 	stur	x22, [x25, #-16]
+  203f84:	9128c270 	add	x16, x19, #0xa30
+  203f88:	d34226d1 	ubfx	x17, x22, #2, #8
+  203f8c:	8b111210 	add	x16, x16, x17, lsl #4
+  203f90:	a9400a10 	ldp	x16, x2, [x16]
+  203f94:	eb16021f 	cmp	x16, x22
+  203f98:	54000101 	b.ne	203fb8 <nterp_op_invoke_virtual+0x38>  // b.any
+  203f9c:	79400ac1 	ldrh	w1, [x22, #4]
+  203fa0:	12000c21 	and	w1, w1, #0xf
+  203fa4:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  203fa8:	b9400020 	ldr	w0, [x1]
+  203fac:	11022000 	add	w0, w0, #0x88
+  203fb0:	f8625800 	ldr	x0, [x0, w2, uxtw #3]
+  203fb4:	140018a3 	b	20a240 <NterpCommonInvokeInstance>
+  203fb8:	aa1303e0 	mov	x0, x19
+  203fbc:	f94003e1 	ldr	x1, [sp]
+  203fc0:	aa1603e2 	mov	x2, x22
+  203fc4:	94002d53 	bl	20f510 <nterp_get_method>
+  203fc8:	aa0003e2 	mov	x2, x0
+  203fcc:	17fffff4 	b	203f9c <nterp_op_invoke_virtual+0x1c>
+	...
+
+0000000000204000 <nterp_op_invoke_super>:
+  204000:	f81f0336 	stur	x22, [x25, #-16]
+  204004:	9128c270 	add	x16, x19, #0xa30
+  204008:	d34226d1 	ubfx	x17, x22, #2, #8
+  20400c:	8b111210 	add	x16, x16, x17, lsl #4
+  204010:	a9400210 	ldp	x16, x0, [x16]
+  204014:	eb16021f 	cmp	x16, x22
+  204018:	540000c1 	b.ne	204030 <nterp_op_invoke_super+0x30>  // b.any
+  20401c:	79400ac1 	ldrh	w1, [x22, #4]
+  204020:	12000c21 	and	w1, w1, #0xf
+  204024:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  204028:	34029781 	cbz	w1, 209318 <common_errNullObject>
+  20402c:	14001885 	b	20a240 <NterpCommonInvokeInstance>
+  204030:	aa1303e0 	mov	x0, x19
+  204034:	f94003e1 	ldr	x1, [sp]
+  204038:	aa1603e2 	mov	x2, x22
+  20403c:	94002d35 	bl	20f510 <nterp_get_method>
+  204040:	17fffff7 	b	20401c <nterp_op_invoke_super+0x1c>
+	...
+
+0000000000204080 <nterp_op_invoke_direct>:
+  204080:	f81f0336 	stur	x22, [x25, #-16]
+  204084:	9128c270 	add	x16, x19, #0xa30
+  204088:	d34226d1 	ubfx	x17, x22, #2, #8
+  20408c:	8b111210 	add	x16, x16, x17, lsl #4
+  204090:	a9400210 	ldp	x16, x0, [x16]
+  204094:	eb16021f 	cmp	x16, x22
+  204098:	540000c1 	b.ne	2040b0 <nterp_op_invoke_direct+0x30>  // b.any
+  20409c:	79400ac1 	ldrh	w1, [x22, #4]
+  2040a0:	12000c21 	and	w1, w1, #0xf
+  2040a4:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  2040a8:	34029381 	cbz	w1, 209318 <common_errNullObject>
+  2040ac:	14001865 	b	20a240 <NterpCommonInvokeInstance>
+  2040b0:	aa1303e0 	mov	x0, x19
+  2040b4:	f94003e1 	ldr	x1, [sp]
+  2040b8:	aa1603e2 	mov	x2, x22
+  2040bc:	94002d15 	bl	20f510 <nterp_get_method>
+  2040c0:	3607fee0 	tbz	w0, #0, 20409c <nterp_op_invoke_direct+0x1c>
+  2040c4:	927ff800 	and	x0, x0, #0xfffffffffffffffe
+  2040c8:	140025c8 	b	20d7e8 <NterpHandleStringInit>
+	...
+
+0000000000204100 <nterp_op_invoke_static>:
+  204100:	f81f0336 	stur	x22, [x25, #-16]
+  204104:	9128c270 	add	x16, x19, #0xa30
+  204108:	d34226d1 	ubfx	x17, x22, #2, #8
+  20410c:	8b111210 	add	x16, x16, x17, lsl #4
+  204110:	a9400210 	ldp	x16, x0, [x16]
+  204114:	eb16021f 	cmp	x16, x22
+  204118:	54000041 	b.ne	204120 <nterp_op_invoke_static+0x20>  // b.any
+  20411c:	14001481 	b	209320 <NterpCommonInvokeStatic>
+  204120:	aa1303e0 	mov	x0, x19
+  204124:	f94003e1 	ldr	x1, [sp]
+  204128:	aa1603e2 	mov	x2, x22
+  20412c:	94002cf9 	bl	20f510 <nterp_get_method>
+  204130:	1400147c 	b	209320 <NterpCommonInvokeStatic>
+	...
+
+0000000000204180 <nterp_op_invoke_interface>:
+  204180:	f81f0336 	stur	x22, [x25, #-16]
+  204184:	9128c270 	add	x16, x19, #0xa30
+  204188:	d34226d1 	ubfx	x17, x22, #2, #8
+  20418c:	8b111210 	add	x16, x16, x17, lsl #4
+  204190:	a9406a10 	ldp	x16, x26, [x16]
+  204194:	eb16021f 	cmp	x16, x22
+  204198:	54000281 	b.ne	2041e8 <nterp_op_invoke_interface+0x68>  // b.any
+  20419c:	79400ac1 	ldrh	w1, [x22, #4]
+  2041a0:	12000c21 	and	w1, w1, #0xf
+  2041a4:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  2041a8:	b9400022 	ldr	w2, [x1]
+  2041ac:	7200075f 	tst	w26, #0x3
+  2041b0:	540000a1 	b.ne	2041c4 <nterp_op_invoke_interface+0x44>  // b.any
+  2041b4:	79401f43 	ldrh	w3, [x26, #14]
+  2041b8:	f9404042 	ldr	x2, [x2, #128]
+  2041bc:	f8635840 	ldr	x0, [x2, w3, uxtw #3]
+  2041c0:	14001ba8 	b	20b060 <NterpCommonInvokeInterface>
+  2041c4:	370000ba 	tbnz	w26, #0, 2041d8 <nterp_op_invoke_interface+0x58>
+  2041c8:	927ef75a 	and	x26, x26, #0xfffffffffffffffc
+  2041cc:	79401b43 	ldrh	w3, [x26, #12]
+  2041d0:	12001063 	and	w3, w3, #0x1f
+  2041d4:	17fffff9 	b	2041b8 <nterp_op_invoke_interface+0x38>
+  2041d8:	53107f5a 	lsr	w26, w26, #16
+  2041dc:	11022042 	add	w2, w2, #0x88
+  2041e0:	f87a5840 	ldr	x0, [x2, w26, uxtw #3]
+  2041e4:	14001817 	b	20a240 <NterpCommonInvokeInstance>
+  2041e8:	aa1303e0 	mov	x0, x19
+  2041ec:	f94003e1 	ldr	x1, [sp]
+  2041f0:	aa1603e2 	mov	x2, x22
+  2041f4:	94002cc7 	bl	20f510 <nterp_get_method>
+  2041f8:	aa0003fa 	mov	x26, x0
+  2041fc:	17ffffe8 	b	20419c <nterp_op_invoke_interface+0x1c>
+
+0000000000204200 <nterp_op_unused_73>:
+  204200:	d4200540 	brk	#0x2a
+	...
+
+0000000000204280 <nterp_op_invoke_virtual_range>:
+  204280:	f81f0336 	stur	x22, [x25, #-16]
+  204284:	9128c270 	add	x16, x19, #0xa30
+  204288:	d34226d1 	ubfx	x17, x22, #2, #8
+  20428c:	8b111210 	add	x16, x16, x17, lsl #4
+  204290:	a9400a10 	ldp	x16, x2, [x16]
+  204294:	eb16021f 	cmp	x16, x22
+  204298:	540000e1 	b.ne	2042b4 <nterp_op_invoke_virtual_range+0x34>  // b.any
+  20429c:	79400ac1 	ldrh	w1, [x22, #4]
+  2042a0:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  2042a4:	b9400020 	ldr	w0, [x1]
+  2042a8:	11022000 	add	w0, w0, #0x88
+  2042ac:	f8625800 	ldr	x0, [x0, w2, uxtw #3]
+  2042b0:	140019a5 	b	20a944 <NterpCommonInvokeInstanceRange>
+  2042b4:	aa1303e0 	mov	x0, x19
+  2042b8:	f94003e1 	ldr	x1, [sp]
+  2042bc:	aa1603e2 	mov	x2, x22
+  2042c0:	94002c94 	bl	20f510 <nterp_get_method>
+  2042c4:	aa0003e2 	mov	x2, x0
+  2042c8:	17fffff5 	b	20429c <nterp_op_invoke_virtual_range+0x1c>
+	...
+
+0000000000204300 <nterp_op_invoke_super_range>:
+  204300:	f81f0336 	stur	x22, [x25, #-16]
+  204304:	9128c270 	add	x16, x19, #0xa30
+  204308:	d34226d1 	ubfx	x17, x22, #2, #8
+  20430c:	8b111210 	add	x16, x16, x17, lsl #4
+  204310:	a9400210 	ldp	x16, x0, [x16]
+  204314:	eb16021f 	cmp	x16, x22
+  204318:	540000a1 	b.ne	20432c <nterp_op_invoke_super_range+0x2c>  // b.any
+  20431c:	79400ac1 	ldrh	w1, [x22, #4]
+  204320:	b8615ba1 	ldr	w1, [x29, w1, uxtw #2]
+  204324:	34027fa1 	cbz	w1, 209318 <common_errNullObject>
+  204328:	14001987 	b	20a944 <NterpCommonInvokeInstanceRange>
+  20432c:	aa1303e0 	mov	x0, x19
+  204330:	f94003e1 	ldr	x1, [sp]
+  204334:	aa1603e2 	mov	x2, x22
+  204338:	94002c76 	bl	20f510 <nterp_get_method>
+  20433c:	17fffff8 	b	20431c <nterp_op_invoke_super_range+0x1c>
+	...
+
+--- strings near possible ART runtime keywords ---
+_ZN3art5Mutex13ExclusiveLockEPNS_6ThreadE
+_ZN3art5Mutex15ExclusiveUnlockEPNS_6ThreadE
+_ZN3art6Thread11is_started_E
+_ZN3art7Runtime34AbortTransactionAndThrowAbortErrorEPNS_6ThreadERKNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEE
+_ZN3art14AotClassLinker15InitializeClassEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEEbb
+_ZN3art11ClassLinker15InitializeClassEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEEbb
+_ZN3art14AotClassLinker24PerformClassVerificationEPNS_6ThreadEPNS_8verifier12VerifierDepsENS_6HandleINS_6mirror5ClassEEENS3_15HardFailLogModeEPNSt3__112basic_stringIcNSB_11char_traitsIcEENSB_9allocatorIcEEEE
+_ZN3art11ClassLinker24PerformClassVerificationEPNS_6ThreadEPNS_8verifier12VerifierDepsENS_6HandleINS_6mirror5ClassEEENS3_15HardFailLogModeEPNSt3__112basic_stringIcNSB_11char_traitsIcEENSB_9allocatorIcEEEE
+_ZN3art2gc5space5Space13AsZygoteSpaceEv
+_ZN3art2gc9collector17ConcurrentCopying35MarkFromReadBarrierWithMeasurementsEPNS_6ThreadEPNS_6mirror6ObjectE
+_ZN3art2gc9collector17ConcurrentCopying4CopyEPNS_6ThreadEPNS_6mirror6ObjectES7_NS_12MemberOffsetE
+_ZN3art2gc9collector17ConcurrentCopying13MarkNonMovingEPNS_6ThreadEPNS_6mirror6ObjectES7_NS_12MemberOffsetE
+_ZN3art2gc9collector17ConcurrentCopying17PushOntoMarkStackEPNS_6ThreadEPNS_6mirror6ObjectE
+_ZN3art11ClassLinker11LookupClassEPNS_6ThreadEPKcNS_6ObjPtrINS_6mirror11ClassLoaderEEE
+_ZN3art9ArtMethod13GetInvokeTypeEv
+_ZN3art6Thread18GetLongJumpContextEv
+_ZN3art6Thread12SetExceptionENS_6ObjPtrINS_6mirror9ThrowableEEE
+_ZN3art9ArtMethod6InvokeEPNS_6ThreadEPjjPNS_6JValueEPKc
+_ZN3art23ThrowStackOverflowErrorEPNS_6ThreadE
+_ZN3art11interpreter26EnterInterpreterFromInvokeEPNS_6ThreadEPNS_9ArtMethodENS_6ObjPtrINS_6mirror6ObjectEEEPjPNS_6JValueEb
+_ZN3art6Thread37DeoptimizeWithDeoptimizationExceptionEPNS_6JValueE
+_ZNK3art6Thread22AssertPendingExceptionEv
+_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm
+_ZNK3art11ClassLinker21IsQuickGenericJniStubEPKv
+_ZNK3art11ClassLinker21IsQuickResolutionStubEPKv
+_ZNK3art11ClassLinker26IsQuickToInterpreterBridgeEPKv
+_ZN3art9ArtMethod21GetOatMethodQuickCodeENS_11PointerSizeE
+_ZN3art11interpreter16IsNterpSupportedEv
+_ZN3art11interpreter18GetNterpEntryPointEv
+_ZN3art9ArtMethod12JniShortNameEv
+_ZN3art15GetJniShortNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES8_
+_ZN3art9ArtMethod11JniLongNameEv
+_ZN3art12MangleForJniERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE
+_ZNK3art6Thread13DecodeJObjectEP8_jobject
+_ZN3art20OatQuickMethodHeader17NterpMethodHeaderE
+_ZN3art18BacktraceCollector11CollectImplEPN11unwindstack8UnwinderE
+_ZN11unwindstack4Regs15CreateFromLocalEv
+_ZN3art6Thread12GetCustomTLSEPKc
+_ZN3art6Thread12SetCustomTLSEPKcPNS_7TLSDataE
+_ZN11unwindstack18LocalUpdatableMapsC1Ev
+_ZN11unwindstack4Regs11CurrentArchEv
+_ZN11unwindstack6Memory31CreateProcessMemoryThreadCachedEi
+_ZN11unwindstack14CreateJitDebugENS_8ArchEnumERNSt3__110shared_ptrINS_6MemoryEEENS1_6vectorINS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENSA_ISC_EEEE
+_ZN11unwindstack14CreateDexFilesENS_8ArchEnumERNSt3__110shared_ptrINS_6MemoryEEENS1_6vectorINS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENSA_ISC_EEEE
+_ZN11unwindstack18LocalUpdatableMaps5ParseEv
+_ZN11unwindstack8Unwinder11SetJitDebugEPNS_20GlobalDebugInterfaceINS_3ElfEEE
+_ZN11unwindstack8Unwinder11SetDexFilesEPNS_20GlobalDebugInterfaceINS_7DexFileEEE
+_ZN11unwindstack3Elf17SetCachingEnabledEb
+_ZN11unwindstack18LocalUpdatableMaps7ReparseEPb
+_ZTVN11unwindstack8UnwinderE
+_ZTVN11unwindstack4MapsE
+_ZN3art7Barrier4PassEPNS_6ThreadE
+_ZN3art7Barrier14SetCountLockedEPNS_6ThreadEi
+_ZN3art7Barrier4WaitEPNS_6ThreadE
+_ZN3art7Barrier9IncrementILNS0_12LockHandlingE1EEEvPNS_6ThreadEi
+_ZN3art7Barrier4InitEPNS_6ThreadEi
+_ZN3art7Barrier9IncrementEPNS_6ThreadEij
+_ZN3art17ConditionVariable9TimedWaitEPNS_6ThreadEli
+_ZN3art7Barrier8GetCountEPNS_6ThreadE
+_ZN3art17ConditionVariable9BroadcastEPNS_6ThreadE
+_ZN3art7Barrier9IncrementILNS0_12LockHandlingE0EEEvPNS_6ThreadEi
+_ZN3art17ConditionVariable16WaitHoldingLocksEPNS_6ThreadE
+_ZN3art17ConditionVariable4WaitEPNS_6ThreadE
+_ZN3art17ReaderWriterMutex32WakeupToRespondToEmptyCheckpointEv
+_ZN3art5Locks26allocated_thread_ids_lock_E
+_ZN3art5Locks28instrument_entrypoints_lock_E
+_ZN3art5Locks24jni_function_table_lock_E
+_ZN3art5Locks19jni_libraries_lock_E
+_ZN3art5Locks13mutator_lock_E
+_ZN3art5Locks25runtime_thread_pool_lock_E
+_ZN3art5Locks17thread_list_lock_E
+_ZN3art5Locks17thread_exit_cond_E
+_ZN3art5Locks26thread_suspend_count_lock_E
+_ZN3art5Locks17jni_globals_lock_E
+_ZN3art5Locks22jni_weak_globals_lock_E
+_ZN3art5Locks12jni_id_lock_E
+_ZTVN3art12MutatorMutexE
+_ZN3art9BaseMutex15CheckSafeToWaitEPNS_6ThreadE
+_ZN3art5Mutex9DumpStackEPNS_6ThreadEmm
+_ZN3art10ThreadList15FindThreadByTidEi
+_ZN3art5Mutex14IsDumpFrequentEPNS_6ThreadEm
+_ZN3art6Thread28RequestSynchronousCheckpointEPNS_7ClosureENS_11ThreadStateE
+_ZN3art5Mutex16ExclusiveTryLockEPNS_6ThreadE
+_ZN3art5Mutex28ExclusiveTryLockWithSpinningEPNS_6ThreadE
+_ZN3art5Mutex27ExclusiveLockUncontendedForEPNS_6ThreadE
+_ZN3art9LogHelper15LogLineLowStackEPKcjN7android4base11LogSeverityES2_
+_ZN3art5Mutex32WakeupToRespondToEmptyCheckpointEv
+_ZN3art17ReaderWriterMutex13ExclusiveLockEPNS_6ThreadE
+_ZN3art17ReaderWriterMutex15ExclusiveUnlockEPNS_6ThreadE
+_ZN3art17ReaderWriterMutex24ExclusiveLockWithTimeoutEPNS_6ThreadEli
+_ZN3art17ReaderWriterMutex26HandleSharedLockContentionEPNS_6ThreadEi
+_ZN3art17ReaderWriterMutex13SharedTryLockEPNS_6ThreadE
+_ZNK3art17ReaderWriterMutex12IsSharedHeldEPKNS_6ThreadE
+_ZN3artlsERNSt3__113basic_ostreamIcNS0_11char_traitsIcEEEERKNS_12MutatorMutexE
+_ZN3art17ConditionVariable6SignalEPNS_6ThreadE
+_ZN3art6Thread18RunEmptyCheckpointEv
+_ZN3art6Thread25PassActiveSuspendBarriersEPS0_
+_ZN3artlsERNSt3__113basic_ostreamIcNS0_11char_traitsIcEEEENS_11ThreadStateE
+_ZN3art6Thread15RunFlipFunctionEPS0_b
+_ZN3art6Thread21RunCheckpointFunctionEv
+_ZN3artlsERNSt3__113basic_ostreamIcNS0_11char_traitsIcEEEERKNS_6ThreadE
+_ZNK3art6Thread13DumpJavaStackERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEEbb
+_ZN3art23ScopedThreadStateChange33ScopedThreadChangeDestructorCheckEv
+_ZN3art6Thread12resume_cond_E
+_ZTVN3art24DumpStackLastTimeTLSDataE
+_ZN3art17ThreadCpuNanoTimeEv
+_ZN3art22ClassHierarchyAnalysis13AddDependencyEPNS_9ArtMethodES2_PNS_20OatQuickMethodHeaderE
+_ZN3art22ClassHierarchyAnalysis33RemoveDependentsWithMethodHeadersERKNSt3__113unordered_setIPNS_20OatQuickMethodHeaderENS1_4hashIS4_EENS1_8equal_toIS4_EENS1_9allocatorIS4_EEEE
+_ZN3art3jit12JitCodeCache25InvalidateCompiledCodeForEPNS_9ArtMethodEPKNS_20OatQuickMethodHeaderE
+_ZN3art10ThreadList13RunCheckpointEPNS_7ClosureES2_
+_ZN3art12StackVisitor9WalkStackILNS0_16CountTransitionsE0EEEvb
+_ZN3art7Runtime14IsShuttingDownEPNS_6ThreadE
+_ZN3art12StackVisitorC2EPNS_6ThreadEPNS_7ContextENS0_13StackWalkKindEb
+_ZNK3art12StackVisitor9GetMethodEv
+_ZNK3art12StackVisitor27GetShouldDeoptimizeFlagAddrEv
+_ZNSt3__112__hash_tableIPN3art20OatQuickMethodHeaderENS_4hashIS3_EENS_8equal_toIS3_EENS_9allocatorIS3_EEE25__emplace_unique_key_argsIS3_JRKS3_EEENS_4pairINS_15__hash_iteratorIPNS_11__hash_nodeIS3_PvEEEEbEERKT_DpOT0_
+_ZNSt3__112__hash_tableIPN3art20OatQuickMethodHeaderENS_4hashIS3_EENS_8equal_toIS3_EENS_9allocatorIS3_EEE8__rehashEm
+_ZTVN3art13CHACheckpointE
+_ZTVN3art15CHAStackVisitorE
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE21ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE21ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art6Thread18ThrowNewExceptionFEPKcS2_z
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE37ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE37ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE25ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE25ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE41ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE41ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE22ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art11ClassLinker17EnsureInitializedEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEEbb
+_ZN3art26StackReflectiveHandleScopeILm1ELm0EED2Ev
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE22ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE38ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE38ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE26ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE26ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE42ELb0EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art17FindFieldFromCodeILNS_13FindFieldTypeE42ELb1EEEPNS_8ArtFieldEjPNS_9ArtMethodEPNS_6ThreadEm
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE0ELb0EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE0ELb1EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE1ELb0EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE1ELb1EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE2ELb0EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE2ELb1EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE3ELb0EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE3ELb1EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE4ELb0EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art18FindMethodFromCodeILNS_10InvokeTypeE4ELb1EEEPNS_9ArtMethodEjPNS_6ObjPtrINS_6mirror6ObjectEEES3_PNS_6ThreadE
+_ZN3art11ClassLinker10AllocClassILb1EEENS_6ObjPtrINS_6mirror5ClassEEEPNS_6ThreadES5_j
+_ZN3art11ClassLinker10AllocClassILb0EEENS_6ObjPtrINS_6mirror5ClassEEEPNS_6ThreadES5_j
+_ZN3art11ClassLinker40MakeInitializedClassesVisiblyInitializedEPNS_6ThreadEb
+_ZN3art11ClassLinker30VisiblyInitializedCallbackDoneEPNS_6ThreadEPNS0_26VisiblyInitializedCallbackE
+_ZN3art11ClassLinker21ForceClassInitializedEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEE
+_ZN3art11ClassLinker20MarkClassInitializedEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEE
+_ZN3art6mirror5Class9SetStatusENS_6HandleIS1_EENS_11ClassStatusEPNS_6ThreadE
+_ZN3art11ClassLinker22FixupStaticTrampolinesEPNS_6ThreadENS_6ObjPtrINS_6mirror5ClassEEE
+_ZN3art11ClassLinker14RegisterNativeEPNS_6ThreadEPNS_9ArtMethodEPKv
+_ZN3art11ClassLinker16UnregisterNativeEPNS_6ThreadEPNS_9ArtMethodE
+_ZN3art11ClassLinker19GetRegisteredNativeEPNS_6ThreadEPNS_9ArtMethodE
+_ZNK3art11ClassLinker28IsJniDlsymLookupCriticalStubEPKv
+_ZNK3art11ClassLinker20IsJniDlsymLookupStubEPKv
+_ZN3art6Thread24ThrowNewWrappedExceptionEPKcS2_
+_ZN3art11ClassLinker16CheckSystemClassEPNS_6ThreadENS_6HandleINS_6mirror5ClassEEEPKc
+_ZN3art12AllocIfTableEPNS_6ThreadEmNS_6ObjPtrINS_6mirror5ClassEEE
+_ZN3art2gc4Heap24IncrementDisableMovingGCEPNS_6ThreadE
+_ZN3art2gc4Heap24DecrementDisableMovingGCEPNS_6ThreadE
+_ZN3art11ClassLinker20CreatePrimitiveClassEPNS_6ThreadENS_9Primitive4TypeENS_9ClassRootE
+_ZN3art11ClassLinker24AllocPrimitiveArrayClassEPNS_6ThreadENS_9ClassRootES3_
+_ZN3art11ClassLinker21AppendToBootClassPathEPNS_6ThreadEPKNS_7DexFileE
+_ZN3art11ClassLinker10FinishInitEPNS_6ThreadE
+_ZN3art11ClassLinker14RunRootClinitsEPNS_6ThreadE
+_ZNK3art9OatHeader27GetJniDlsymLookupTrampolineEv
+_ZNK3art9OatHeader35GetJniDlsymLookupCriticalTrampolineEv
+_ZNK3art9OatHeader28GetQuickResolutionTrampolineEv
+_ZNK3art9OatHeader29GetQuickImtConflictTrampolineEv
+_ZNK3art9OatHeader28GetQuickGenericJniTrampolineEv
+_ZNK3art9OatHeader27GetQuickToInterpreterBridgeEv
+_ZN3art11ClassLinker20AddExtraBootDexFilesEPNS_6ThreadEONSt3__16vectorINS3_10unique_ptrIKNS_7DexFileENS3_14default_deleteIS7_EEEENS3_9allocatorISA_EEEE
+_ZN3art11interpreter18CanRuntimeUseNterpEv
+_ZNK3art11ClassLinker16NumZygoteClassesEv
+_ZNK3art11ClassLinker19NumNonZygoteClassesEv
+_ZN3art11ClassLinker17DeleteClassLoaderEPNS_6ThreadERKNS0_15ClassLoaderDataEb
+_ZN3art9JavaVMExt19DeleteWeakGlobalRefEPNS_6ThreadEP8_jobject
+_ZN3art3jit12JitCodeCache15RemoveMethodsInEPNS_6ThreadERKNS_11LinearAllocE
+_ZN3art11ClassLinker17AllocPointerArrayEPNS_6ThreadEm
+_ZN3art6mirror14PrimitiveArrayIlE5AllocEPNS_6ThreadEm
+_ZN3art6mirror14PrimitiveArrayIiE5AllocEPNS_6ThreadEm
+_ZN3art11ClassLinker13AllocDexCacheEPNS_6ThreadERKNS_7DexFileE
+_ZNK3art6Thread25AssertPendingOOMExceptionEv
+_ZN3art11ClassLinker26AllocAndInitializeDexCacheEPNS_6ThreadERKNS_7DexFileENS_6ObjPtrINS_6mirror11ClassLoaderEEE
+_ZN3art11ClassLinker10AllocClassEPNS_6ThreadEj
+_ZN3art11ClassLinker27AllocStackTraceElementArrayEPNS_6ThreadEm
+_ZN3art11ClassLinker14EnsureResolvedEPNS_6ThreadEPKcNS_6ObjPtrINS_6mirror5ClassEEE
+_ZN3art10ObjectLockINS_6mirror5ClassEEC1EPNS_6ThreadENS_6HandleIS2_EE
+_ZN3art13ObjectTryLockINS_6mirror5ClassEEC1EPNS_6ThreadENS_6HandleIS2_EE
+_ZNK3art6Thread24AssertNoPendingExceptionEv
+_ZN3art11ClassLinker26FindClassInSharedLibrariesERNS_33ScopedObjectAccessAlreadyRunnableEPNS_6ThreadEPKcmNS_6HandleINS_6mirror11ClassLoaderEEEPNS_6ObjPtrINS8_5ClassEEE
+_ZN3art11ClassLinker32FindClassInSharedLibrariesHelperERNS_33ScopedObjectAccessAlreadyRunnableEPNS_6ThreadEPKcmNS_6HandleINS_6mirror11ClassLoaderEEEPNS_8ArtFieldEPNS_6ObjPtrINS8_5ClassEEE
+_ZN3art11ClassLinker29FindClassInBaseDexClassLoaderERNS_33ScopedObjectAccessAlreadyRunnableEPNS_6ThreadEPKcmNS_6HandleINS_6mirror11ClassLoaderEEEPNS_6ObjPtrINS8_5ClassEEE
+_ZN3art11ClassLinker31FindClassInSharedLibrariesAfterERNS_33ScopedObjectAccessAlreadyRunnableEPNS_6ThreadEPKcmNS_6HandleINS_6mirror11ClassLoaderEEEPNS_6ObjPtrINS8_5ClassEEE
+
+EXTRACT_ART_2041A8_DONE

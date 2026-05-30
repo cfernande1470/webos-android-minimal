@@ -1,0 +1,69 @@
+--- current mounts libbinder ---
+
+--- managers pids ---
+root     17469     1  0 00:18 ?        00:00:00 /system/bin/servicemanager
+root     17470     1  0 00:18 ?        00:00:00 /system/bin/hwservicemanager
+root     17471     1  0 00:18 ?        00:00:00 /vendor/bin/vndservicemanager
+
+--- managers libbinder maps ---
+
+=== PID 17469 ===
+/system/bin/servicemanager 
+7fa3f43000-7fa3f95000 r--p 00000000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fa3f95000-7fa3ff0000 r-xp 00052000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fa3ff0000-7fa3ffe000 r--p 000ad000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fa3ffe000-7fa3fff000 rw-p 000ba000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7fa46db000-7fa46e9000 r--p 00000000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7fa46e9000-7fa46f6000 r-xp 0000e000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7fa46f6000-7fa46f7000 r--p 0001b000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7fa46f7000-7fa46f8000 rw-p 0001b000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7fa480e000-7fa4817000 r--p 00000000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7fa4817000-7fa4822000 r-xp 00009000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7fa4822000-7fa4824000 r--p 00014000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7fa4824000-7fa4825000 rw-p 00015000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+
+=== PID 17470 ===
+/system/bin/hwservicemanager 
+7f818a1000-7f818af000 r--p 00000000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7f818af000-7f818bc000 r-xp 0000e000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7f818bc000-7f818bd000 r--p 0001b000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7f818bd000-7f818be000 rw-p 0001b000 07:03 2707                           /media/internal/android-usb/android-rootfs/system/lib64/libutils.so
+7f818cf000-7f818d8000 r--p 00000000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7f818d8000-7f818e3000 r-xp 00009000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7f818e3000-7f818e5000 r--p 00014000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+7f818e5000-7f818e6000 rw-p 00015000 07:03 2438                           /media/internal/android-usb/android-rootfs/system/lib64/libcutils.so
+
+=== PID 17471 ===
+/vendor/bin/vndservicemanager 
+7f9c231000-7f9c280000 r--p 00000000 07:03 726                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
+7f9c280000-7f9c2d8000 r-xp 0004f000 07:03 726                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
+7f9c2d8000-7f9c2e5000 r--p 000a7000 07:03 726                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
+7f9c2e5000-7f9c2e6000 rw-p 000b3000 07:03 726                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
+7f9c347000-7f9c355000 r--p 00000000 07:03 791                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libutils.so
+7f9c355000-7f9c362000 r-xp 0000e000 07:03 791                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libutils.so
+7f9c362000-7f9c363000 r--p 0001b000 07:03 791                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libutils.so
+7f9c363000-7f9c364000 rw-p 0001b000 07:03 791                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libutils.so
+7f9ce4f000-7f9ce58000 r--p 00000000 07:03 739                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libcutils.so
+7f9ce58000-7f9ce63000 r-xp 00009000 07:03 739                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libcutils.so
+7f9ce63000-7f9ce65000 r--p 00014000 07:03 739                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libcutils.so
+7f9ce65000-7f9ce66000 rw-p 00015000 07:03 739                            /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libcutils.so
+
+--- system/vender libbinder candidates ---
+
+=== /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so ===
+-rw-r--r--    1 root     root        774608 Apr  3 07:36 /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+Expecting header 0x%x but found 0x%x. Mixing copies of libbinder?
+
+=== /media/internal/android-usb/android-rootfs/apex/com.android.vndk.current/lib64/libbinder.so ===
+-rw-r--r--    1 root     root        745944 Apr  3 07:37 /media/internal/android-usb/android-rootfs/apex/com.android.vndk.current/lib64/libbinder.so
+Expecting header 0x%x but found 0x%x. Mixing copies of libbinder?
+
+=== /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so ===
+-rw-r--r--    1 root     root        745944 Apr  3 07:37 /media/internal/android-usb/android-rootfs/apex/com.android.vndk.v33/lib64/libbinder.so
+Expecting header 0x%x but found 0x%x. Mixing copies of libbinder?
+
+=== /media/internal/android-usb/android-rootfs/system/apex/com.android.vndk.current/lib64/libbinder.so ===
+-rw-r--r--    1 root     root        745944 Apr  3 07:37 /media/internal/android-usb/android-rootfs/system/apex/com.android.vndk.current/lib64/libbinder.so
+Expecting header 0x%x but found 0x%x. Mixing copies of libbinder?
+
+INSPECT_BINDER_MAPS_DONE

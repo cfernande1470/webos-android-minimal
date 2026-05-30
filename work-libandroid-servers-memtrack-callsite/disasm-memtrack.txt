@@ -1,0 +1,39 @@
+
+work-libandroid-servers-memtrack-callsite/libandroid_servers.so.patched:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000074f00 <_ZN7android36register_android_server_SystemServerEP7_JNIEnv@@Base+0x6d8>:
+   74f00:	d0fffd80 	adrp	x0, 26000 <_ZN7android12make_javastrEP7_JNIEnvRKNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE@@Base-0x16010>
+   74f04:	90fffdc2 	adrp	x2, 2c000 <_ZN7android12make_javastrEP7_JNIEnvRKNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE@@Base-0x10010>
+   74f08:	911e9400 	add	x0, x0, #0x7a5
+   74f0c:	9123d442 	add	x2, x2, #0x8f5
+   74f10:	52800ba1 	mov	w1, #0x5d                  	// #93
+   74f14:	94007387 	bl	91d30 <__assert@plt>
+   74f18:	94006cd6 	bl	90270 <__stack_chk_fail@plt>
+   74f1c:	d10103ff 	sub	sp, sp, #0x40
+   74f20:	a9027bfd 	stp	x29, x30, [sp, #32]
+   74f24:	910083fd 	add	x29, sp, #0x20
+   74f28:	a9034ff4 	stp	x20, x19, [sp, #48]
+   74f2c:	d53bd054 	mrs	x20, tpidr_el0
+   74f30:	52800d00 	mov	w0, #0x68                  	// #104
+   74f34:	f9401688 	ldr	x8, [x20, #40]
+   74f38:	f81f83a8 	stur	x8, [x29, #-8]
+   74f3c:	a900ffff 	stp	xzr, xzr, [sp, #8]
+   74f40:	94006d3c 	bl	90430 <malloc@plt>
+   74f44:	aa0003f3 	mov	x19, x0
+   74f48:	94007402 	bl	91f50 <_ZN4aidl7android8hardware8memtrack13MemtrackProxyC1Ev@plt>
+   74f4c:	910023e8 	add	x8, sp, #0x8
+   74f50:	aa1303e0 	mov	x0, x19
+   74f54:	94000159 	bl	754b8 <_ZN3ndk12BnCInterfaceIN4aidl7android10frameworks5stats6IStatsEE8asBinderEv@@Base+0x13c>
+   74f58:	f94007e0 	ldr	x0, [sp, #8]
+   74f5c:	910003e8 	mov	x8, sp
+   74f60:	f90003ff 	str	xzr, [sp]
+   74f64:	940073ff 	bl	91f60 <_ZN3ndk12BnCInterfaceIN4aidl7android8hardware8memtrack9IMemtrackEE8asBinderEv@plt>
+   74f68:	f94003e0 	ldr	x0, [sp]
+   74f6c:	94007401 	bl	91f70 <AIBinder_forceDowngradeToSystemStability@plt>
+   74f70:	b0fffdc1 	adrp	x1, 2d000 <_ZN7android12make_javastrEP7_JNIEnvRKNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE@@Base-0xf010>
+   74f74:	f94003e0 	ldr	x0, [sp]
+   74f78:	91214821 	add	x1, x1, #0x852
+   74f7c:	940073f1 	bl	91f40 <AServiceManager_addService@plt>

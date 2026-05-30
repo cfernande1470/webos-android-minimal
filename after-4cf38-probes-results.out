@@ -1,0 +1,102 @@
+
+================ probe-5d1cc ================
+probe-5d1cc: ALIVE
+--- services while alive ---
+0	manager: [android.os.IServiceManager]
+--- log ---
+--- dmesg ---
+[16164.523383] binder: binder: WEBOS accept ioctl 0x40046210 no-op
+[16164.523407] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc09f70d700 vma=ffffffc02b009210 start=0x7f82849000 end=0x7f82947000 flags=0x200071
+[16164.523429] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bc80000 end=ffffff800bc81000 vma=ffffffc02b009210
+[16164.523435] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[16164.523440] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc00b626000
+[16164.523444] binder: binder_alloc_shim: virt_to_page page=ffffffbdc02d8980
+[16164.523450] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7f82849000 page=ffffffbdc02d8980
+[16164.523456] binder: binder_alloc_shim: after vm_insert_page ret=0
+[16164.523549] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16164.523634] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bc81000 end=ffffff800bc81000 vma=          (null)
+[16164.523659] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16164.523674] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bc81000 end=ffffff800bc80000 vma=          (null)
+[16164.523779] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16164.523883] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bc81000 end=ffffff800bc81000 vma=          (null)
+[16164.523934] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bc81000 end=ffffff800bc80000 vma=          (null)
+[16164.523942] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16164.524363] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16164.524429] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bc81000 end=ffffff800bc81000 vma=          (null)
+[16164.524464] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16164.524482] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bc81000 end=ffffff800bc80000 vma=          (null)
+[16164.524525] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16164.524558] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bc81000 end=ffffff800bc81000 vma=          (null)
+[16164.524581] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bc81000 end=ffffff800bc80000 vma=          (null)
+[16164.524588] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+
+================ probe-5d220 ================
+probe-5d220: ALIVE
+--- services while alive ---
+0	manager: [android.os.IServiceManager]
+--- log ---
+--- dmesg ---
+[16166.626211] binder: binder: WEBOS accept ioctl 0x40046210 no-op
+[16166.626238] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc0a1adb100 vma=ffffffc02a69bd10 start=0x7fadc1e000 end=0x7fadd1c000 flags=0x200071
+[16166.626263] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bd80000 end=ffffff800bd81000 vma=ffffffc02a69bd10
+[16166.626268] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[16166.626273] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc018f00000
+[16166.626276] binder: binder_alloc_shim: virt_to_page page=ffffffbdc063c000
+[16166.626282] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7fadc1e000 page=ffffffbdc063c000
+[16166.626288] binder: binder_alloc_shim: after vm_insert_page ret=0
+[16166.626418] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16166.626511] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bd81000 end=ffffff800bd81000 vma=          (null)
+[16166.626538] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16166.626546] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bd81000 end=ffffff800bd80000 vma=          (null)
+[16166.626655] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16166.626751] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bd81000 end=ffffff800bd81000 vma=          (null)
+[16166.626802] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bd81000 end=ffffff800bd80000 vma=          (null)
+[16166.626810] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16166.627101] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16166.627167] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bd81000 end=ffffff800bd81000 vma=          (null)
+[16166.627204] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+[16166.627222] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bd81000 end=ffffff800bd80000 vma=          (null)
+[16166.627259] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b401000 end=ffffff800b401000 vma=          (null)
+[16166.627295] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800bd81000 end=ffffff800bd81000 vma=          (null)
+[16166.627316] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800bd81000 end=ffffff800bd80000 vma=          (null)
+[16166.627323] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b401000 end=ffffff800b400000 vma=          (null)
+
+================ probe-5d340 ================
+probe-5d340: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d5d8 ================
+probe-5d5d8: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d5fc ================
+probe-5d5fc: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d610 ================
+probe-5d610: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d618 ================
+probe-5d618: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d620 ================
+probe-5d620: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d624 ================
+probe-5d624: EXITED
+--- log ---
+--- dmesg ---
+
+================ probe-5d638 ================
+probe-5d638: EXITED
+--- log ---
+--- dmesg ---

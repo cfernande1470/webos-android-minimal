@@ -1,0 +1,45 @@
+--- pids ---
+wam       4114  3021  0 21:02 ?        00:00:00 /usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic
+root      4164     1  0 23:44 ?        00:00:00 /system/bin/servicemanager
+root      4165     1  0 23:44 ?        00:00:00 /system/bin/hwservicemanager
+root      4166     1  0 23:44 ?        00:00:00 /vendor/bin/vndservicemanager
+root     19897     1  0 23:29 ?        00:00:00 /media/internal/android-usb/android-sidecar/bin/property_service_ack_shim /media/internal/android-usb/android-rootfs/dev/socket/property_service
+
+--- zygote log ---
+Zygote: Zygote failed to write to system_server FD: No such file or directory
+Zygote: Process 4265 exited due to signal 9 (Killed)
+Zygote: Exit zygote because system server (pid 4265) has terminated
+
+--- dmesg focused ---
+[ 9691.813255] media_event  NOT (06235:06314) gst_lx_adec_set_property 3317: <lxaudiodec> Set audio index(resource-info) to 0
+[ 9691.816505] media_event  INF (06235:06314) gst_lx_audio_render_set_property 1363: <audio_sink> audio-port 0, mixer-port -1
+[ 9691.901075] media_event  INF (06235:06314) gst_lx_audio_render_set_property 1419: <audio_sink> ease volume setting start
+[ 9691.901106] media_event  INF (06235:06314) gst_lx_audio_render_set_property 1431: <audio_sink> audio ease volume value = 57
+[ 9691.901118] media_event  INF (06235:06314) gst_lx_audio_render_set_property 1432: <audio_sink> audio ease volume duration = 0
+[ 9691.901165] media_event  INF (06235:06314) gst_lx_audio_render_set_property 1433: <audio_sink> audio ease volume fadeType = Linear
+[ 9695.417466] binder: 683795072:0 ioctl 40046210 7fec9d5030 returned -22
+[ 9695.417524] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc083b16b00 vma=ffffffc09c52a420 start=0x7efa543000 end=0x7efa641000 flags=0x200071
+[ 9695.417541] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b600000 end=ffffff800b601000 vma=ffffffc09c52a420
+[ 9695.417546] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[ 9695.417552] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc002586000
+[ 9695.417556] binder: binder_alloc_shim: virt_to_page page=ffffffbdc0096180
+[ 9695.417562] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7efa543000 page=ffffffbdc0096180
+[ 9695.417572] binder: binder_alloc_shim: after vm_insert_page ret=0
+[ 9695.622928] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a681000 end=ffffff800a681000 vma=          (null)
+[ 9695.623054] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b601000 end=ffffff800b601000 vma=          (null)
+[ 9695.623074] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a681000 end=ffffff800a680000 vma=          (null)
+[ 9695.623124] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b601000 end=ffffff800b600000 vma=          (null)
+[ 9695.625972] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a681000 end=ffffff800a681000 vma=          (null)
+[ 9695.626218] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b601000 end=ffffff800b601000 vma=          (null)
+[ 9695.626241] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a681000 end=ffffff800a680000 vma=          (null)
+[ 9695.626292] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b601000 end=ffffff800b600000 vma=          (null)
+[ 9695.628715] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a681000 end=ffffff800a681000 vma=          (null)
+[ 9695.628903] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b601000 end=ffffff800b601000 vma=          (null)
+[ 9695.628924] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a681000 end=ffffff800a680000 vma=          (null)
+[ 9695.628975] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b601000 end=ffffff800b600000 vma=          (null)
+
+--- service list ---
+Found 0 services:
+service_list_rc=0
+
+AFTER_SECOND_LIBBINDER_PATCH_DONE

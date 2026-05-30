@@ -1,0 +1,154 @@
+--- hard cleanup old android zygotes/wrappers ---
+
+--- sanity files ---
+-rwxr-xr-x    1 root     root        782632 May 29 22:06 /media/internal/android-usb/android-sidecar/bin/ptrace_bt_wrap
+-rwxr-xr-x    1 root     root        710584 May 29 21:24 /media/internal/android-usb/android-sidecar/zygote_socket_wrap
+-rw-r--r--    1 root     root        156186 May 29 21:54 /media/internal/android-usb/android-rootfs/linkerconfig/ld.config.txt
+
+--- sanity patches ---
+abort call @ 0x1ca198:  1f 20 03 d5
+task call  @ 0x1ca1b0:  20 00 80 52
+task tbz   @ 0x1ca208:  1f 20 03 d5
+
+--- classpath ---
+BOOTCLASSPATH length: 1624
+SYSTEMSERVERCLASSPATH length: 463
+
+--- ptrace start-system-server zygote ---
+
+--- important ---
+28:=== CRASH pid=21640 sig=11 ===
+29:pc=0x7eda6041a8 sp=0x7e62927080 fp/x29=0x7e629270c0 lr/x30=0x7eda6041f8 pstate=0x60000000
+62:--- owners ---
+63:pc=0x7eda6041a8 map_off=0x41a8 file_off=0x2041a8 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+64:lr=0x7eda6041f8 map_off=0x41f8 file_off=0x2041f8 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+66:--- frame chain x29 ---
+84:=== END CRASH ===
+85:pid 21632 signaled sig=9
+86:pid 21637 signaled sig=9
+87:pid 21635 signaled sig=9
+88:pid 21633 signaled sig=9
+89:pid 21640 signaled sig=9
+90:pid 21631 signaled sig=9
+91:pid 21630 signaled sig=9
+92:pid 21639 signaled sig=9
+93:pid 21638 signaled sig=9
+94:pid 21636 signaled sig=Zygote: Zygote failed to write to system_server FD: No such file or directory
+95:Zygote: Process 21625 exited due to signal 9 (Killed)
+96:Zygote: Exit zygote because system server (pid 21625) has terminated
+98:pid 21634 signaled sig=9
+99:pid 21625 signaled sig=9
+100:pid 21629 signaled sig=9
+101:pid 21627 signaled sig=9
+102:pid 21626 signaled sig=9
+103:pid 21628 signaled sig=9
+104:pid 21620 signaled sig=9
+
+--- tail ---
+ptrace event=4 pid=21620 newpid=21620
+ptrace event=4 pid=21620 newpid=21620
+ptrace event=3 pid=21620 newpid=21621
+ptrace event=3 pid=21620 newpid=21622
+ptrace event=3 pid=21620 newpid=21623
+ptrace event=3 pid=21620 newpid=21624
+pid 21621 exited rc=0
+pid 21622 exited rc=0
+pid 21623 exited rc=0
+pid 21624 exited rc=0
+ptrace event=1 pid=21620 newpid=21625
+ptrace event=3 pid=21620 newpid=21626
+ptrace event=3 pid=21620 newpid=21627
+ptrace event=3 pid=21620 newpid=21628
+ptrace event=3 pid=21620 newpid=21629
+ptrace event=3 pid=21625 newpid=21630
+ptrace event=3 pid=21625 newpid=21631
+ptrace event=3 pid=21625 newpid=21632
+ptrace event=3 pid=21625 newpid=21633
+ptrace event=3 pid=21625 newpid=21634
+ptrace event=3 pid=21625 newpid=21635
+ptrace event=3 pid=21625 newpid=21636
+ptrace event=3 pid=21625 newpid=21637
+ptrace event=3 pid=21625 newpid=21638
+ptrace event=3 pid=21625 newpid=21639
+ptrace event=3 pid=21625 newpid=21640
+
+=== CRASH pid=21640 sig=11 ===
+pc=0x7eda6041a8 sp=0x7e62927080 fp/x29=0x7e629270c0 lr/x30=0x7eda6041f8 pstate=0x60000000
+x0 =0x00000000717e5ff0
+x1 =0x0000000000000000
+x2 =0x0000000000000000
+x3 =0x00214c616e000000
+x4 =0x0000000080000000
+x5 =0x0000001600000000
+x6 =0x0000008016000000
+x7 =0x6d604b35ff3a6e65
+x8 =0xfe97c4b8fef33705
+x9 =0xfe97c4b8fef33705
+x10=0x0000000000000000
+x11=0x0000000000000018
+x12=0x000000000000000b
+x13=0x00000000000000b0
+x14=0x00000000130820a8
+x15=0x0000000000000002
+x16=0x0000000000000000
+x17=0x0000007f67abfec0
+x18=0x0000007e61edc000
+x19=0x0000007e66a91c00
+x20=0x0000000000000000
+x21=0x0000007e66a91cc0
+x22=0x0000007ed81be37c
+x23=0x0000000000003072
+x24=0x0000007eda600880
+x25=0x0000007e629270a8
+x26=0x00000000717e5ff0
+x27=0x0000007e629270a8
+x28=0x0000007e629270e0
+x29=0x0000007e629270c0
+x30=0x0000007eda6041f8
+
+--- owners ---
+pc=0x7eda6041a8 map_off=0x41a8 file_off=0x2041a8 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+lr=0x7eda6041f8 map_off=0x41f8 file_off=0x2041f8 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+
+--- frame chain x29 ---
+#0  fp=0x7e629270c0 ret=0x12c025d813081288 ret=0x12c025d813081288 owner=<none>
+stop: next_fp=0xa
+
+--- executable maps of interest ---
+0x7104d000-0x71090000 off=0xe000 r-xp /media/internal/android-usb/android-rootfs/system/framework/arm64/boot-core-libart.oat
+0x5585cc9000-0x5585cca000 off=0x2000 r-xp /media/internal/android-usb/android-rootfs/system/bin/app_process64
+0x7ecba00000-0x7ecbd28000 off=0x200000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart-compiler.so
+0x7ece5e8000-0x7ece5ec000 off=0x4000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libopenjdkjvm.so
+0x7ece61a000-0x7ece637000 off=0x18000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libopenjdk.so
+0x7eda600000-0x7edab38000 off=0x200000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libart.so
+0x7edcb36000-0x7edcb3a000 off=0x4000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libartpalette-system.so
+0x7f67a83000-0x7f67b37000 off=0x47000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/lib64/bionic/libc.so
+0x7f74903000-0x7f74904000 off=0x1000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime_lazy.so
+0x7f74b35000-0x7f74c76000 off=0xbb000 r-xp /media/internal/android-usb/android-rootfs/system/lib64/libandroid_runtime.so
+0x7f8512d000-0x7f8512e000 off=0x2000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libartpalette.so
+0x7f85255000-0x7f85278000 off=0x1b000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.art/lib64/libartbase.so
+0x7f86cc9000-0x7f86dad000 off=0x37000 r-xp /media/internal/android-usb/android-rootfs/apex/com.android.runtime/bin/linker64
+=== END CRASH ===
+pid 21632 signaled sig=9
+pid 21637 signaled sig=9
+pid 21635 signaled sig=9
+pid 21633 signaled sig=9
+pid 21640 signaled sig=9
+pid 21631 signaled sig=9
+pid 21630 signaled sig=9
+pid 21639 signaled sig=9
+pid 21638 signaled sig=9
+pid 21636 signaled sig=Zygote: Zygote failed to write to system_server FD: No such file or directory
+Zygote: Process 21625 exited due to signal 9 (Killed)
+Zygote: Exit zygote because system server (pid 21625) has terminated
+9
+pid 21634 signaled sig=9
+pid 21625 signaled sig=9
+pid 21629 signaled sig=9
+pid 21627 signaled sig=9
+pid 21626 signaled sig=9
+pid 21628 signaled sig=9
+pid 21620 signaled sig=9
+
+--- remaining android-ish ---
+PID=4114 COMM=WebAppMgr CMD=/usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic 

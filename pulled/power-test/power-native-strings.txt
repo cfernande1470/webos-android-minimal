@@ -1,0 +1,24 @@
+  14c15 _ZN7android18NativeInputManager20setInputDispatchModeEbb
+  14e5c _ZN7android18NativeInputManager14setInteractiveEb
+  15697 _ZN7android47android_server_PowerManagerService_userActivityEliii
+  183e9 _ZN7android43register_android_server_PowerManagerServiceEP7_JNIEnv
+  250fe native_set_position_mode
+  2518a nativeInit failed to connect to power.stats HAL
+  275da nativeGetEnergyMeterInfo failed to connect to power.stats HAL
+  280b2 nativeGetPowerEntityInfo
+  28127 nativeGetAudioMode
+  289a2 nativeAcquireSuspendBlocker
+  28e2e native_request_power_stats
+  28f1c nativeSetPowerMode
+  29cbf nativeReleaseSuspendBlocker
+  29cdb com/android/server/powerstats/PowerStatsHALWrapper$PowerStatsHAL10WrapperImpl
+  2ac79 com/android/server/power/PowerManagerService
+  2affd nativeSetAutoSuspend
+  2b012 nativeSetPowerBoost
+  2b443 nativeForceSuspend
+  2b76f native_set_supl_mode
+  2bd5d nativeGetEnergy failed to connect to power.stats HAL
+  2c3e0 com/android/server/power/hint/HintManagerService$NativeWrapper
+  2c924 nativeGetStateResidency failed to connect to power.stats HAL
+  2cdcc nativeGetPowerEntityInfo failed to connect to power.stats HAL
+  2e27b PowerManagerService-JNI

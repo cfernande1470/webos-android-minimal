@@ -1,0 +1,937 @@
+--- kill android logd/logcat and stale capture ---
+--- prepare socket dir ---
+--- start direct logdw capture ---
+cap_pid=30537
+--- logdw socket ---
+srw-rw-rw-    1 root     root             0 May 30 00:47 /media/internal/android-usb/android-rootfs/dev/socket/logdw
+LOGDW_CAPTURE_READY path=/dev/socket/logdw fd=3
+--- clear dmesg ---
+--- start zygote/system_server ---
+--- cleanup old zygotes/wrappers ---
+
+--- sanity patches ---
+storage abort call @ 0x1ca198, should be 1f 20 03 d5:  1f 20 03 d5
+SetTaskProfiles call @ 0x1ca1b0, should be 20 00 80 52:  20 00 80 52
+SetTaskProfiles tbz @ 0x1ca208, should be 1f 20 03 d5:  1f 20 03 d5
+
+--- classpath ---
+BOOTCLASSPATH length: 1624
+SYSTEMSERVERCLASSPATH length: 463
+
+--- start zygote + system_server ---
+
+--- pids ---
+30572 30566
+
+--- android-ish scan ---
+PID=30546 COMM=sh CMD=sh /tmp/try-zygote-start-system-server-v2.sh 
+  Name:	sh
+  State:	S (sleeping)
+  Tgid:	30546
+  Ngid:	0
+  Pid:	30546
+  PPid:	30527
+  TracerPid:	0
+  Uid:	0	0	0	0
+PID=30566 COMM=main CMD=zygote64                                                                                                              
+  Name:	main
+  State:	S (sleeping)
+  Tgid:	30566
+  Ngid:	0
+  Pid:	30566
+  PPid:	30546
+  TracerPid:	0
+  Uid:	0	0	0	0
+PID=30572 COMM=system_server CMD=system_server                                                                                                         
+  Name:	system_server
+  State:	S (sleeping)
+  Tgid:	30572
+  Ngid:	0
+  Pid:	30572
+  PPid:	30566
+  TracerPid:	0
+  Uid:	1000	1000	1000	1000
+PID=4114 COMM=WebAppMgr CMD=/usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic 
+  Name:	WebAppMgr
+  State:	S (sleeping)
+  Tgid:	4114
+  Ngid:	0
+  Pid:	4114
+  PPid:	3021
+  TracerPid:	0
+  Uid:	505	505	505	505
+
+--- sockets ---
+srw-rw-rw-    1 root     root             0 May 30 00:47 usap_pool_primary
+srw-rw-rw-    1 root     root             0 May 30 00:47 zygote
+
+--- log tail ---
+--- collect ---
+--- pids ---
+wam       4114  3021  0 May29 ?        00:00:01 /usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic
+root     19897     1  0 May29 ?        00:00:00 /media/internal/android-usb/android-sidecar/bin/property_service_ack_shim /media/internal/android-usb/android-rootfs/dev/socket/property_service
+root     30503     1  0 00:47 ?        00:00:00 /system/bin/servicemanager
+root     30505     1  0 00:47 ?        00:00:00 /system/bin/hwservicemanager
+root     30507     1  0 00:47 ?        00:00:00 /vendor/bin/vndservicemanager
+root     30566     1 11 00:47 ?        00:00:02 zygote64
+1000     30572 30566  4 00:47 ?        00:00:00 system_server
+
+--- zygote log ---
+
+--- capture stderr ---
+LOGDW_CAPTURE_READY path=/dev/socket/logdw fd=3
+
+--- logdw fatal/exceptions ---
+fwjAndroidRuntime >>>>>> START com.android.internal.os.ZygoteInit uid 0 <<<<<<
+fwj']AndroidRuntime Using default boot image 
+fwj$]AndroidRuntime Leaving lock profiling enabled 
+fwj4~~ cutils-trace Error opening trace file: No such file or directory (2) 
+fwj`@zygote64 option[0]=-Xzygote 
+fwjzygote64 option[1]=-Xdeny-art-apex-data-files 
+fwjzygote64 option[2]=exit 
+fwjzygote64 option[3]=vfprintf 
+fwj*zygote64 option[4]=sensitiveThread 
+fwjPzygote64 option[5]=-verbose:gc 
+fwjxzygote64 option[6]=-XX:PerfettoHprof=true 
+fwj$zygote64 option[7]=-XX:PerfettoJavaHeapStackProf=true 
+fwjdzygote64 option[8]=-Xprimaryzygote 
+fwjzygote64 option[9]=-Xms8m 
+fwjzygote64 option[10]=-Xmx512m 
+fwjt9zygote64 option[11]=-XX:HeapGrowthLimit=192m 
+fwjbzygote64 option[12]=-XX:HeapMinFree=8m 
+fwjdzygote64 option[13]=-XX:HeapMaxFree=16m 
+fwjzygote64 option[14]=-XX:HeapTargetUtilization=0.6 
+fwjhzygote64 option[15]=-Xusejit:true 
+fwjzygote64 option[16]=-Xjitsaveprofilinginfo 
+fwj06zygote64 option[17]=-XMadviseWillNeedVdexFileSize:104857600 
+fwjdzygote64 option[18]=-XMadviseWillNeedOdexFileSize:104857600 
+fwjzygote64 option[19]=-XMadviseWillNeedArtFileSize:4294967295 
+fwjHzygote64 option[20]=-XjdwpOptions:suspend=n,server=y 
+fwj zygote64 option[21]=-XjdwpProvider:default 
+fwj	zygote64 option[22]=-Xopaque-jni-ids:swapable 
+fwj1zygote64 option[23]=-Xlockprofthreshold:500 
+fwjYzygote64 option[24]=-Xcompiler-option 
+fwjzygote64 option[25]=--instruction-set-variant=generic 
+fwjzygote64 option[26]=-Xcompiler-option 
+fwj4zygote64 option[27]=--instruction-set-features=default 
+fwjzygote64 option[28]=-Xcompiler-option 
+fwj`"zygote64 option[29]=--generate-mini-debug-info 
+fwj`Jzygote64 option[30]=-Ximage-compiler-option 
+fwjrzygote64 option[31]=--runtime-arg 
+fwjzygote64 option[32]=-Ximage-compiler-option 
+fwj,zygote64 option[33]=-Xms64m 
+fwjHzygote64 option[34]=-Ximage-compiler-option 
+fwjzygote64 option[35]=--runtime-arg 
+fwj3zygote64 option[36]=-Ximage-compiler-option 
+fwj`Xzygote64 option[37]=-Xmx64m 
+fwj}zygote64 option[38]=-Ximage-compiler-option 
+fwjzygote64 option[39]=--dirty-image-objects=/system/etc/dirty-image-objects 
+fwj0zygote64 option[40]=-Ximage-compiler-option 
+fwj@zygote64 option[41]=--instruction-set-variant=generic 
+fwjX(zygote64 option[42]=-Ximage-compiler-option 
+fwjzygote64 option[43]=--instruction-set-features=default 
+fwjzygote64 option[44]=-Ximage-compiler-option 
+fwjzygote64 option[45]=--generate-mini-debug-info 
+fwjzygote64 option[46]=-Duser.locale=en-US 
+fwj@zygote64 option[47]=--cpu-abilist=arm64-v8a 
+fwjizygote64 option[48]=-Xcore-platform-api-policy:just-warn 
+fwj zygote64 option[49]=-Xfingerprint:waydroid/lineage_waydroid_arm64_only/waydroid_arm64_only:13/TQ3A.230901.001/eng.aleast.20260403.072834:userdebug/test-keys 
+fwj7zygote64 ART APEX data files are untrusted. 
+fwj&zygote64 Core platform API reporting enabled, enforcing=false 
+fwj?'zygote64 Time zone APEX ICU file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat 
+fwjA'zygote64 I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt70l.dat 
+fwj\x(zygote64 fcntl(F_ADD_SEALS) failed: Invalid argument, no memfd support. 
+fwjhUy( zygote64 Falling back to ashmem implementation for JIT zygote mapping 
+fwj ~(ashmem Unable to open ashmem device /dev/ashmem89186ff2-684d-4810-8e23-866a9bc61396 (error = No such file or directory) and /dev/ashmem(error = No such file or directory) 
+fwj (zygote64 Failed to create JIT Code Cache: Failed to create zygote mapping: No such file or directory 
+fwj)(zygote64 Missing code cache, cannot create JIT. 
+fwj1,Zygote begin preload 
+fwj13,Zygote Calling ZygoteHooks.beginPreload() 
+fwj*4Zygote64Timing BeginPreload took to complete: 133ms 
+fwj/4Zygote Preloading classes... 
+fwj@64Zygote ...preloaded 0 classes in 0ms. 
+fwjD!94 Zygote64Timing PreloadClasses took to complete: 1ms 
+fwj*4ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.base-V1.0-java.jar 
+fwj4ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.manager-V1.0-java.jar 
+fwj5ApplicationLoaders Created zygote-cached class loader: /system/framework/android.test.base.jar 
+fwjx5Zygote64Timing CacheNonBootClasspathClassLoaders took to complete: 14ms 
+fwjn&9Zygote Preloading resources... 
+fwj6Zygote ...preloaded 64 resources in 52ms. 
+fwj</Zygote ...preloaded 41 resources in 9ms. 
+fwjLrZygote ...preloaded 8 resource in 4ms. 
+fwjtZygote64Timing PreloadResources took to complete: 134ms 
+fwjx[Zygote Preloading shared libraries... 
+fwj0zygote64 Unable to find pattern file or unable to map it for am 
+fwjZygote Called ZygoteHooks.endPreload() 
+fwj|Zygote Installed AndroidKeyStoreProvider in 0ms. 
+fwjL&l Zygote Warmed up JCA providers in 8ms. 
+fwjDlZygote end preload 
+fwjmZygote64Timing ZygotePreload took to complete: 317ms 
+fwjXzygote64 Explicit concurrent copying GC freed 32762(1544KB) AllocSpace objects, 11(288KB) LOS objects, 95% free, 1274KB/25MB, paused 97us,32us total 26.080ms 
+fwjP94 zygote64 Explicit concurrent copying GC freed 2275(125KB) AllocSpace objects, 0(0B) LOS objects, 95% free, 1180KB/25MB, paused 35us,25us total 18.454ms 
+fwjD6Zygote64Timing PostZygoteInitGC took to complete: 46ms 
+fwjl`7 Zygote64Timing ZygoteInit took to complete: 382ms 
+fwj9Zygote Unable to fetch Zygote socket file descriptor 
+fwjx$: Zygote Unable to fetch USAP pool socket file descriptor 
+fwj8Zygote Forked child process 30572 
+fwjKZygote System server process 30572 has been created 
+fwjZygote Accepting command socket connections 
+lwjlzzygote64 open() failed for /dev/cgroup_info/cgroup.rc: No such file or directory 
+lwj2}libprocessgroup CgroupMap::LoadRcFile called for [30572] failed 
+lwj(system_server Failed to upload odrefresh metrics: file parsing error. 
+lwjHSystemServerTiming InitBeforeStartServices 
+lwjSystemServer persist.sys.timezone is not valid (); setting to GMT. 
+lwjtSystemServer Entered the Android system server! 
+lwjT)SystemServerInitThreadPool Creating instance with 4 threads 
+lwjFJ;SystemServerTiming InitBeforeStartServices took to complete: 516ms 
+lwjK;SystemServerTiming StartServices 
+lwjM;SystemServerTiming startBootstrapServices 
+lwjVN;SystemServerTiming StartWatchdog 
+lwj;SystemServerTiming StartWatchdog took to complete: 5ms 
+lwj,;SystemServer Reading configuration... 
+lwjD8;SystemServerTiming ReadingSystemConfig 
+lwjSystemServerTiming ReadingSystemConfig took to complete: 1ms 
+lwj(SystemServerTiming PlatformCompat 
+wjxSystemServerTimingAsync InitThreadPoolExec:ReadingSystemConfig 
+wjSystemServerInitThreadPool Started executing ReadingSystemConfig 
+wj 'SystemConfig Reading permissions from /system/etc/sysconfig/preinstalled-packages-platform.xml 
+lwj~aCompatConfig No directory /apex/com.android.permission/etc/compatconfig, skipping 
+wjTnSystemConfig Reading permissions from /system/etc/sysconfig/hiddenapi-package-whitelist.xml 
+wj|PSystemConfig Reading permissions from /system/etc/sysconfig/preinstalled-packages-com.android.providers.media.module.xml 
+wjSystemConfig Reading permissions from /system/etc/sysconfig/framework-sysconfig.xml 
+wjpSystemConfig Reading permissions from /system/etc/sysconfig/preinstalled-packages-platform-full-base.xml 
+wjSystemConfig Reading permissions from /system/etc/permissions/android.test.mock.xml 
+lwjSystemServerTiming PlatformCompat took to complete: 29ms 
+lwjSystemServerTiming StartFileIntegrityService 
+lwj;SystemServiceManager Starting com.android.server.security.FileIntegrityService 
+wjdSystemConfig Reading permissions from /system/etc/permissions/com.android.intentresolver.xml 
+wjoSystemConfig Reading permissions from /system/etc/permissions/javax.obex.xml 
+wj4SystemConfig Reading permissions from /system/etc/permissions/android.software.live_wallpaper.xml 
+wjPSystemConfig Reading permissions from /system/etc/permissions/com.android.mediadrm.signer.xml 
+wj<dSystemConfig Reading permissions from /system/etc/permissions/com.android.media.remotedisplay.xml 
+wj|wSystemConfig Reading permissions from /system/etc/permissions/com.android.location.provider.xml 
+wjpSystemConfig Reading permissions from /system/etc/permissions/com.android.documentsui.xml 
+wjSystemConfig Reading permissions from /system/etc/permissions/pc.xml 
+wjdSystemConfig Reading permissions from /system/etc/permissions/privapp_allowlist_com.android.adservices.api.xml 
+lwjSystemServerTiming StartFileIntegrityService took to complete: 15ms 
+lwjSystemServerTiming StartInstaller 
+lwjLeSystemServiceManager Starting com.android.server.pm.Installer 
+lwjkInstaller installd not found; trying again 
+lwjTSystemServerTiming StartInstaller took to complete: 2ms 
+lwj7SystemServerTiming DeviceIdentifiersPolicyService 
+lwjSystemServiceManager Starting com.android.server.os.DeviceIdentifiersPolicyService 
+wj8SystemConfig Reading permissions from /system/etc/permissions/android.software.webview.xml 
+lwj,$SystemServerTiming DeviceIdentifiersPolicyService took to complete: 0ms 
+lwjSystemServerTiming UriGrantsManagerService 
+lwjSystemServiceManager Starting com.android.server.uri.UriGrantsManagerService$Lifecycle 
+wjSystemConfig Reading permissions from /system/etc/permissions/android.test.runner.xml 
+wj<TSystemConfig Reading permissions from /system/etc/permissions/android.software.freeform_window_management.xml 
+lwjxSystemServerTiming UriGrantsManagerService took to complete: 2ms 
+lwj<SystemServerTiming StartPowerStatsService 
+lwj`SystemServiceManager Starting com.android.server.powerstats.PowerStatsService 
+wjdSystemConfig Reading permissions from /system/etc/permissions/android.test.base.xml 
+'wjservicemanager getDeviceHalManifest: Reading VINTF information. 
+wj&SystemConfig Reading permissions from /system/etc/permissions/com.android.future.usb.accessory.xml 
+wjp$; SystemConfig Reading permissions from /system/etc/permissions/org.apache.http.legacy.xml 
+'wjSservicemanager getDeviceHalManifest: Successfully processed VINTF information 
+'wjwTservicemanager getFrameworkHalManifest: Reading VINTF information. 
+wjLRc SystemConfig Reading permissions from /system/etc/permissions/com.android.networkstack.xml 
+wj`zSystemConfig Reading permissions from /system/etc/permissions/privapp-permissions-platform.xml 
+'wjp{servicemanager getFrameworkHalManifest: Successfully processed VINTF information 
+'wj4$| servicemanager Could not find android.hardware.power.stats.IPowerStats/default in the VINTF manifest. 
+lwjLPowerStatsService nativeInit failed to connect to power.stats HAL 
+lwjSystemServerTiming StartPowerStatsService took to complete: 9ms 
+lwjLSystemServerTiming StartIStatsService 
+lwjDSystemServerTiming StartIStatsService took to complete: 0ms 
+lwj\SystemServerTiming MemtrackProxyService 
+wjLSystemConfig Reading permissions from /system/etc/permissions/privapp_allowlist_com.android.providers.media.module.xml 
+wjSystemConfig Reading permissions from /system/etc/permissions/platform.xml 
+wjp`SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.audio.low_latency.xml 
+wj vSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.relative_humidity.xml 
+wjD SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.ethernet.xml 
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.compute.xml 
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.software.sip.voip.xml 
+wj*SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.flash-autofocus.xml 
+wj4SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.opengles.aep.xml 
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.light.xml 
+wjDSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.full.xml 
+wjDSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.proximity.xml 
+wjxSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.version.xml 
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.front.xml 
+wjGSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.location.gps.xml 
+wjgSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.raw.xml 
+wj,!SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.level.xml 
+wj(SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.touchscreen.xml 
+wj2SystemConfig Reading permissions from /vendor/etc/permissions/handheld_core_hardware.xml 
+wjASystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.usb.accessory.xml 
+wj{KSystemConfig Reading permissions from /vendor/etc/permissions/android.software.verified_boot.xml 
+wj@TSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.ambient_temperature.xml 
+wj`~] SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.barometer.xml 
+wjmhSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.gyroscope.xml 
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.wifi.xml 
+wj`$SystemConfig No directory /product/etc/permissions, skipping 
+wjWSystemConfig No directory /system_ext/etc/permissions, skipping 
+wj:SystemConfig Reading permissions from /apex/com.android.tethering/etc/permissions/permissions.xml 
+wj aSystemConfig Reading permissions from /apex/com.android.permission/etc/permissions/privapp_allowlist_com.android.permissioncontroller.xml 
+wjp"SystemConfig Reading permissions from /apex/com.android.mediaprovider/etc/permissions/privapp_allowlist_com.android.providers.media.module.xml 
+wjhSystemConfig Reading permissions from /apex/com.android.ipsec/etc/permissions/android.net.ipsec.ike.xml 
+wjSystemConfig Reading permissions from /apex/com.android.extservices/etc/permissions/privapp_allowlist_android.ext.services.xml 
+wj<)! SystemConfig Reading permissions from /apex/com.android.btservices/etc/permissions/privapp_allowlist_com.android.bluetooth.xml 
+wjX5SystemConfig Reading permissions from /apex/com.android.adservices/etc/permissions/privapp_allowlist_com.android.adservices.api.xml 
+wjHRSystemConfig readAllPermissions took to complete: 104ms 
+wjpUSystemServerInitThreadPool Finished executing ReadingSystemConfig 
+wjVSystemServerTimingAsync InitThreadPoolExec:ReadingSystemConfig took to complete: 105ms 
+wj"Installer installd not found; trying again 
+lwj8HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjSInstaller installd not found; trying again 
+lwj`HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjInstaller installd not found; trying again 
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wj0Installer installd not found; trying again 
+lwjGHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wj FInstaller installd not found; trying again 
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjInstaller installd not found; trying again 
+lwjPHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjInstaller installd not found; trying again 
+lwj|HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wj!Installer installd not found; trying again 
+lwj\HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wj*Installer installd not found; trying again 
+lwjT|HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjUInstaller installd not found; trying again 
+lwjEHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wj<_Installer installd not found; trying again 
+lwjXHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+wjDbInstaller installd not found; trying again 
+
+--- raw logdw tail ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@6dec657 
+
+--- packet bytes=110 time=1780094857.016189100 ---
+lwjCompatConfig Found a config file: /system/etc/compatconfig/TeleService-platform-compat-config.xml 
+
+--- packet bytes=81 time=1780094857.017615720 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@999c62d 
+
+--- packet bytes=81 time=1780094857.017652140 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@4a94762 
+
+--- packet bytes=81 time=1780094857.017665400 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@79f70f3 
+
+--- packet bytes=81 time=1780094857.017676340 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@23f51b0 
+
+--- packet bytes=81 time=1780094857.017688060 ---
+lwjX:CompatConfig Adding: com.android.server.compat.config.Change@df99829 
+
+--- packet bytes=81 time=1780094857.017699540 ---
+lwjlCompatConfig Adding: com.android.server.compat.config.Change@85877ae 
+
+--- packet bytes=118 time=1780094857.017710620 ---
+lwj
+CompatConfig Found a config file: /system/system_ext/etc/compatconfig/settings-platform-compat-config.xml 
+
+--- packet bytes=80 time=1780094857.018397400 ---
+lwjpICompatConfig Adding: com.android.server.compat.config.Change@3fd8dc 
+
+--- packet bytes=92 time=1780094857.020056580 ---
+lwj^1CompatConfig No directory /apex/com.android.vndk.v33/etc/compatconfig, skipping 
+
+--- packet bytes=109 time=1780094857.020194860 ---
+lwj(3CompatConfig Found a config file: /apex/com.android.wifi/etc/compatconfig/wifi-compat-config.xml 
+
+--- packet bytes=81 time=1780094857.020741600 ---
+lwj<CompatConfig Adding: com.android.server.compat.config.Change@9b860ba 
+
+--- packet bytes=81 time=1780094857.020821400 ---
+lwj<CompatConfig Adding: com.android.server.compat.config.Change@ad60b6b 
+
+--- packet bytes=96 time=1780094857.021305040 ---
+lwj\DCompatConfig No directory /apex/com.android.vndk.current/etc/compatconfig, skipping 
+
+--- packet bytes=87 time=1780094857.021460020 ---
+lwj(GCompatConfig No directory /apex/com.android.uwb/etc/compatconfig, skipping 
+
+--- packet bytes=90 time=1780094857.021566560 ---
+lwjhHCompatConfig No directory /apex/com.android.tzdata/etc/compatconfig, skipping 
+
+--- packet bytes=131 time=1780094857.021720340 ---
+lwj$KCompatConfig Found a config file: /apex/com.android.tethering/etc/compatconfig/connectivity-platform-compat-config.xml 
+
+--- packet bytes=81 time=1780094857.022259380 ---
+lwj OS CompatConfig Adding: com.android.server.compat.config.Change@83b2361 
+
+--- packet bytes=90 time=1780094857.022776260 ---
+lwj 8[ CompatConfig No directory /apex/com.android.sdkext/etc/compatconfig, skipping 
+
+--- packet bytes=94 time=1780094857.022904060 ---
+lwj @] CompatConfig No directory /apex/com.android.scheduling/etc/compatconfig, skipping 
+
+--- packet bytes=91 time=1780094857.023026880 ---
+lwj"_CompatConfig No directory /apex/com.android.runtime/etc/compatconfig, skipping 
+
+--- packet bytes=90 time=1780094857.023108760 ---
+lwjD_` CompatConfig No directory /apex/com.android.resolv/etc/compatconfig, skipping 
+
+--- packet bytes=94 time=1780094857.023183980 ---
+lwj~aCompatConfig No directory /apex/com.android.permission/etc/compatconfig, skipping 
+
+--- packet bytes=93 time=1780094857.023267280 ---
+lwj\bCompatConfig No directory /apex/com.android.os.statsd/etc/compatconfig, skipping 
+
+--- packet bytes=107 time=1780094857.023338060 ---
+lwjhcCompatConfig No directory /apex/com.android.ondevicepersonalization/etc/compatconfig, skipping 
+
+--- packet bytes=98 time=1780094857.023405500 ---
+lwjdCompatConfig No directory /apex/com.android.neuralnetworks/etc/compatconfig, skipping 
+
+--- packet bytes=137 time=1780094857.023593740 ---
+lwjgCompatConfig Found a config file: /apex/com.android.mediaprovider/etc/compatconfig/media-provider-platform-compat-config.xml 
+
+--- packet bytes=104 time=1780094857.024018360 ---
+wjTnSystemConfig Reading permissions from /system/etc/sysconfig/hiddenapi-package-whitelist.xml 
+
+--- packet bytes=81 time=1780094857.024279240 ---
+lwjlrCompatConfig Adding: com.android.server.compat.config.Change@d2c6774 
+
+--- packet bytes=81 time=1780094857.024320360 ---
+lwjrCompatConfig Adding: com.android.server.compat.config.Change@b25949d 
+
+--- packet bytes=80 time=1780094857.024333520 ---
+lwj8&s CompatConfig Adding: com.android.server.compat.config.Change@b64d12 
+
+--- packet bytes=81 time=1780094857.024354440 ---
+lwjhds CompatConfig Adding: com.android.server.compat.config.Change@7067ce3 
+
+--- packet bytes=81 time=1780094857.024366280 ---
+lwjLsCompatConfig Adding: com.android.server.compat.config.Change@26286e0 
+
+--- packet bytes=81 time=1780094857.024390420 ---
+lwjsCompatConfig Adding: com.android.server.compat.config.Change@a4bdd99 
+
+--- packet bytes=81 time=1780094857.024402400 ---
+lwj:tCompatConfig Adding: com.android.server.compat.config.Change@d28285e 
+
+--- packet bytes=97 time=1780094857.024901780 ---
+lwjL{CompatConfig No directory /apex/com.android.media.swcodec/etc/compatconfig, skipping 
+
+--- packet bytes=89 time=1780094857.025049160 ---
+lwj}CompatConfig No directory /apex/com.android.media/etc/compatconfig, skipping 
+
+--- packet bytes=89 time=1780094857.025147140 ---
+lwjhqCompatConfig No directory /apex/com.android.ipsec/etc/compatconfig, skipping 
+
+--- packet bytes=88 time=1780094857.025226040 ---
+lwjCompatConfig No directory /apex/com.android.i18n/etc/compatconfig, skipping 
+
+--- packet bytes=95 time=1780094857.025293080 ---
+lwj8CompatConfig No directory /apex/com.android.extservices/etc/compatconfig, skipping 
+
+--- packet bytes=93 time=1780094857.025404800 ---
+lwj`CompatConfig No directory /apex/com.android.conscrypt/etc/compatconfig, skipping 
+
+--- packet bytes=120 time=1780094857.025569440 ---
+lwjCompatConfig Found a config file: /apex/com.android.btservices/etc/compatconfig/bluetooth-compat-config.xml 
+
+--- packet bytes=133 time=1780094857.025661560 ---
+wj|PSystemConfig Reading permissions from /system/etc/sysconfig/preinstalled-packages-com.android.providers.media.module.xml 
+
+--- packet bytes=81 time=1780094857.025960440 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@7f3ba55 
+
+--- packet bytes=120 time=1780094857.026448580 ---
+lwj7CompatConfig Found a config file: /apex/com.android.art/etc/compatconfig/libcore-platform-compat-config.xml 
+
+--- packet bytes=96 time=1780094857.026823520 ---
+wjSystemConfig Reading permissions from /system/etc/sysconfig/framework-sysconfig.xml 
+
+--- packet bytes=81 time=1780094857.027010800 ---
+lwjxCompatConfig Adding: com.android.server.compat.config.Change@eae51f8 
+
+--- packet bytes=81 time=1780094857.027041260 ---
+lwjl}CompatConfig Adding: com.android.server.compat.config.Change@b02a6d1 
+
+--- packet bytes=81 time=1780094857.027064080 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@59ae536 
+
+--- packet bytes=81 time=1780094857.027117560 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@28e3c37 
+
+--- packet bytes=81 time=1780094857.027131520 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@67295a4 
+
+--- packet bytes=81 time=1780094857.027142700 ---
+lwjCompatConfig Adding: com.android.server.compat.config.Change@939df0d 
+
+--- packet bytes=93 time=1780094857.027729780 ---
+lwj0CompatConfig No directory /apex/com.android.appsearch/etc/compatconfig, skipping 
+
+--- packet bytes=94 time=1780094857.027837600 ---
+lwjCompatConfig No directory /apex/com.android.adservices/etc/compatconfig, skipping 
+
+--- packet bytes=88 time=1780094857.027938640 ---
+lwjCompatConfig No directory /apex/com.android.adbd/etc/compatconfig, skipping 
+
+--- packet bytes=117 time=1780094857.028337320 ---
+wjpSystemConfig Reading permissions from /system/etc/sysconfig/preinstalled-packages-platform-full-base.xml 
+
+--- packet bytes=96 time=1780094857.029448760 ---
+wjSystemConfig Reading permissions from /system/etc/permissions/android.test.mock.xml 
+
+--- packet bytes=69 time=1780094857.030304040 ---
+lwjSystemServerTiming PlatformCompat took to complete: 29ms 
+
+--- packet bytes=57 time=1780094857.030430900 ---
+lwjSystemServerTiming StartFileIntegrityService 
+
+--- packet bytes=91 time=1780094857.030731640 ---
+lwj;SystemServiceManager Starting com.android.server.security.FileIntegrityService 
+
+--- packet bytes=105 time=1780094857.031797840 ---
+wjdSystemConfig Reading permissions from /system/etc/permissions/com.android.intentresolver.xml 
+
+--- packet bytes=89 time=1780094857.034451740 ---
+wjoSystemConfig Reading permissions from /system/etc/permissions/javax.obex.xml 
+
+--- packet bytes=110 time=1780094857.037080520 ---
+wj4SystemConfig Reading permissions from /system/etc/permissions/android.software.live_wallpaper.xml 
+
+--- packet bytes=106 time=1780094857.038878820 ---
+wjPSystemConfig Reading permissions from /system/etc/permissions/com.android.mediadrm.signer.xml 
+
+--- packet bytes=110 time=1780094857.040204380 ---
+wj<dSystemConfig Reading permissions from /system/etc/permissions/com.android.media.remotedisplay.xml 
+
+--- packet bytes=108 time=1780094857.041442280 ---
+wj|wSystemConfig Reading permissions from /system/etc/permissions/com.android.location.provider.xml 
+
+--- packet bytes=102 time=1780094857.042460640 ---
+wjpSystemConfig Reading permissions from /system/etc/permissions/com.android.documentsui.xml 
+
+--- packet bytes=81 time=1780094857.043978540 ---
+wjSystemConfig Reading permissions from /system/etc/permissions/pc.xml 
+
+--- packet bytes=123 time=1780094857.045061700 ---
+wjdSystemConfig Reading permissions from /system/etc/permissions/privapp_allowlist_com.android.adservices.api.xml 
+
+--- packet bytes=80 time=1780094857.046067640 ---
+lwjSystemServerTiming StartFileIntegrityService took to complete: 15ms 
+
+--- packet bytes=46 time=1780094857.046165280 ---
+lwjSystemServerTiming StartInstaller 
+
+--- packet bytes=74 time=1780094857.046221340 ---
+lwjLeSystemServiceManager Starting com.android.server.pm.Installer 
+
+--- packet bytes=55 time=1780094857.046327520 ---
+lwjkInstaller installd not found; trying again 
+
+--- packet bytes=68 time=1780094857.047517620 ---
+lwjTSystemServerTiming StartInstaller took to complete: 2ms 
+
+--- packet bytes=62 time=1780094857.047607960 ---
+lwj7SystemServerTiming DeviceIdentifiersPolicyService 
+
+--- packet bytes=95 time=1780094857.047732200 ---
+lwjSystemServiceManager Starting com.android.server.os.DeviceIdentifiersPolicyService 
+
+--- packet bytes=103 time=1780094857.047879620 ---
+wj8SystemConfig Reading permissions from /system/etc/permissions/android.software.webview.xml 
+
+--- packet bytes=84 time=1780094857.048207360 ---
+lwj,$SystemServerTiming DeviceIdentifiersPolicyService took to complete: 0ms 
+
+--- packet bytes=55 time=1780094857.048253900 ---
+lwjSystemServerTiming UriGrantsManagerService 
+
+--- packet bytes=99 time=1780094857.048303700 ---
+lwjSystemServiceManager Starting com.android.server.uri.UriGrantsManagerService$Lifecycle 
+
+--- packet bytes=98 time=1780094857.049137320 ---
+wjSystemConfig Reading permissions from /system/etc/permissions/android.test.runner.xml 
+
+--- packet bytes=122 time=1780094857.050278200 ---
+wj<TSystemConfig Reading permissions from /system/etc/permissions/android.software.freeform_window_management.xml 
+
+--- packet bytes=77 time=1780094857.050433500 ---
+lwjxSystemServerTiming UriGrantsManagerService took to complete: 2ms 
+
+--- packet bytes=54 time=1780094857.050474420 ---
+lwj<SystemServerTiming StartPowerStatsService 
+
+--- packet bytes=90 time=1780094857.050511240 ---
+lwj`SystemServiceManager Starting com.android.server.powerstats.PowerStatsService 
+
+--- packet bytes=96 time=1780094857.051493620 ---
+wjdSystemConfig Reading permissions from /system/etc/permissions/android.test.base.xml 
+
+--- packet bytes=76 time=1780094857.051618180 ---
+'wjservicemanager getDeviceHalManifest: Reading VINTF information. 
+
+--- packet bytes=111 time=1780094857.052951160 ---
+wj&SystemConfig Reading permissions from /system/etc/permissions/com.android.future.usb.accessory.xml 
+
+--- packet bytes=101 time=1780094857.054257740 ---
+wjp$; SystemConfig Reading permissions from /system/etc/permissions/org.apache.http.legacy.xml 
+
+--- packet bytes=20 time=1780094857.056537240 ---
+'wjS
+
+--- packet bytes=90 time=1780094857.056624940 ---
+'wjSservicemanager getDeviceHalManifest: Successfully processed VINTF information 
+
+--- packet bytes=79 time=1780094857.056639820 ---
+'wjwTservicemanager getFrameworkHalManifest: Reading VINTF information. 
+
+--- packet bytes=103 time=1780094857.056877600 ---
+wjLRc SystemConfig Reading permissions from /system/etc/permissions/com.android.networkstack.xml 
+
+--- packet bytes=107 time=1780094857.058449040 ---
+wj`zSystemConfig Reading permissions from /system/etc/permissions/privapp-permissions-platform.xml 
+
+--- packet bytes=93 time=1780094857.058538520 ---
+'wjp{servicemanager getFrameworkHalManifest: Successfully processed VINTF information 
+
+--- packet bytes=114 time=1780094857.058552180 ---
+'wj4$| servicemanager Could not find android.hardware.power.stats.IPowerStats/default in the VINTF manifest. 
+
+--- packet bytes=78 time=1780094857.059595960 ---
+lwjLPowerStatsService nativeInit failed to connect to power.stats HAL 
+
+--- packet bytes=76 time=1780094857.059975380 ---
+lwjSystemServerTiming StartPowerStatsService took to complete: 9ms 
+
+--- packet bytes=50 time=1780094857.060033520 ---
+lwjLSystemServerTiming StartIStatsService 
+
+--- packet bytes=72 time=1780094857.060047300 ---
+lwjDSystemServerTiming StartIStatsService took to complete: 0ms 
+
+--- packet bytes=52 time=1780094857.060071860 ---
+lwj\SystemServerTiming MemtrackProxyService 
+
+--- packet bytes=131 time=1780094857.066915180 ---
+wjLSystemConfig Reading permissions from /system/etc/permissions/privapp_allowlist_com.android.providers.media.module.xml 
+
+--- packet bytes=87 time=1780094857.068055660 ---
+wjSystemConfig Reading permissions from /system/etc/permissions/platform.xml 
+
+--- packet bytes=113 time=1780094857.073479440 ---
+wjp`SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.audio.low_latency.xml 
+
+--- packet bytes=120 time=1780094857.074909200 ---
+wj vSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.relative_humidity.xml 
+
+--- packet bytes=104 time=1780094857.076084360 ---
+wjD SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.ethernet.xml 
+
+--- packet bytes=110 time=1780094857.076991400 ---
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.compute.xml 
+
+--- packet bytes=104 time=1780094857.077977900 ---
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.software.sip.voip.xml 
+
+--- packet bytes=118 time=1780094857.078831580 ---
+wj*SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.flash-autofocus.xml 
+
+--- packet bytes=108 time=1780094857.079680660 ---
+wj4SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.opengles.aep.xml 
+
+--- packet bytes=108 time=1780094857.080428520 ---
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.light.xml 
+
+--- packet bytes=107 time=1780094857.081148580 ---
+wjDSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.full.xml 
+
+--- packet bytes=112 time=1780094857.082036880 ---
+wjDSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.proximity.xml 
+
+--- packet bytes=110 time=1780094857.082812920 ---
+wjxSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.version.xml 
+
+--- packet bytes=108 time=1780094857.083534320 ---
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.front.xml 
+
+--- packet bytes=108 time=1780094857.084198880 ---
+wjGSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.location.gps.xml 
+
+--- packet bytes=106 time=1780094857.084930940 ---
+wjgSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.camera.raw.xml 
+
+--- packet bytes=108 time=1780094857.085773100 ---
+wj,!SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.vulkan.level.xml 
+
+--- packet bytes=107 time=1780094857.086551280 ---
+wj(SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.touchscreen.xml 
+
+--- packet bytes=101 time=1780094857.087248220 ---
+wj2SystemConfig Reading permissions from /vendor/etc/permissions/handheld_core_hardware.xml 
+
+--- packet bytes=109 time=1780094857.088215380 ---
+wjASystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.usb.accessory.xml 
+
+--- packet bytes=109 time=1780094857.088864800 ---
+wj{KSystemConfig Reading permissions from /vendor/etc/permissions/android.software.verified_boot.xml 
+
+--- packet bytes=122 time=1780094857.089455680 ---
+wj@TSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.ambient_temperature.xml 
+
+--- packet bytes=112 time=1780094857.090043480 ---
+wj`~] SystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.barometer.xml 
+
+--- packet bytes=112 time=1780094857.090759440 ---
+wjmhSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.sensor.gyroscope.xml 
+
+--- packet bytes=100 time=1780094857.092324400 ---
+wjSystemConfig Reading permissions from /vendor/etc/permissions/android.hardware.wifi.xml 
+
+--- packet bytes=71 time=1780094857.094064920 ---
+wjSystemConfig No directory /product/etc/sysconfig, skipping 
+
+--- packet bytes=73 time=1780094857.094276060 ---
+wj`$SystemConfig No directory /product/etc/permissions, skipping 
+
+--- packet bytes=74 time=1780094857.094424720 ---
+wjSystemConfig No directory /system_ext/etc/sysconfig, skipping 
+
+--- packet bytes=76 time=1780094857.094541580 ---
+wjWSystemConfig No directory /system_ext/etc/permissions, skipping 
+
+--- packet bytes=110 time=1780094857.095992200 ---
+wj:SystemConfig Reading permissions from /apex/com.android.tethering/etc/permissions/permissions.xml 
+
+--- packet bytes=150 time=1780094857.097779080 ---
+wj aSystemConfig Reading permissions from /apex/com.android.permission/etc/permissions/privapp_allowlist_com.android.permissioncontroller.xml 
+
+--- packet bytes=155 time=1780094857.099271240 ---
+wjp"SystemConfig Reading permissions from /apex/com.android.mediaprovider/etc/permissions/privapp_allowlist_com.android.providers.media.module.xml 
+
+--- packet bytes=116 time=1780094857.100674760 ---
+wjhSystemConfig Reading permissions from /apex/com.android.ipsec/etc/permissions/android.net.ipsec.ike.xml 
+
+--- packet bytes=139 time=1780094857.101693640 ---
+wjSystemConfig Reading permissions from /apex/com.android.extservices/etc/permissions/privapp_allowlist_android.ext.services.xml 
+
+--- packet bytes=139 time=1780094857.102877020 ---
+wj<)! SystemConfig Reading permissions from /apex/com.android.btservices/etc/permissions/privapp_allowlist_com.android.bluetooth.xml 
+
+--- packet bytes=144 time=1780094857.104202140 ---
+wjX5SystemConfig Reading permissions from /apex/com.android.adservices/etc/permissions/privapp_allowlist_com.android.adservices.api.xml 
+
+--- packet bytes=79 time=1780094857.105901120 ---
+wj?OSystemConfig Public libraries file folder missing: /system_ext/etc 
+
+--- packet bytes=76 time=1780094857.106025280 ---
+wjQSystemConfig Public libraries file folder missing: /product/etc 
+
+--- packet bytes=68 time=1780094857.106093120 ---
+wjHRSystemConfig readAllPermissions took to complete: 104ms 
+
+--- packet bytes=78 time=1780094857.106298380 ---
+wjpUSystemServerInitThreadPool Finished executing ReadingSystemConfig 
+
+--- packet bytes=99 time=1780094857.106357180 ---
+wjVSystemServerTimingAsync InitThreadPoolExec:ReadingSystemConfig took to complete: 105ms 
+
+--- packet bytes=55 time=1780094858.052432140 ---
+wj"Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094858.060583900 ---
+lwj8HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094859.055893420 ---
+wjSInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094859.060730520 ---
+lwj`HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=101 time=1780094860.061178760 ---
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094860.062078840 ---
+wjInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094861.061410340 ---
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094861.066919600 ---
+wj0Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094862.061651860 ---
+lwjGHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094862.071775780 ---
+wj FInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094863.061881180 ---
+lwjHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094863.076157940 ---
+wjInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094864.062121540 ---
+lwjPHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094864.081710340 ---
+wjInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094865.062353040 ---
+lwj|HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094865.086107900 ---
+wj!Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094866.062591820 ---
+lwj\HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094866.086754140 ---
+wj*Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094867.062855380 ---
+lwjT|HidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094867.089584440 ---
+wjUInstaller installd not found; trying again 
+
+--- packet bytes=101 time=1780094868.063093400 ---
+lwjEHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094868.090185700 ---
+wj<_Installer installd not found; trying again 
+
+--- packet bytes=101 time=1780094869.063355900 ---
+lwjXHidlServiceManagement Waited for hwservicemanager.ready for a second, waiting another... 
+
+--- packet bytes=55 time=1780094869.094388980 ---
+wjDbInstaller installd not found; trying again 
+
+--- dmesg focused ---
+[13497.358655] binder: binder: WEBOS accept ioctl 0x40046210 no-op
+[13497.358696] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc08b933400 vma=ffffffc08cb7f210 start=0x7eced0c000 end=0x7ecee0a000 flags=0x200071
+[13497.358720] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b880000 end=ffffff800b881000 vma=ffffffc08cb7f210
+[13497.358726] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[13497.358732] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc032324000
+[13497.358736] binder: binder_alloc_shim: virt_to_page page=ffffffbdc0c8c900
+[13497.358742] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7eced0c000 page=ffffffbdc0c8c900
+[13497.358753] binder: binder_alloc_shim: after vm_insert_page ret=0
+[13497.559791] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.559942] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.559965] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.560014] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.563192] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.563382] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.563469] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.563527] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.565721] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.565885] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.565943] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.566002] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.566839] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.567017] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.567082] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.567126] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.567826] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.567985] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.568064] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.568109] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.568268] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.568339] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.568370] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.568395] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.569200] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.569351] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.569392] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.569428] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.911099] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.911322] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.911478] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.911549] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.911672] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.911816] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.911860] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.911924] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.927194] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.927476] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.927547] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.927642] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.928164] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.928299] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.928362] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.928406] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.929982] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.930230] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.930296] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.930344] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.931242] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.931461] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.931523] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.931590] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.933389] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.940745] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.940792] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.941353] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13497.941933] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13497.942051] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13497.942066] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13497.942085] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13498.934290] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13498.934420] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13498.934448] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13498.934457] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13499.937780] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13499.937913] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13499.937943] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13499.937953] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13500.942957] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13500.943086] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13500.943137] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13500.944176] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13501.948837] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13501.948966] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13501.948995] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13501.949008] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13502.953665] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13502.953787] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13502.953814] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13502.953823] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13503.957874] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13503.958058] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13503.958117] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13503.958168] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13504.963582] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13504.963712] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13504.963741] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13504.963750] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13505.967933] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13505.968082] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13505.968117] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13505.968165] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13506.968602] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13506.968745] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13506.968775] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13506.968819] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13507.971406] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13507.971540] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13507.971568] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13507.971636] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13508.972056] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13508.972189] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13508.972214] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13508.972257] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13509.976257] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13509.976391] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13509.976418] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13509.976458] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13510.977890] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13510.978031] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13510.978059] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13510.978102] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+[13511.980971] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800ac01000 end=ffffff800ac01000 vma=          (null)
+[13511.981111] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800b881000 end=ffffff800b881000 vma=          (null)
+[13511.981138] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800ac01000 end=ffffff800ac00000 vma=          (null)
+[13511.981179] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800b881000 end=ffffff800b880000 vma=          (null)
+
+AFTER_LOGDW_SYSTEMSERVER_DONE

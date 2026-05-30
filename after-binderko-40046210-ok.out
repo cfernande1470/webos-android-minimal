@@ -1,0 +1,25 @@
+--- pids ---
+wam       4114  3021  0 May29 ?        00:00:00 /usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic
+root     19897     1  0 May29 ?        00:00:00 /media/internal/android-usb/android-sidecar/bin/property_service_ack_shim /media/internal/android-usb/android-rootfs/dev/socket/property_service
+
+--- pidof ---
+
+--- zygote log ---
+Binder driver '/dev/binder' could not be opened. Terminating: Using /dev/binder failed: unable to mmap transaction memory.
+libc: Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 7398 (system_server), pid 7398 (system_server)
+Zygote: Zygote failed to write to system_server FD: No such file or directory
+Zygote: Process 7398 exited due to signal 6 (Aborted)
+Zygote: Exit zygote because system server (pid 7398) has terminated
+
+--- dmesg focused ---
+[10667.174197] binder: binder: WEBOS accept ioctl 0x40046210 no-op
+[10667.174231] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc086e85100 vma=ffffffc0868709a0 start=0x7ee1b48000 end=0x7ee1c46000 flags=0x200071
+[10667.174297] binder: webos_binder: missing address for get_vm_area
+[10667.174302] binder: binder_mmap: -1955247232 7ee1b48000-7ee1c46000 get_vm_area failed -12
+
+--- service list ---
+Binder driver '/dev/binder' could not be opened. Terminating: Using /dev/binder failed: unable to mmap transaction memory.
+libc: Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 8503 (service), pid 8503 (service)
+service_list_rc=0
+
+AFTER_BINDERKO_40046210_OK_DONE

@@ -1,0 +1,62 @@
+--- pids ---
+root       903     1  0 23:39 ?        00:00:00 /system/bin/servicemanager
+root       904     1  0 23:39 ?        00:00:00 /system/bin/hwservicemanager
+root       905     1  0 23:39 ?        00:00:00 /vendor/bin/vndservicemanager
+wam       4114  3021  0 21:02 ?        00:00:00 /usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic
+root     19897     1  0 23:29 ?        00:00:00 /media/internal/android-usb/android-sidecar/bin/property_service_ack_shim /media/internal/android-usb/android-rootfs/dev/socket/property_service
+
+--- pidof ---
+
+--- zygote log ---
+Zygote: Zygote failed to write to system_server FD: No such file or directory
+Zygote: Process 947 exited due to signal 9 (Killed)
+Zygote: Exit zygote because system server (pid 947) has terminated
+
+--- dmesg after libbinder patch ---
+[ 9448.449214] binder: 842091392:0 ioctl 40046210 7ff5e9ea80 returned -22
+[ 9448.449269] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc029e3f500 vma=ffffffc02a68ee70 start=0x7ead9b2000 end=0x7eadab0000 flags=0x200071
+[ 9448.449300] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a380000 end=ffffff800a381000 vma=ffffffc02a68ee70
+[ 9448.449306] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[ 9448.449312] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc089be8000
+[ 9448.449317] binder: binder_alloc_shim: virt_to_page page=ffffffbdc226fa00
+[ 9448.449323] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7ead9b2000 page=ffffffbdc226fa00
+[ 9448.449332] binder: binder_alloc_shim: after vm_insert_page ret=0
+[ 9448.629831] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.629932] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.629954] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.629971] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.632519] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.632671] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.632723] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.632736] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.634863] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.634953] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.634990] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.634999] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.635751] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.635825] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.635860] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.635869] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.636413] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.636484] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.636519] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.636528] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.636650] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.636698] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.636719] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.636727] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.637469] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.637648] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.637682] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[ 9448.638070] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.922450] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[ 9448.922623] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff800a381000 end=ffffff800a381000 vma=          (null)
+[ 9448.922663] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff800a381000 end=ffffff800a380000 vma=          (null)
+[ 9448.922684] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+
+--- service list ---
+Found 1 services:
+0	manager: [android.os.IServiceManager]
+service_list_rc=0
+
+AFTER_LIBBINDER_SPAM_PATCH_DONE

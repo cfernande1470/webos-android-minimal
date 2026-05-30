@@ -1,0 +1,36 @@
+--- kill managers ---
+--- start system servicemanager only on /dev/binder ---
+--- start hwservicemanager ---
+--- start vndservicemanager ---
+--- pids ---
+root     30503 30499  0 00:47 ?        00:00:00 /system/bin/servicemanager
+root     30505 30499  1 00:47 ?        00:00:00 /system/bin/hwservicemanager
+root     30507 30499  1 00:47 ?        00:00:00 /vendor/bin/vndservicemanager
+
+--- servicemanager maps: libbinder source ---
+servicemanager_pid=30503
+7f7fe68000-7f7fe69000 r--p 00000000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7f7fe69000-7f7fe6a000 r-xp 00001000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7f7fe6a000-7f7fe6b000 r--p 00002000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7f7fe6b000-7f7fe6c000 rw-p 00002000 07:03 2714                           /media/internal/android-usb/android-rootfs/system/lib64/libvndksupport.so
+7f7fe84000-7f7fed6000 r--p 00000000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7f7fed6000-7f7ff31000 r-xp 00052000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7f7ff31000-7f7ff3f000 r--p 000ad000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7f7ff3f000-7f7ff40000 rw-p 000ba000 07:03 2354                           /media/internal/android-usb/android-rootfs/system/lib64/libbinder.so
+7f800a7000-7f800ad000 r--p 00000000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7f800ad000-7f800b4000 r-xp 00006000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7f800b4000-7f800b5000 r--p 0000d000 07:03 2503                           /media/internal/android-usb/android-rootfs/system/lib64/libhidl-gen-utils.so
+7f802e2000-7f80302000 r--s 00000000 00:06 389300                         /media/internal/android-usb/android-rootfs/dev/__properties__/u:object_r:vndk_prop:s0
+
+--- service list smoke ---
+Found 1 services:
+0	manager: [android.os.IServiceManager]
+
+--- manager stderr ---
+### servicemanager
+### hwservicemanager
+SELinux: Loaded service_contexts from:
+    /system/etc/selinux/plat_hwservice_contexts
+    /vendor/etc/selinux/vendor_hwservice_contexts
+### vndservicemanager
+RESTART_MANAGERS_SYSTEM_BINDER_CLEAN_DONE

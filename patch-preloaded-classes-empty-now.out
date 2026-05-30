@@ -1,0 +1,14 @@
+--- preloaded-classes source ---
+-rw-r--r--    1 root     root        741540 Apr  3 07:29 /media/internal/android-usb/android-rootfs/system/etc/preloaded-classes
+original lines: 16454
+
+--- desmontar override previo ---
+
+--- crear override vacío ---
+-rw-r--r--    1 root     root             0 May 30 11:23 /media/internal/android-usb/android-sidecar/overrides/preloaded-classes.empty
+
+--- bind mount empty preloaded-classes ---
+
+--- check final ---
+/dev/sda1 on /media/internal/android-usb/android-rootfs/system/etc/preloaded-classes type ext4 (rw,relatime,data=ordered)
+final lines: 0

@@ -1,0 +1,28 @@
+--- sanity ---
+-rwxr-xr-x    1 root     root        711368 May 29 21:59 /media/internal/android-usb/android-sidecar/bin/tombstoned_socket_wrap
+-rw-r--r--    1 root     root             0 May 30 10:52 /media/internal/android-usb/android-rootfs/linkerconfig/ld.config.txt
+ro.hardware.egl=
+ro.board.platform=waydroid
+ro.zygote.disable_gl_preload=
+ro.vendor.api_level=28
+
+--- start tombstoned via socket wrapper ---
+--- tombstoned pid/socket ---
+srw-rw-rw-    1 root     root             0 May 30 11:03 tombstoned_crash
+srw-rw-rw-    1 root     root             0 May 30 11:03 tombstoned_intercept
+srw-rw-rw-    1 root     root             0 May 30 11:03 tombstoned_java_trace
+
+--- start zygote ---
+
+--- zygote pid ---
+
+--- zygote log ---
+libc: Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 15779 (zygote64), pid 15779 (zygote64)
+
+--- tombstoned log ---
+
+--- tombstones ---
+total 0
+NO_TOMBSTONE
+
+--- dmesg crash tail ---

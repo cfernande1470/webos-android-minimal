@@ -1,0 +1,31 @@
+--- sanity ---
+-rwxr-xr-x    1 root     root        711368 May 29 21:59 /media/internal/android-usb/android-sidecar/bin/tombstoned_socket_wrap
+-rw-r--r--    1 root     root        156186 May 30 11:05 /media/internal/android-usb/android-rootfs/linkerconfig/ld.config.txt
+29:additional.namespaces = com_android_adbd,com_android_appsearch,com_android_art,com_android_btservices,com_android_conscrypt,com_android_i18n,com_android_media,com_android_neuralnetworks,com_android_os_statsd,com_android_resolv,com_android_runtime,com_android_tethering,com_android_uwb,rs,sphal,vndk
+133:namespace.default.links = com_android_adbd,com_android_i18n,default,com_android_art,com_android_resolv,com_android_tethering,com_android_neuralnetworks,com_android_os_statsd
+142:namespace.default.link.com_android_art.shared_libs = libdexfile.so
+ro.hardware.egl=
+ro.board.platform=waydroid
+ro.zygote.disable_gl_preload=
+ro.vendor.api_level=28
+
+--- start tombstoned via socket wrapper ---
+--- tombstoned pid/socket ---
+srw-rw-rw-    1 root     root             0 May 30 11:07 tombstoned_crash
+srw-rw-rw-    1 root     root             0 May 30 11:07 tombstoned_intercept
+srw-rw-rw-    1 root     root             0 May 30 11:07 tombstoned_java_trace
+
+--- start zygote ---
+
+--- zygote pid ---
+
+--- zygote log ---
+libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x270 in tid 19795 (main), pid 19795 (main)
+
+--- tombstoned log ---
+
+--- tombstones ---
+total 0
+NO_TOMBSTONE
+
+--- dmesg crash tail ---

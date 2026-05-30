@@ -1,0 +1,1509 @@
+--- libandroid_runtime around 0x1c7414 ---
+
+zygote-symbols-post-binder/libandroid_runtime.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+00000000001c7300 <android::battery::MultiStateCounter<long>::toString()@@Base+0x3ac>:
+  1c7300:	f85f03a9 	ldur	x9, [x29, #-16]
+  1c7304:	eb09011f 	cmp	x8, x9
+  1c7308:	540002c1 	b.ne	1c7360 <android::battery::MultiStateCounter<long>::toString()@@Base+0x40c>  // b.any
+  1c730c:	a95a4ff4 	ldp	x20, x19, [sp, #416]
+  1c7310:	a95957f6 	ldp	x22, x21, [sp, #400]
+  1c7314:	a9585ff8 	ldp	x24, x23, [sp, #384]
+  1c7318:	a95767fa 	ldp	x26, x25, [sp, #368]
+  1c731c:	a9566ffc 	ldp	x28, x27, [sp, #352]
+  1c7320:	a9557bfd 	ldp	x29, x30, [sp, #336]
+  1c7324:	9106c3ff 	add	sp, sp, #0x1b0
+  1c7328:	d65f03c0 	ret
+  1c732c:	90fff521 	adrp	x1, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1c7330:	aa1603e0 	mov	x0, x22
+  1c7334:	91063c21 	add	x1, x1, #0x18f
+  1c7338:	52800262 	mov	w2, #0x13                  	// #19
+  1c733c:	9400a9b1 	bl	1f1a00 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)@plt>
+  1c7340:	3940e2a8 	ldrb	w8, [x21, #56]
+  1c7344:	35fffa28 	cbnz	w8, 1c7288 <android::battery::MultiStateCounter<long>::toString()@@Base+0x334>
+  1c7348:	90fff581 	adrp	x1, 77000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x11ec6>
+  1c734c:	aa1603e0 	mov	x0, x22
+  1c7350:	91294421 	add	x1, x1, #0xa51
+  1c7354:	52800122 	mov	w2, #0x9                   	// #9
+  1c7358:	9400a9aa 	bl	1f1a00 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)@plt>
+  1c735c:	17ffffcb 	b	1c7288 <android::battery::MultiStateCounter<long>::toString()@@Base+0x334>
+  1c7360:	9400a95c 	bl	1f18d0 <__stack_chk_fail@plt>
+
+00000000001c7364 <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base>:
+  1c7364:	d10143ff 	sub	sp, sp, #0x50
+  1c7368:	a9027bfd 	stp	x29, x30, [sp, #32]
+  1c736c:	910083fd 	add	x29, sp, #0x20
+  1c7370:	f9001bf5 	str	x21, [sp, #48]
+  1c7374:	a9044ff4 	stp	x20, x19, [sp, #64]
+  1c7378:	aa0303f4 	mov	x20, x3
+  1c737c:	aa0103f5 	mov	x21, x1
+  1c7380:	aa0003f3 	mov	x19, x0
+  1c7384:	b4000142 	cbz	x2, 1c73ac <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x48>
+  1c7388:	f9400268 	ldr	x8, [x19]
+  1c738c:	aa1303e0 	mov	x0, x19
+  1c7390:	aa0203e1 	mov	x1, x2
+  1c7394:	aa1f03e2 	mov	x2, xzr
+  1c7398:	f942a508 	ldr	x8, [x8, #1352]
+  1c739c:	d63f0100 	blr	x8
+  1c73a0:	b4000060 	cbz	x0, 1c73ac <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x48>
+  1c73a4:	aa0003f5 	mov	x21, x0
+  1c73a8:	14000002 	b	1c73b0 <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x4c>
+  1c73ac:	b40001b5 	cbz	x21, 1c73e0 <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x7c>
+  1c73b0:	394002a8 	ldrb	w8, [x21]
+  1c73b4:	34000168 	cbz	w8, 1c73e0 <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x7c>
+  1c73b8:	39400288 	ldrb	w8, [x20]
+  1c73bc:	90fff5c0 	adrp	x0, 7f000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x9ec6>
+  1c73c0:	f9400a89 	ldr	x9, [x20, #16]
+  1c73c4:	91238800 	add	x0, x0, #0x8e2
+  1c73c8:	aa1503e1 	mov	x1, x21
+  1c73cc:	7200011f 	tst	w8, #0x1
+  1c73d0:	910023e8 	add	x8, sp, #0x8
+  1c73d4:	9a941522 	csinc	x2, x9, x20, ne	// ne = any
+  1c73d8:	9400affe 	bl	1f33d0 <android::base::StringPrintf(char const*, ...)@plt>
+  1c73dc:	14000004 	b	1c73ec <android::zygote::ZygoteFailure(_JNIEnv*, char const*, _jstring*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@@Base+0x88>
+  1c73e0:	910023e0 	add	x0, sp, #0x8
+  1c73e4:	aa1403e1 	mov	x1, x20
+  1c73e8:	9400ab62 	bl	1f2170 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::basic_string(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@plt>
+  1c73ec:	394023e8 	ldrb	w8, [sp, #8]
+  1c73f0:	910023eb 	add	x11, sp, #0x8
+  1c73f4:	f9400fe9 	ldr	x9, [sp, #24]
+  1c73f8:	b240016b 	orr	x11, x11, #0x1
+  1c73fc:	f940026a 	ldr	x10, [x19]
+  1c7400:	aa1303e0 	mov	x0, x19
+  1c7404:	7200011f 	tst	w8, #0x1
+  1c7408:	9a890161 	csel	x1, x11, x9, eq	// eq = none
+  1c740c:	f9404948 	ldr	x8, [x10, #144]
+  1c7410:	d63f0100 	blr	x8
+
+00000000001c7414 <android::zygote::ForkCommon(_JNIEnv*, bool, std::__1::vector<int, std::__1::allocator<int> > const&, std::__1::vector<int, std::__1::allocator<int> > const&, bool, bool)@@Base>:
+  1c7414:	d10343ff 	sub	sp, sp, #0xd0
+  1c7418:	a9077bfd 	stp	x29, x30, [sp, #112]
+  1c741c:	9101c3fd 	add	x29, sp, #0x70
+  1c7420:	a9086ffc 	stp	x28, x27, [sp, #128]
+  1c7424:	a90967fa 	stp	x26, x25, [sp, #144]
+  1c7428:	a90a5ff8 	stp	x24, x23, [sp, #160]
+  1c742c:	a90b57f6 	stp	x22, x21, [sp, #176]
+  1c7430:	a90c4ff4 	stp	x20, x19, [sp, #192]
+  1c7434:	f0000249 	adrp	x9, 212000 <vtable for android::battery::MultiStateCounter<std::__1::vector<unsigned long, std::__1::allocator<unsigned long> > >@@Base+0xb8>
+  1c7438:	d53bd048 	mrs	x8, tpidr_el0
+  1c743c:	910c0129 	add	x9, x9, #0x300
+  1c7440:	f90003e8 	str	x8, [sp]
+  1c7444:	aa0203f4 	mov	x20, x2
+  1c7448:	2a0103f8 	mov	w24, w1
+  1c744c:	aa0003f3 	mov	x19, x0
+  1c7450:	f9401508 	ldr	x8, [x8, #40]
+  1c7454:	ad400520 	ldp	q0, q1, [x9]
+  1c7458:	910043e1 	add	x1, sp, #0x10
+  1c745c:	52800220 	mov	w0, #0x11                  	// #17
+  1c7460:	aa1f03e2 	mov	x2, xzr
+  1c7464:	2a0503f5 	mov	w21, w5
+  1c7468:	2a0403f7 	mov	w23, w4
+  1c746c:	aa0303f6 	mov	x22, x3
+  1c7470:	f81f83a8 	stur	x8, [x29, #-8]
+  1c7474:	ad0087e0 	stp	q0, q1, [sp, #16]
+  1c7478:	9400ce5e 	bl	1fadf0 <sigaction@plt>
+  1c747c:	36f80160 	tbz	w0, #31, 1c74a8 <android::zygote::ForkCommon(_JNIEnv*, bool, std::__1::vector<int, std::__1::allocator<int> > const&, std::__1::vector<int, std::__1::allocator<int> > const&, bool, bool)@@Base+0x94>
+  1c7480:	9400a954 	bl	1f19d0 <__errno@plt>
+  1c7484:	b9400000 	ldr	w0, [x0]
+  1c7488:	9400abee 	bl	1f2440 <strerror@plt>
+  1c748c:	d0fff5e1 	adrp	x1, 85000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x3ec6>
+  1c7490:	f0fff562 	adrp	x2, 76000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x12ec6>
+  1c7494:	aa0003e3 	mov	x3, x0
+  1c7498:	911acc21 	add	x1, x1, #0x6b3
+  1c749c:	911dd042 	add	x2, x2, #0x774
+  1c74a0:	528000a0 	mov	w0, #0x5                   	// #5
+  1c74a4:	9400a93f 	bl	1f19a0 <__android_log_print@plt>
+  1c74a8:	6f00e400 	movi	v0.2d, #0x0
+  1c74ac:	52800028 	mov	w8, #0x1                   	// #1
+  1c74b0:	d100c3a1 	sub	x1, x29, #0x30
+  1c74b4:	52800020 	mov	w0, #0x1                   	// #1
+  1c74b8:	aa1f03e2 	mov	x2, xzr
+  1c74bc:	ad3e83a0 	stp	q0, q0, [x29, #-48]
+  1c74c0:	f81d83a8 	stur	x8, [x29, #-40]
+  1c74c4:	9400ce4b 	bl	1fadf0 <sigaction@plt>
+  1c74c8:	36f80160 	tbz	w0, #31, 1c74f4 <android::zygote::ForkCommon(_JNIEnv*, bool, std::__1::vector<int, std::__1::allocator<int> > const&, std::__1::vector<int, std::__1::allocator<int> > const&, bool, bool)@@Base+0xe0>
+  1c74cc:	9400a941 	bl	1f19d0 <__errno@plt>
+  1c74d0:	b9400000 	ldr	w0, [x0]
+  1c74d4:	9400abdb 	bl	1f2440 <strerror@plt>
+  1c74d8:	d0fff5e1 	adrp	x1, 85000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x3ec6>
+  1c74dc:	d0fff582 	adrp	x2, 79000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0xfec6>
+  1c74e0:	aa0003e3 	mov	x3, x0
+  1c74e4:	911acc21 	add	x1, x1, #0x6b3
+  1c74e8:	91398442 	add	x2, x2, #0xe61
+  1c74ec:	528000a0 	mov	w0, #0x5                   	// #5
+  1c74f0:	9400a92c 	bl	1f19a0 <__android_log_print@plt>
+  1c74f4:	52800500 	mov	w0, #0x28                  	// #40
+  1c74f8:	90fff508 	adrp	x8, 67000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x21ec6>
+  1c74fc:	f0fff529 	adrp	x9, 6e000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1aec6>
+  1c7500:	911dc508 	add	x8, x8, #0x771
+  1c7504:	91249129 	add	x9, x9, #0x924
+  1c7508:	7200031f 	tst	w24, #0x1
+  1c750c:	9a88113a 	csel	x26, x9, x8, ne	// ne = any
+  1c7510:	9400a95c 	bl	1f1a80 <operator new(unsigned long)@plt>
+  1c7514:	9000027b 	adrp	x27, 213000 <vtable for android::gui::WindowInfo@@Base+0x4a8>
+  1c7518:	90000279 	adrp	x25, 213000 <vtable for android::gui::WindowInfo@@Base+0x4a8>
+  1c751c:	910043e1 	add	x1, sp, #0x10
+
+--- libandroid_runtime around 0x1cce84 ---
+
+zygote-symbols-post-binder/libandroid_runtime.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+00000000001ccd80 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1b78>:
+  1ccd80:	910683e0 	add	x0, sp, #0x1a0
+  1ccd84:	394423e8 	ldrb	w8, [sp, #264]
+  1ccd88:	7200011f 	tst	w8, #0x1
+  1ccd8c:	d341fd08 	lsr	x8, x8, #1
+  1ccd90:	9a890161 	csel	x1, x11, x9, eq	// eq = none
+  1ccd94:	9a8a0102 	csel	x2, x8, x10, eq	// eq = none
+  1ccd98:	940094fa 	bl	1f2180 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::append(char const*, unsigned long)@plt>
+  1ccd9c:	aa0003e1 	mov	x1, x0
+  1ccda0:	910783e0 	add	x0, sp, #0x1e0
+  1ccda4:	940094f3 	bl	1f2170 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::basic_string(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@plt>
+  1ccda8:	f94002a8 	ldr	x8, [x21]
+  1ccdac:	910783e1 	add	x1, sp, #0x1e0
+  1ccdb0:	aa1503e0 	mov	x0, x21
+  1ccdb4:	f9401908 	ldr	x8, [x8, #48]
+  1ccdb8:	d63f0100 	blr	x8
+  1ccdbc:	394783e8 	ldrb	w8, [sp, #480]
+  1ccdc0:	37004588 	tbnz	w8, #0, 1cd670 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x2468>
+  1ccdc4:	394423e8 	ldrb	w8, [sp, #264]
+  1ccdc8:	370045c8 	tbnz	w8, #0, 1cd680 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x2478>
+  1ccdcc:	394683e8 	ldrb	w8, [sp, #416]
+  1ccdd0:	36000068 	tbz	w8, #0, 1ccddc <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1bd4>
+  1ccdd4:	f940dbe0 	ldr	x0, [sp, #432]
+  1ccdd8:	9400932e 	bl	1f1a90 <operator delete(void*)@plt>
+  1ccddc:	2a1f03e0 	mov	w0, wzr
+  1ccde0:	2a1603e1 	mov	w1, w22
+  1ccde4:	9400b8d7 	bl	1fb140 <set_sched_policy@plt>
+  1ccde8:	2a0003f7 	mov	w23, w0
+  1ccdec:	4b0003f9 	neg	w25, w0
+  1ccdf0:	940092f8 	bl	1f19d0 <__errno@plt>
+  1ccdf4:	aa0003f4 	mov	x20, x0
+  1ccdf8:	b9000019 	str	w25, [x0]
+  1ccdfc:	34000557 	cbz	w23, 1ccea4 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1c9c>
+  1cce00:	f0fff4e0 	adrp	x0, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1cce04:	f0fff4e1 	adrp	x1, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1cce08:	91074c00 	add	x0, x0, #0x1d3
+  1cce0c:	91076c21 	add	x1, x1, #0x1db
+  1cce10:	910423e8 	add	x8, sp, #0x108
+  1cce14:	52805ac2 	mov	w2, #0x2d6                 	// #726
+  1cce18:	9400996e 	bl	1f33d0 <android::base::StringPrintf(char const*, ...)@plt>
+  1cce1c:	b9400280 	ldr	w0, [x20]
+  1cce20:	94009588 	bl	1f2440 <strerror@plt>
+  1cce24:	aa0003e2 	mov	x2, x0
+  1cce28:	90fff540 	adrp	x0, 74000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x14ec6>
+  1cce2c:	91165000 	add	x0, x0, #0x594
+  1cce30:	9103c3e8 	add	x8, sp, #0xf0
+  1cce34:	2a1603e1 	mov	w1, w22
+  1cce38:	9103c3f6 	add	x22, sp, #0xf0
+  1cce3c:	94009965 	bl	1f33d0 <android::base::StringPrintf(char const*, ...)@plt>
+  1cce40:	a94fa7ea 	ldp	x10, x9, [sp, #248]
+  1cce44:	b24002cb 	orr	x11, x22, #0x1
+  1cce48:	910423e0 	add	x0, sp, #0x108
+  1cce4c:	3943c3e8 	ldrb	w8, [sp, #240]
+  1cce50:	7200011f 	tst	w8, #0x1
+  1cce54:	d341fd08 	lsr	x8, x8, #1
+  1cce58:	9a890161 	csel	x1, x11, x9, eq	// eq = none
+  1cce5c:	9a8a0102 	csel	x2, x8, x10, eq	// eq = none
+  1cce60:	940094c8 	bl	1f2180 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::append(char const*, unsigned long)@plt>
+  1cce64:	aa0003e1 	mov	x1, x0
+  1cce68:	910683e0 	add	x0, sp, #0x1a0
+  1cce6c:	940094c1 	bl	1f2170 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::basic_string(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@plt>
+  1cce70:	f94002a8 	ldr	x8, [x21]
+  1cce74:	910683e1 	add	x1, sp, #0x1a0
+  1cce78:	aa1503e0 	mov	x0, x21
+  1cce7c:	f9401908 	ldr	x8, [x8, #48]
+  1cce80:	d63f0100 	blr	x8
+  1cce84:	394683e8 	ldrb	w8, [sp, #416]
+  1cce88:	370015e8 	tbnz	w8, #0, 1cd144 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1f3c>
+  1cce8c:	3943c3e8 	ldrb	w8, [sp, #240]
+  1cce90:	37001628 	tbnz	w8, #0, 1cd154 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1f4c>
+  1cce94:	394423e8 	ldrb	w8, [sp, #264]
+  1cce98:	36000068 	tbz	w8, #0, 1ccea4 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1c9c>
+  1cce9c:	f9408fe0 	ldr	x0, [sp, #280]
+  1ccea0:	940092fc 	bl	1f1a90 <operator delete(void*)@plt>
+  1ccea4:	9400b8ab 	bl	1fb150 <DropTaskProfilesResourceCaching@plt>
+  1ccea8:	f94002a8 	ldr	x8, [x21]
+  1cceac:	aa1503e0 	mov	x0, x21
+  1cceb0:	f9401508 	ldr	x8, [x8, #40]
+  1cceb4:	d63f0100 	blr	x8
+  1cceb8:	b94077f5 	ldr	w21, [sp, #116]
+  1ccebc:	2a1503e0 	mov	w0, w21
+  1ccec0:	2a1503e1 	mov	w1, w21
+  1ccec4:	2a1503e2 	mov	w2, w21
+  1ccec8:	9400b8a6 	bl	1fb160 <setresuid@plt>
+  1ccecc:	f9401bf7 	ldr	x23, [sp, #48]
+  1cced0:	3100041f 	cmn	w0, #0x1
+  1cced4:	b94027f6 	ldr	w22, [sp, #36]
+  1cced8:	540004c1 	b.ne	1ccf70 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1d68>  // b.any
+  1ccedc:	f0fff4e0 	adrp	x0, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1ccee0:	f0fff4e1 	adrp	x1, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1ccee4:	91074c00 	add	x0, x0, #0x1d3
+  1ccee8:	91076c21 	add	x1, x1, #0x1db
+  1cceec:	910783e8 	add	x8, sp, #0x1e0
+  1ccef0:	5280e622 	mov	w2, #0x731                 	// #1841
+  1ccef4:	94009937 	bl	1f33d0 <android::base::StringPrintf(char const*, ...)@plt>
+  1ccef8:	b9400280 	ldr	w0, [x20]
+  1ccefc:	94009551 	bl	1f2440 <strerror@plt>
+  1ccf00:	aa0003e2 	mov	x2, x0
+  1ccf04:	b0fff580 	adrp	x0, 7d000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0xbec6>
+  1ccf08:	910e1000 	add	x0, x0, #0x384
+  1ccf0c:	910683e8 	add	x8, sp, #0x1a0
+  1ccf10:	2a1503e1 	mov	w1, w21
+  1ccf14:	910683f5 	add	x21, sp, #0x1a0
+  1ccf18:	9400992e 	bl	1f33d0 <android::base::StringPrintf(char const*, ...)@plt>
+  1ccf1c:	a95aa7ea 	ldp	x10, x9, [sp, #424]
+  1ccf20:	b24002ab 	orr	x11, x21, #0x1
+  1ccf24:	910783e0 	add	x0, sp, #0x1e0
+  1ccf28:	394683e8 	ldrb	w8, [sp, #416]
+  1ccf2c:	7200011f 	tst	w8, #0x1
+  1ccf30:	d341fd08 	lsr	x8, x8, #1
+  1ccf34:	9a890161 	csel	x1, x11, x9, eq	// eq = none
+  1ccf38:	9a8a0102 	csel	x2, x8, x10, eq	// eq = none
+  1ccf3c:	94009491 	bl	1f2180 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::append(char const*, unsigned long)@plt>
+  1ccf40:	aa0003e3 	mov	x3, x0
+  1ccf44:	a94803e8 	ldp	x8, x0, [sp, #128]
+  1ccf48:	a9490be1 	ldp	x1, x2, [sp, #144]
+  1ccf4c:	d63f0100 	blr	x8
+  1ccf50:	394683e8 	ldrb	w8, [sp, #416]
+  1ccf54:	36000068 	tbz	w8, #0, 1ccf60 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1d58>
+  1ccf58:	f940dbe0 	ldr	x0, [sp, #432]
+  1ccf5c:	940092cd 	bl	1f1a90 <operator delete(void*)@plt>
+  1ccf60:	394783e8 	ldrb	w8, [sp, #480]
+  1ccf64:	36000068 	tbz	w8, #0, 1ccf70 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1d68>
+  1ccf68:	f940fbe0 	ldr	x0, [sp, #496]
+  1ccf6c:	940092c9 	bl	1f1a90 <operator delete(void*)@plt>
+  1ccf70:	52800060 	mov	w0, #0x3                   	// #3
+  1ccf74:	9400b827 	bl	1fb010 <prctl@plt>
+  1ccf78:	3100041f 	cmn	w0, #0x1
+  1ccf7c:	540003a0 	b.eq	1ccff0 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x1de8>  // b.none
+
+--- libandroid_runtime around 0x1c9710 ---
+
+zygote-symbols-post-binder/libandroid_runtime.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+00000000001c9600 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xd8c>:
+  1c9600:	910ed442 	add	x2, x2, #0x3b5
+  1c9604:	528000c0 	mov	w0, #0x6                   	// #6
+  1c9608:	2a1b03e3 	mov	w3, w27
+  1c960c:	9400a0e5 	bl	1f19a0 <__android_log_print@plt>
+  1c9610:	b0fff562 	adrp	x2, 76000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x12ec6>
+  1c9614:	aa1303e0 	mov	x0, x19
+  1c9618:	911f7442 	add	x2, x2, #0x7dd
+  1c961c:	52812ce1 	mov	w1, #0x967                 	// #2407
+  1c9620:	94001064 	bl	1cd7b0 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x25a8>
+  1c9624:	9400c647 	bl	1faf40 <UsePerAppMemcg@plt>
+  1c9628:	36000980 	tbz	w0, #0, 1c9758 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xee4>
+  1c962c:	d0fff50a 	adrp	x10, 6b000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x1dec6>
+  1c9630:	528cac69 	mov	w9, #0x6563                	// #25955
+  1c9634:	9109414a 	add	x10, x10, #0x250
+  1c9638:	528004c8 	mov	w8, #0x26                  	// #38
+  1c963c:	72ae6e69 	movk	w9, #0x7373, lsl #16
+  1c9640:	52800300 	mov	w0, #0x18                  	// #24
+  1c9644:	f81e83bf 	stur	xzr, [x29, #-24]
+  1c9648:	3dc00140 	ldr	q0, [x10]
+  1c964c:	381d83a8 	sturb	w8, [x29, #-40]
+  1c9650:	b81e83a9 	stur	w9, [x29, #-24]
+  1c9654:	3c9d93a0 	stur	q0, [x29, #-39]
+  1c9658:	9400a10a 	bl	1f1a80 <operator new(unsigned long)@plt>
+  1c965c:	91006013 	add	x19, x0, #0x18
+  1c9660:	d100a3a1 	sub	x1, x29, #0x28
+  1c9664:	f9003fe0 	str	x0, [sp, #120]
+  1c9668:	f90047f3 	str	x19, [sp, #136]
+  1c966c:	9400a2c1 	bl	1f2170 <std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::basic_string(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)@plt>
+  1c9670:	9101e3e1 	add	x1, sp, #0x78
+  1c9674:	2a1b03e0 	mov	w0, w27
+  1c9678:	2a1f03e2 	mov	w2, wzr
+  1c967c:	f90043f3 	str	x19, [sp, #128]
+  1c9680:	9400bbac 	bl	1f8530 <SetTaskProfiles@plt>
+  1c9684:	f9403ff4 	ldr	x20, [sp, #120]
+  1c9688:	2a0003f3 	mov	w19, w0
+  1c968c:	b40004f4 	cbz	x20, 1c9728 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xeb4>
+  1c9690:	f94043e8 	ldr	x8, [sp, #128]
+  1c9694:	eb14011f 	cmp	x8, x20
+  1c9698:	54000420 	b.eq	1c971c <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xea8>  // b.none
+  1c969c:	aa0803f6 	mov	x22, x8
+  1c96a0:	14000004 	b	1c96b0 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xe3c>
+  1c96a4:	aa1603e8 	mov	x8, x22
+  1c96a8:	eb1402df 	cmp	x22, x20
+  1c96ac:	54000340 	b.eq	1c9714 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xea0>  // b.none
+  1c96b0:	385e8ec9 	ldrb	w9, [x22, #-24]!
+  1c96b4:	3607ff89 	tbz	w9, #0, 1c96a4 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xe30>
+  1c96b8:	f85f8100 	ldur	x0, [x8, #-8]
+  1c96bc:	9400a0f5 	bl	1f1a90 <operator delete(void*)@plt>
+  1c96c0:	17fffff9 	b	1c96a4 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xe30>
+  1c96c4:	6f00e400 	movi	v0.2d, #0x0
+  1c96c8:	aa1303e0 	mov	x0, x19
+  1c96cc:	b94067e1 	ldr	w1, [sp, #100]
+  1c96d0:	aa1a03e3 	mov	x3, x26
+  1c96d4:	b94077e2 	ldr	w2, [sp, #116]
+  1c96d8:	2a1903e4 	mov	w4, w25
+  1c96dc:	aa1803e5 	mov	x5, x24
+  1c96e0:	aa1703e6 	mov	x6, x23
+  1c96e4:	f94037e7 	ldr	x7, [sp, #104]
+  1c96e8:	390143ff 	strb	wzr, [sp, #80]
+  1c96ec:	390123ff 	strb	wzr, [sp, #72]
+  1c96f0:	f90023ff 	str	xzr, [sp, #64]
+  1c96f4:	3900e3ff 	strb	wzr, [sp, #56]
+  1c96f8:	3c8283e0 	stur	q0, [sp, #40]
+  1c96fc:	390083ff 	strb	wzr, [sp, #32]
+  1c9700:	390063f4 	strb	w20, [sp, #24]
+  1c9704:	3c8083e0 	stur	q0, [sp, #8]
+  1c9708:	b90003f4 	str	w20, [sp]
+  1c970c:	94000765 	bl	1cb4a0 <std::__1::enable_if<__is_forward_iterator<std::__1::__wrap_iter<int*> >::value&&is_constructible<int, std::__1::iterator_traits<std::__1::__wrap_iter<int*> >::reference>::value, std::__1::__wrap_iter<int*> >::type std::__1::vector<int, std::__1::allocator<int> >::insert<std::__1::__wrap_iter<int*> >(std::__1::__wrap_iter<int const*>, std::__1::__wrap_iter<int*>, std::__1::__wrap_iter<int*>)@@Base+0x298>
+  1c9710:	14000012 	b	1c9758 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xee4>
+  1c9714:	f9403fe0 	ldr	x0, [sp, #120]
+  1c9718:	14000002 	b	1c9720 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xeac>
+  1c971c:	aa1403e0 	mov	x0, x20
+  1c9720:	f90043f4 	str	x20, [sp, #128]
+  1c9724:	9400a0db 	bl	1f1a90 <operator delete(void*)@plt>
+  1c9728:	385d83a8 	ldurb	w8, [x29, #-40]
+  1c972c:	36000068 	tbz	w8, #0, 1c9738 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xec4>
+  1c9730:	f85e83a0 	ldur	x0, [x29, #-24]
+  1c9734:	9400a0d7 	bl	1f1a90 <operator delete(void*)@plt>
+  1c9738:	37000113 	tbnz	w19, #0, 1c9758 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xee4>
+  1c973c:	90fff5e1 	adrp	x1, 85000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x3ec6>
+  1c9740:	b0fff542 	adrp	x2, 72000 <android::meminfo::SysMemInfo::kMemTotal@@Base-0x16ec6>
+  1c9744:	911acc21 	add	x1, x1, #0x6b3
+  1c9748:	91067c42 	add	x2, x2, #0x19f
+  1c974c:	528000c0 	mov	w0, #0x6                   	// #6
+  1c9750:	2a1b03e3 	mov	w3, w27
+  1c9754:	9400a093 	bl	1f19a0 <__android_log_print@plt>
+  1c9758:	f85c03a0 	ldur	x0, [x29, #-64]
+  1c975c:	b4000060 	cbz	x0, 1c9768 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xef4>
+  1c9760:	f81c83a0 	stur	x0, [x29, #-56]
+  1c9764:	9400a0cb 	bl	1f1a90 <operator delete(void*)@plt>
+  1c9768:	f85a83a0 	ldur	x0, [x29, #-88]
+  1c976c:	b4000060 	cbz	x0, 1c9778 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xf04>
+  1c9770:	f81b03a0 	stur	x0, [x29, #-80]
+  1c9774:	9400a0c7 	bl	1f1a90 <operator delete(void*)@plt>
+  1c9778:	f94016a8 	ldr	x8, [x21, #40]
+  1c977c:	f85f03a9 	ldur	x9, [x29, #-16]
+  1c9780:	eb09011f 	cmp	x8, x9
+  1c9784:	54000181 	b.ne	1c97b4 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xf40>  // b.any
+  1c9788:	2a1b03e0 	mov	w0, w27
+  1c978c:	a9544ff4 	ldp	x20, x19, [sp, #320]
+  1c9790:	a95357f6 	ldp	x22, x21, [sp, #304]
+  1c9794:	a9525ff8 	ldp	x24, x23, [sp, #288]
+  1c9798:	a95167fa 	ldp	x26, x25, [sp, #272]
+  1c979c:	a9506ffc 	ldp	x28, x27, [sp, #256]
+  1c97a0:	a94f7bfd 	ldp	x29, x30, [sp, #240]
+  1c97a4:	910543ff 	add	sp, sp, #0x150
+  1c97a8:	d65f03c0 	ret
+  1c97ac:	d10103a0 	sub	x0, x29, #0x40
+  1c97b0:	9400b038 	bl	1f5890 <std::__1::__vector_base_common<true>::__throw_length_error() const@plt>
+  1c97b4:	9400a047 	bl	1f18d0 <__stack_chk_fail@plt>
+  1c97b8:	d10203ff 	sub	sp, sp, #0x80
+  1c97bc:	a9027bfd 	stp	x29, x30, [sp, #32]
+  1c97c0:	910083fd 	add	x29, sp, #0x20
+  1c97c4:	f9001bfb 	str	x27, [sp, #48]
+  1c97c8:	a90467fa 	stp	x26, x25, [sp, #64]
+  1c97cc:	a9055ff8 	stp	x24, x23, [sp, #80]
+  1c97d0:	a90657f6 	stp	x22, x21, [sp, #96]
+  1c97d4:	a9074ff4 	stp	x20, x19, [sp, #112]
+  1c97d8:	d53bd05a 	mrs	x26, tpidr_el0
+  1c97dc:	aa0203f3 	mov	x19, x2
+  1c97e0:	f9401748 	ldr	x8, [x26, #40]
+  1c97e4:	aa0003f4 	mov	x20, x0
+  1c97e8:	f81f83a8 	stur	x8, [x29, #-8]
+  1c97ec:	f9400008 	ldr	x8, [x0]
+  1c97f0:	b4000142 	cbz	x2, 1c9818 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xfa4>
+  1c97f4:	f942a508 	ldr	x8, [x8, #1352]
+  1c97f8:	aa1403e0 	mov	x0, x20
+  1c97fc:	aa1303e1 	mov	x1, x19
+  1c9800:	aa1f03e2 	mov	x2, xzr
+  1c9804:	d63f0100 	blr	x8
+  1c9808:	b4000400 	cbz	x0, 1c9888 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0x1014>
+  1c980c:	aa0003f5 	mov	x21, x0
+  1c9810:	2a1f03fb 	mov	w27, wzr
+  1c9814:	14000024 	b	1c98a4 <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0x1030>
+  1c9818:	f9439108 	ldr	x8, [x8, #1824]
+  1c981c:	aa1403e0 	mov	x0, x20
+  1c9820:	d63f0100 	blr	x8
+  1c9824:	72001c1f 	tst	w0, #0xff
+  1c9828:	540000a0 	b.eq	1c983c <android::register_com_android_internal_os_Zygote(_JNIEnv*)@@Base+0xfc8>  // b.none
+  1c982c:	f9400288 	ldr	x8, [x20]
+  1c9830:	aa1403e0 	mov	x0, x20
+  1c9834:	f9404508 	ldr	x8, [x8, #136]
+  1c9838:	d63f0100 	blr	x8
+  1c983c:	f9400288 	ldr	x8, [x20]
+
+--- libart around 0x4be390 ---
+
+zygote-symbols-post-binder/libart.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+00000000004be200 <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x578>:
+  4be200:	f0ffe014 	adrp	x20, c1000 <.str.49.llvm.5704029433737647809+0xe45>
+  4be204:	b0ffdff5 	adrp	x21, bb000 <.str.34.llvm.2731345328483658524+0x1877>
+  4be208:	9121ce94 	add	x20, x20, #0x873
+  4be20c:	9104b6b5 	add	x21, x21, #0x12d
+  4be210:	37180308 	tbnz	w8, #3, 4be270 <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x5e8>
+  4be214:	528000c0 	mov	w0, #0x6                   	// #6
+  4be218:	aa1f03e1 	mov	x1, xzr
+  4be21c:	9409db81 	bl	735020 <android::base::ShouldLog(android::base::LogSeverity, char const*)@plt>
+  4be220:	360002e0 	tbz	w0, #0, 4be27c <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x5f4>
+  4be224:	9409db97 	bl	735080 <__errno@plt>
+  4be228:	aa0003f6 	mov	x22, x0
+  4be22c:	b9400017 	ldr	w23, [x0]
+  4be230:	910063e0 	add	x0, sp, #0x18
+  4be234:	aa1403e1 	mov	x1, x20
+  4be238:	52801d82 	mov	w2, #0xec                  	// #236
+  4be23c:	528000c3 	mov	w3, #0x6                   	// #6
+  4be240:	aa1f03e4 	mov	x4, xzr
+  4be244:	12800005 	mov	w5, #0xffffffff            	// #-1
+  4be248:	9409db7a 	bl	735030 <android::base::LogMessage::LogMessage(char const*, unsigned int, android::base::LogSeverity, char const*, int)@plt>
+  4be24c:	910063e0 	add	x0, sp, #0x18
+  4be250:	9409db7c 	bl	735040 <android::base::LogMessage::stream()@plt>
+  4be254:	aa1503e1 	mov	x1, x21
+  4be258:	52800902 	mov	w2, #0x48                  	// #72
+  4be25c:	97f6d8ea 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be260:	910063e0 	add	x0, sp, #0x18
+  4be264:	9409db7f 	bl	735060 <android::base::LogMessage::~LogMessage()@plt>
+  4be268:	b90002d7 	str	w23, [x22]
+  4be26c:	14000004 	b	4be27c <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x5f4>
+  4be270:	aa1303e0 	mov	x0, x19
+  4be274:	aa1303e1 	mov	x1, x19
+  4be278:	940652dc 	bl	652de8 <art::Thread::PassActiveSuspendBarriers(art::Thread*)>
+  4be27c:	b9400268 	ldr	w8, [x19]
+  4be280:	721f091f 	tst	w8, #0xe
+  4be284:	54fff640 	b.eq	4be14c <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x4c4>  // b.none
+  4be288:	17ffffe2 	b	4be210 <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x588>
+  4be28c:	f943c668 	ldr	x8, [x19, #1928]
+  4be290:	aa1303e0 	mov	x0, x19
+  4be294:	aa1303e1 	mov	x1, x19
+  4be298:	2a1f03e2 	mov	w2, wzr
+  4be29c:	f904ea68 	str	x8, [x19, #2512]
+  4be2a0:	94065a0a 	bl	654ac8 <art::Thread::RunFlipFunction(art::Thread*, bool)>
+  4be2a4:	17ffff0a 	b	4bdecc <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x244>
+  4be2a8:	f943c668 	ldr	x8, [x19, #1928]
+  4be2ac:	aa1303e0 	mov	x0, x19
+  4be2b0:	aa1303e1 	mov	x1, x19
+  4be2b4:	2a1f03e2 	mov	w2, wzr
+  4be2b8:	f904ea68 	str	x8, [x19, #2512]
+  4be2bc:	94065a03 	bl	654ac8 <art::Thread::RunFlipFunction(art::Thread*, bool)>
+  4be2c0:	17ffffa3 	b	4be14c <art::JNI<true>::ExceptionClear(_JNIEnv*)+0x4c4>
+  4be2c4:	9409e57b 	bl	7378b0 <__stack_chk_fail@plt>
+
+00000000004be2c8 <art::JNI<true>::FatalError(_JNIEnv*, char const*)>:
+  4be2c8:	d10143ff 	sub	sp, sp, #0x50
+  4be2cc:	a9017bfd 	stp	x29, x30, [sp, #16]
+  4be2d0:	910043fd 	add	x29, sp, #0x10
+  4be2d4:	f90013f7 	str	x23, [sp, #32]
+  4be2d8:	a90357f6 	stp	x22, x21, [sp, #48]
+  4be2dc:	a9044ff4 	stp	x20, x19, [sp, #64]
+  4be2e0:	d53bd056 	mrs	x22, tpidr_el0
+  4be2e4:	aa0103f3 	mov	x19, x1
+  4be2e8:	f94016c8 	ldr	x8, [x22, #40]
+  4be2ec:	528000c0 	mov	w0, #0x6                   	// #6
+  4be2f0:	aa1f03e1 	mov	x1, xzr
+  4be2f4:	f90007e8 	str	x8, [sp, #8]
+  4be2f8:	9409db4a 	bl	735020 <android::base::ShouldLog(android::base::LogSeverity, char const*)@plt>
+  4be2fc:	37000160 	tbnz	w0, #0, 4be328 <art::JNI<true>::FatalError(_JNIEnv*, char const*)+0x60>
+  4be300:	f94016c8 	ldr	x8, [x22, #40]
+  4be304:	f94007e9 	ldr	x9, [sp, #8]
+  4be308:	eb09011f 	cmp	x8, x9
+  4be30c:	54000461 	b.ne	4be398 <art::JNI<true>::FatalError(_JNIEnv*, char const*)+0xd0>  // b.any
+  4be310:	a9444ff4 	ldp	x20, x19, [sp, #64]
+  4be314:	a94357f6 	ldp	x22, x21, [sp, #48]
+  4be318:	a9417bfd 	ldp	x29, x30, [sp, #16]
+  4be31c:	f94013f7 	ldr	x23, [sp, #32]
+  4be320:	910143ff 	add	sp, sp, #0x50
+  4be324:	d65f03c0 	ret
+  4be328:	9409db56 	bl	735080 <__errno@plt>
+  4be32c:	b0ffe041 	adrp	x1, c7000 <.str.6.llvm.5949244639145401432+0x3378>
+  4be330:	aa0003f4 	mov	x20, x0
+  4be334:	b9400017 	ldr	w23, [x0]
+  4be338:	91344421 	add	x1, x1, #0xd11
+  4be33c:	910003e0 	mov	x0, sp
+  4be340:	52806722 	mov	w2, #0x339                 	// #825
+  4be344:	528000c3 	mov	w3, #0x6                   	// #6
+  4be348:	aa1f03e4 	mov	x4, xzr
+  4be34c:	12800005 	mov	w5, #0xffffffff            	// #-1
+  4be350:	9409db38 	bl	735030 <android::base::LogMessage::LogMessage(char const*, unsigned int, android::base::LogSeverity, char const*, int)@plt>
+  4be354:	910003e0 	mov	x0, sp
+  4be358:	9409db3a 	bl	735040 <android::base::LogMessage::stream()@plt>
+  4be35c:	90ffdfe1 	adrp	x1, ba000 <.str.34.llvm.2731345328483658524+0x877>
+  4be360:	528002e2 	mov	w2, #0x17                  	// #23
+  4be364:	9107d421 	add	x1, x1, #0x1f5
+  4be368:	97f6d8a7 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be36c:	aa0003f5 	mov	x21, x0
+  4be370:	aa1303e0 	mov	x0, x19
+  4be374:	9409db4f 	bl	7350b0 <strlen@plt>
+  4be378:	aa0003e2 	mov	x2, x0
+  4be37c:	aa1503e0 	mov	x0, x21
+  4be380:	aa1303e1 	mov	x1, x19
+  4be384:	97f6d8a0 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be388:	910003e0 	mov	x0, sp
+  4be38c:	9409db35 	bl	735060 <android::base::LogMessage::~LogMessage()@plt>
+  4be390:	b9000297 	str	w23, [x20]
+  4be394:	17ffffdb 	b	4be300 <art::JNI<true>::FatalError(_JNIEnv*, char const*)+0x38>
+  4be398:	9409e546 	bl	7378b0 <__stack_chk_fail@plt>
+
+00000000004be39c <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)>:
+  4be39c:	d102c3ff 	sub	sp, sp, #0xb0
+  4be3a0:	a9057bfd 	stp	x29, x30, [sp, #80]
+  4be3a4:	910143fd 	add	x29, sp, #0x50
+  4be3a8:	a9066ffc 	stp	x28, x27, [sp, #96]
+  4be3ac:	a90767fa 	stp	x26, x25, [sp, #112]
+  4be3b0:	a9085ff8 	stp	x24, x23, [sp, #128]
+  4be3b4:	a90957f6 	stp	x22, x21, [sp, #144]
+  4be3b8:	a90a4ff4 	stp	x20, x19, [sp, #160]
+  4be3bc:	d53bd05c 	mrs	x28, tpidr_el0
+  4be3c0:	2a0103f3 	mov	w19, w1
+  4be3c4:	f9401788 	ldr	x8, [x28, #40]
+  4be3c8:	aa0003f4 	mov	x20, x0
+  4be3cc:	52884009 	mov	w9, #0x4200                	// #16896
+  4be3d0:	f81f83a8 	stur	x8, [x29, #-8]
+  4be3d4:	a940a015 	ldp	x21, x8, [x0, #8]
+  4be3d8:	a903a7f5 	stp	x21, x9, [sp, #56]
+  4be3dc:	a90203f5 	stp	x21, x0, [sp, #32]
+  4be3e0:	f9001be8 	str	x8, [sp, #48]
+  4be3e4:	b4002655 	cbz	x21, 4be8ac <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x510>
+  4be3e8:	b94002a8 	ldr	w8, [x21]
+  4be3ec:	53187d08 	lsr	w8, w8, #24
+  4be3f0:	390107e8 	strb	w8, [sp, #65]
+  4be3f4:	34000ee8 	cbz	w8, 4be5d0 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x234>
+  4be3f8:	d0ffded9 	adrp	x25, 98000 <abitag+0x97d90>
+  4be3fc:	d0ffdf3a 	adrp	x26, a4000 <.str.llvm.6508975386424791805+0x432>
+  4be400:	b94002bb 	ldr	w27, [x21]
+  4be404:	b0002ab7 	adrp	x23, a13000 <art::gMethods+0x2d0>
+  4be408:	52800036 	mov	w22, #0x1                   	// #1
+  4be40c:	90002ad8 	adrp	x24, a16000 <art::RuntimeArgumentMap::LowMemoryMode+0x10>
+  4be410:	91229b39 	add	x25, x25, #0x8a6
+  4be414:	9123db5a 	add	x26, x26, #0x8f6
+  4be418:	72001b7f 	tst	w27, #0x7f
+  4be41c:	54000101 	b.ne	4be43c <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0xa0>  // b.any
+  4be420:	12005f61 	and	w1, w27, #0xffffff
+  4be424:	2a1b03e0 	mov	w0, w27
+  4be428:	aa1503e2 	mov	x2, x21
+  4be42c:	97f6fdf1 	bl	27dbf0 <__aarch64_cas4_acq>
+  4be430:	6b1b001f 	cmp	w0, w27
+  4be434:	54000ca0 	b.eq	4be5c8 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x22c>  // b.none
+  4be438:	1400002e 	b	4be4f0 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x154>
+  4be43c:	3718055b 	tbnz	w27, #3, 4be4e4 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x148>
+  4be440:	721f077f 	tst	w27, #0x6
+  4be444:	540005a0 	b.eq	4be4f8 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x15c>  // b.none
+  4be448:	528000c0 	mov	w0, #0x6                   	// #6
+  4be44c:	aa1f03e1 	mov	x1, xzr
+  4be450:	9409daf4 	bl	735020 <android::base::ShouldLog(android::base::LogSeverity, char const*)@plt>
+  4be454:	360004e0 	tbz	w0, #0, 4be4f0 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x154>
+  4be458:	9409db0a 	bl	735080 <__errno@plt>
+  4be45c:	f0ffe001 	adrp	x1, c1000 <.str.49.llvm.5704029433737647809+0xe45>
+  4be460:	f90007e0 	str	x0, [sp, #8]
+  4be464:	b9400008 	ldr	w8, [x0]
+  4be468:	910063e0 	add	x0, sp, #0x18
+  4be46c:	9121cc21 	add	x1, x1, #0x873
+  4be470:	52802482 	mov	w2, #0x124                 	// #292
+  4be474:	528000c3 	mov	w3, #0x6                   	// #6
+  4be478:	aa1f03e4 	mov	x4, xzr
+  4be47c:	12800005 	mov	w5, #0xffffffff            	// #-1
+  4be480:	b90017e8 	str	w8, [sp, #20]
+  4be484:	9409daeb 	bl	735030 <android::base::LogMessage::LogMessage(char const*, unsigned int, android::base::LogSeverity, char const*, int)@plt>
+  4be488:	910063e0 	add	x0, sp, #0x18
+  4be48c:	9409daed 	bl	735040 <android::base::LogMessage::stream()@plt>
+  4be490:	aa1a03e1 	mov	x1, x26
+  4be494:	528005e2 	mov	w2, #0x2f                  	// #47
+  4be498:	97f6d85b 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be49c:	90ffdfc1 	adrp	x1, b6000 <.str.3.llvm.5704029433737647809+0x191a>
+  4be4a0:	528000e2 	mov	w2, #0x7                   	// #7
+  4be4a4:	910ed821 	add	x1, x1, #0x3b6
+  4be4a8:	97f6d857 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be4ac:	12005f61 	and	w1, w27, #0xffffff
+  4be4b0:	9409dae8 	bl	735050 <std::__1::basic_ostream<char, std::__1::char_traits<char> >::operator<<(unsigned int)@plt>
+  4be4b4:	aa1903e1 	mov	x1, x25
+  4be4b8:	528000e2 	mov	w2, #0x7                   	// #7
+  4be4bc:	97f6d852 	bl	274604 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)>
+  4be4c0:	53187f61 	lsr	w1, w27, #24
+  4be4c4:	94099c64 	bl	725654 <art::operator<<(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, art::ThreadState)>
+  4be4c8:	910063e0 	add	x0, sp, #0x18
+  4be4cc:	9409dae5 	bl	735060 <android::base::LogMessage::~LogMessage()@plt>
+  4be4d0:	b94017e8 	ldr	w8, [sp, #20]
+  4be4d4:	f94007e9 	ldr	x9, [sp, #8]
+  4be4d8:	b9000128 	str	w8, [x9]
+  4be4dc:	b94002bb 	ldr	w27, [x21]
+  4be4e0:	17ffffce 	b	4be418 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x7c>
+  4be4e4:	aa1503e0 	mov	x0, x21
+  4be4e8:	aa1503e1 	mov	x1, x21
+  4be4ec:	9406523f 	bl	652de8 <art::Thread::PassActiveSuspendBarriers(art::Thread*)>
+  4be4f0:	b94002bb 	ldr	w27, [x21]
+  4be4f4:	17ffffc9 	b	4be418 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x7c>
+  4be4f8:	3700019b 	tbnz	w27, #0, 4be528 <art::JNI<true>::PushLocalFrame(_JNIEnv*, int)+0x18c>
+  4be4fc:	721b077f 	tst	w27, #0x60
+
+--- libbase around 0x16454 and 0x16eac ---
+
+zygote-symbols-post-binder/libbase.so.real:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000016380 <android::base::LogMessage::~LogMessage()@@Base+0x90>:
+   16380:	94008cd8 	bl	396e0 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)@plt>
+   16384:	f9400268 	ldr	x8, [x19]
+   16388:	aa0003f4 	mov	x20, x0
+   1638c:	b9412100 	ldr	w0, [x8, #288]
+   16390:	94008da4 	bl	39a20 <strerror@plt>
+   16394:	aa0003f5 	mov	x21, x0
+   16398:	94008d52 	bl	398e0 <strlen@plt>
+   1639c:	aa0003e2 	mov	x2, x0
+   163a0:	aa1403e0 	mov	x0, x20
+   163a4:	aa1503e1 	mov	x1, x21
+   163a8:	94008cce 	bl	396e0 <std::__1::basic_ostream<char, std::__1::char_traits<char> >& std::__1::__put_character_sequence<char, std::__1::char_traits<char> >(std::__1::basic_ostream<char, std::__1::char_traits<char> >&, char const*, unsigned long)@plt>
+   163ac:	f9400260 	ldr	x0, [x19]
+   163b0:	91002000 	add	x0, x0, #0x8
+   163b4:	910023e8 	add	x8, sp, #0x8
+   163b8:	a900ffff 	stp	xzr, xzr, [sp, #8]
+   163bc:	910023f4 	add	x20, sp, #0x8
+   163c0:	f9000fff 	str	xzr, [sp, #24]
+   163c4:	94008e63 	bl	39d50 <std::__1::basic_stringbuf<char, std::__1::char_traits<char>, std::__1::allocator<char> >::str() const@plt>
+   163c8:	f9400268 	ldr	x8, [x19]
+   163cc:	b9411502 	ldr	w2, [x8, #276]
+   163d0:	7100185f 	cmp	w2, #0x6
+   163d4:	54000121 	b.ne	163f8 <android::base::LogMessage::~LogMessage()@@Base+0x108>  // b.any
+   163d8:	394023e8 	ldrb	w8, [sp, #8]
+   163dc:	b240028a 	orr	x10, x20, #0x1
+   163e0:	f9400fe9 	ldr	x9, [sp, #24]
+   163e4:	7200011f 	tst	w8, #0x1
+   163e8:	9a890140 	csel	x0, x10, x9, eq	// eq = none
+   163ec:	94008e15 	bl	39c40 <android_set_abort_message@plt>
+   163f0:	f9400268 	ldr	x8, [x19]
+   163f4:	b9411502 	ldr	w2, [x8, #276]
+   163f8:	394023e9 	ldrb	w9, [sp, #8]
+   163fc:	b2400294 	orr	x20, x20, #0x1
+   16400:	f9400fea 	ldr	x10, [sp, #24]
+   16404:	f9408500 	ldr	x0, [x8, #264]
+   16408:	7200013f 	tst	w9, #0x1
+   1640c:	b9411101 	ldr	w1, [x8, #272]
+   16410:	f9408d03 	ldr	x3, [x8, #280]
+   16414:	9a8a0284 	csel	x4, x20, x10, eq	// eq = none
+   16418:	94008e52 	bl	39d60 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@plt>
+   1641c:	f9400268 	ldr	x8, [x19]
+   16420:	b9411508 	ldr	w8, [x8, #276]
+   16424:	7100191f 	cmp	w8, #0x6
+   16428:	54000161 	b.ne	16454 <android::base::LogMessage::~LogMessage()@@Base+0x164>  // b.any
+   1642c:	528003c0 	mov	w0, #0x1e                  	// #30
+   16430:	2a1f03e1 	mov	w1, wzr
+   16434:	2a1f03e2 	mov	w2, wzr
+   16438:	94008b8e 	bl	39270 <fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >::grow(unsigned long)@@Base+0xe38>
+   1643c:	34000600 	cbz	w0, 164fc <android::base::LogMessage::~LogMessage()@@Base+0x20c>
+   16440:	394023e8 	ldrb	w8, [sp, #8]
+   16444:	f9400fe9 	ldr	x9, [sp, #24]
+   16448:	7200011f 	tst	w8, #0x1
+   1644c:	9a890280 	csel	x0, x20, x9, eq	// eq = none
+   16450:	94008e48 	bl	39d70 <__android_log_call_aborter@plt>
+   16454:	394023e8 	ldrb	w8, [sp, #8]
+   16458:	36000068 	tbz	w8, #0, 16464 <android::base::LogMessage::~LogMessage()@@Base+0x174>
+   1645c:	f9400fe0 	ldr	x0, [sp, #24]
+   16460:	94008cc4 	bl	39770 <operator delete(void*)@plt>
+   16464:	f9400274 	ldr	x20, [x19]
+   16468:	f900027f 	str	xzr, [x19]
+   1646c:	b4000374 	cbz	x20, 164d8 <android::base::LogMessage::~LogMessage()@@Base+0x1e8>
+   16470:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16474:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16478:	aa1403f3 	mov	x19, x20
+   1647c:	f9426108 	ldr	x8, [x8, #1216]
+   16480:	f9426529 	ldr	x9, [x9, #1224]
+   16484:	3941228b 	ldrb	w11, [x20, #72]
+   16488:	9100610a 	add	x10, x8, #0x18
+   1648c:	91010108 	add	x8, x8, #0x40
+   16490:	91004129 	add	x9, x9, #0x10
+   16494:	f900028a 	str	x10, [x20]
+   16498:	f9003a88 	str	x8, [x20, #112]
+   1649c:	f8008e69 	str	x9, [x19, #8]!
+   164a0:	3600006b 	tbz	w11, #0, 164ac <android::base::LogMessage::~LogMessage()@@Base+0x1bc>
+   164a4:	f9402e80 	ldr	x0, [x20, #88]
+   164a8:	94008cb2 	bl	39770 <operator delete(void*)@plt>
+   164ac:	aa1303e0 	mov	x0, x19
+   164b0:	94008e34 	bl	39d80 <std::__1::basic_streambuf<char, std::__1::char_traits<char> >::~basic_streambuf()@plt>
+   164b4:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   164b8:	aa1403e0 	mov	x0, x20
+   164bc:	f9426908 	ldr	x8, [x8, #1232]
+   164c0:	91002101 	add	x1, x8, #0x8
+   164c4:	94008e33 	bl	39d90 <std::__1::basic_ostream<char, std::__1::char_traits<char> >::~basic_ostream()@plt>
+   164c8:	9101c280 	add	x0, x20, #0x70
+   164cc:	94008e35 	bl	39da0 <std::__1::basic_ios<char, std::__1::char_traits<char> >::~basic_ios()@plt>
+   164d0:	aa1403e0 	mov	x0, x20
+   164d4:	94008ca7 	bl	39770 <operator delete(void*)@plt>
+   164d8:	f94016c8 	ldr	x8, [x22, #40]
+   164dc:	f85f83a9 	ldur	x9, [x29, #-8]
+   164e0:	eb09011f 	cmp	x8, x9
+   164e4:	540005a1 	b.ne	16598 <android::base::LogMessage::~LogMessage()@@Base+0x2a8>  // b.any
+   164e8:	a9454ff4 	ldp	x20, x19, [sp, #80]
+   164ec:	a94457f6 	ldp	x22, x21, [sp, #64]
+   164f0:	a9437bfd 	ldp	x29, x30, [sp, #48]
+   164f4:	910183ff 	add	sp, sp, #0x60
+   164f8:	d65f03c0 	ret
+   164fc:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16500:	d0000135 	adrp	x21, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16504:	91376108 	add	x8, x8, #0xdd8
+   16508:	08dffd08 	ldarb	w8, [x8]
+   1650c:	36000208 	tbz	w8, #0, 1654c <android::base::LogMessage::~LogMessage()@@Base+0x25c>
+   16510:	394023e9 	ldrb	w9, [sp, #8]
+   16514:	f946eaa8 	ldr	x8, [x21, #3536]
+   16518:	f9400fea 	ldr	x10, [sp, #24]
+   1651c:	7200013f 	tst	w9, #0x1
+   16520:	f9401100 	ldr	x0, [x8, #32]
+   16524:	9a8a0289 	csel	x9, x20, x10, eq	// eq = none
+   16528:	f81f03a9 	stur	x9, [x29, #-16]
+   1652c:	b4000340 	cbz	x0, 16594 <android::base::LogMessage::~LogMessage()@@Base+0x2a4>
+   16530:	f9400008 	ldr	x8, [x0]
+   16534:	d10043a1 	sub	x1, x29, #0x10
+   16538:	f9401908 	ldr	x8, [x8, #48]
+   1653c:	d63f0100 	blr	x8
+   16540:	394023e8 	ldrb	w8, [sp, #8]
+   16544:	3707f8c8 	tbnz	w8, #0, 1645c <android::base::LogMessage::~LogMessage()@@Base+0x16c>
+   16548:	17ffffc7 	b	16464 <android::base::LogMessage::~LogMessage()@@Base+0x174>
+   1654c:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16550:	91376000 	add	x0, x0, #0xdd8
+   16554:	94008c93 	bl	397a0 <__cxa_guard_acquire@plt>
+   16558:	34fffdc0 	cbz	w0, 16510 <android::base::LogMessage::~LogMessage()@@Base+0x220>
+   1655c:	52800600 	mov	w0, #0x30                  	// #48
+   16560:	94008c7c 	bl	39750 <operator new(unsigned long)@plt>
+   16564:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16568:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   1656c:	f9425908 	ldr	x8, [x8, #1200]
+   16570:	f9425129 	ldr	x9, [x9, #1184]
+   16574:	f9001000 	str	x0, [x0, #32]
+   16578:	f906eaa0 	str	x0, [x21, #3536]
+   1657c:	91004108 	add	x8, x8, #0x10
+   16580:	a9002408 	stp	x8, x9, [x0]
+   16584:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16588:	91376000 	add	x0, x0, #0xdd8
+   1658c:	94008c8d 	bl	397c0 <__cxa_guard_release@plt>
+   16590:	17ffffe0 	b	16510 <android::base::LogMessage::~LogMessage()@@Base+0x220>
+   16594:	94000489 	bl	177b8 <std::__1::basic_stringbuf<char, std::__1::char_traits<char>, std::__1::allocator<char> >::str() const@@Base+0x258>
+   16598:	94008c4a 	bl	396c0 <__stack_chk_fail@plt>
+
+000000000001659c <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base>:
+   1659c:	d10303ff 	sub	sp, sp, #0xc0
+   165a0:	a9067bfd 	stp	x29, x30, [sp, #96]
+   165a4:	910183fd 	add	x29, sp, #0x60
+   165a8:	a9076ffc 	stp	x28, x27, [sp, #112]
+   165ac:	a90867fa 	stp	x26, x25, [sp, #128]
+   165b0:	a9095ff8 	stp	x24, x23, [sp, #144]
+   165b4:	a90a57f6 	stp	x22, x21, [sp, #160]
+   165b8:	a90b4ff4 	stp	x20, x19, [sp, #176]
+   165bc:	d53bd059 	mrs	x25, tpidr_el0
+   165c0:	2a0203f6 	mov	w22, w2
+   165c4:	2a0103f4 	mov	w20, w1
+   165c8:	f9401728 	ldr	x8, [x25, #40]
+   165cc:	aa0003f5 	mov	x21, x0
+   165d0:	528003c0 	mov	w0, #0x1e                  	// #30
+   165d4:	2a1f03e1 	mov	w1, wzr
+   165d8:	2a1f03e2 	mov	w2, wzr
+   165dc:	aa0403f3 	mov	x19, x4
+   165e0:	aa0303f7 	mov	x23, x3
+   165e4:	f81f83a8 	stur	x8, [x29, #-8]
+   165e8:	94008b22 	bl	39270 <fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >::grow(unsigned long)@@Base+0xe38>
+   165ec:	340001e0 	cbz	w0, 16628 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x8c>
+   165f0:	11000ac8 	add	w8, w22, #0x2
+   165f4:	710016df 	cmp	w22, #0x5
+   165f8:	528000ea 	mov	w10, #0x7                   	// #7
+   165fc:	52800609 	mov	w9, #0x30                  	// #48
+   16600:	12b0000b 	mov	w11, #0x7fffffff            	// #2147483647
+   16604:	1a8a3108 	csel	w8, w8, w10, cc	// cc = lo, ul, last
+   16608:	910023e0 	add	x0, sp, #0x8
+   1660c:	a901d7f7 	stp	x23, x21, [sp, #24]
+   16610:	f90007e9 	str	x9, [sp, #8]
+   16614:	290223eb 	stp	w11, w8, [sp, #16]
+   16618:	a902cfff 	stp	xzr, x19, [sp, #40]
+   1661c:	b9002bf4 	str	w20, [sp, #40]
+   16620:	94008de4 	bl	39db0 <__android_log_write_log_message@plt>
+   16624:	14000066 	b	167bc <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x220>
+   16628:	b4000317 	cbz	x23, 16688 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0xec>
+   1662c:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16630:	d0000138 	adrp	x24, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16634:	91372108 	add	x8, x8, #0xdc8
+   16638:	08dffd08 	ldarb	w8, [x8]
+   1663c:	36000da8 	tbz	w8, #0, 167f0 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x254>
+   16640:	f946e308 	ldr	x8, [x24, #3520]
+   16644:	293e7fb6 	stp	w22, wzr, [x29, #-16]
+   16648:	f90007f7 	str	x23, [sp, #8]
+   1664c:	f81e83b5 	stur	x21, [x29, #-24]
+   16650:	f9401100 	ldr	x0, [x8, #32]
+   16654:	b81e43b4 	stur	w20, [x29, #-28]
+   16658:	f81d83b3 	stur	x19, [x29, #-40]
+   1665c:	b4000c80 	cbz	x0, 167ec <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x250>
+   16660:	f9400008 	ldr	x8, [x0]
+   16664:	d10033a1 	sub	x1, x29, #0xc
+   16668:	d10043a2 	sub	x2, x29, #0x10
+   1666c:	910023e3 	add	x3, sp, #0x8
+   16670:	d10063a4 	sub	x4, x29, #0x18
+   16674:	d10073a5 	sub	x5, x29, #0x1c
+   16678:	f9401908 	ldr	x8, [x8, #48]
+   1667c:	d100a3a6 	sub	x6, x29, #0x28
+   16680:	d63f0100 	blr	x8
+   16684:	1400004e 	b	167bc <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x220>
+   16688:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1668c:	d0000138 	adrp	x24, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16690:	9136a108 	add	x8, x8, #0xda8
+   16694:	08dffd08 	ldarb	w8, [x8]
+   16698:	36000d08 	tbz	w8, #0, 16838 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x29c>
+   1669c:	f946d317 	ldr	x23, [x24, #3488]
+   166a0:	aa1703e0 	mov	x0, x23
+   166a4:	94008d27 	bl	39b40 <std::__1::recursive_mutex::lock()@plt>
+   166a8:	d000013c 	adrp	x28, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   166ac:	f946cb88 	ldr	x8, [x28, #3472]
+   166b0:	b50004c8 	cbnz	x8, 16748 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x1ac>
+   166b4:	52800300 	mov	w0, #0x18                  	// #24
+   166b8:	94008c26 	bl	39750 <operator new(unsigned long)@plt>
+   166bc:	aa0003f8 	mov	x24, x0
+   166c0:	94008d58 	bl	39c20 <getprogname@plt>
+   166c4:	aa0003fb 	mov	x27, x0
+   166c8:	a900ff1f 	stp	xzr, xzr, [x24, #8]
+   166cc:	f900031f 	str	xzr, [x24]
+   166d0:	94008c84 	bl	398e0 <strlen@plt>
+   166d4:	b100401f 	cmn	x0, #0x10
+   166d8:	54000f02 	b.cs	168b8 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x31c>  // b.hs, b.nlast
+   166dc:	aa0003fa 	mov	x26, x0
+   166e0:	f1005c1f 	cmp	x0, #0x17
+   166e4:	f90003fb 	str	x27, [sp]
+   166e8:	540000c2 	b.cs	16700 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x164>  // b.hs, b.nlast
+   166ec:	531f7b48 	lsl	w8, w26, #1
+   166f0:	aa1803fb 	mov	x27, x24
+   166f4:	38001768 	strb	w8, [x27], #1
+   166f8:	b50001da 	cbnz	x26, 16730 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x194>
+   166fc:	14000011 	b	16740 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x1a4>
+   16700:	91004348 	add	x8, x26, #0x10
+   16704:	927ced08 	and	x8, x8, #0xfffffffffffffff0
+   16708:	f1000508 	subs	x8, x8, #0x1
+   1670c:	54000da3 	b.cc	168c0 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x324>  // b.lo, b.ul, b.last
+   16710:	9100051c 	add	x28, x8, #0x1
+   16714:	aa1c03e0 	mov	x0, x28
+   16718:	94008c0e 	bl	39750 <operator new(unsigned long)@plt>
+   1671c:	b2400388 	orr	x8, x28, #0x1
+   16720:	aa0003fb 	mov	x27, x0
+   16724:	a900831a 	stp	x26, x0, [x24, #8]
+   16728:	d000013c 	adrp	x28, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1672c:	f9000308 	str	x8, [x24]
+   16730:	aa1b03e0 	mov	x0, x27
+   16734:	f94003e1 	ldr	x1, [sp]
+   16738:	aa1a03e2 	mov	x2, x26
+   1673c:	94008c6d 	bl	398f0 <memcpy@plt>
+   16740:	383a6b7f 	strb	wzr, [x27, x26]
+   16744:	f906cb98 	str	x24, [x28, #3472]
+   16748:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1674c:	91372108 	add	x8, x8, #0xdc8
+   16750:	08dffd08 	ldarb	w8, [x8]
+   16754:	360008c8 	tbz	w8, #0, 1686c <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x2d0>
+   16758:	f946cb88 	ldr	x8, [x28, #3472]
+   1675c:	d0000129 	adrp	x9, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16760:	3940010a 	ldrb	w10, [x8]
+   16764:	293e7fb6 	stp	w22, wzr, [x29, #-16]
+   16768:	f940090b 	ldr	x11, [x8, #16]
+   1676c:	f81e83b5 	stur	x21, [x29, #-24]
+   16770:	f946e129 	ldr	x9, [x9, #3520]
+   16774:	b81e43b4 	stur	w20, [x29, #-28]
+   16778:	7200015f 	tst	w10, #0x1
+   1677c:	f81d83b3 	stur	x19, [x29, #-40]
+   16780:	9a881568 	csinc	x8, x11, x8, ne	// ne = any
+   16784:	f9401120 	ldr	x0, [x9, #32]
+   16788:	f90007e8 	str	x8, [sp, #8]
+   1678c:	b4000300 	cbz	x0, 167ec <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x250>
+   16790:	f9400008 	ldr	x8, [x0]
+   16794:	d10033a1 	sub	x1, x29, #0xc
+   16798:	d10043a2 	sub	x2, x29, #0x10
+   1679c:	910023e3 	add	x3, sp, #0x8
+   167a0:	d10063a4 	sub	x4, x29, #0x18
+   167a4:	d10073a5 	sub	x5, x29, #0x1c
+   167a8:	f9401908 	ldr	x8, [x8, #48]
+   167ac:	d100a3a6 	sub	x6, x29, #0x28
+   167b0:	d63f0100 	blr	x8
+   167b4:	aa1703e0 	mov	x0, x23
+   167b8:	94008ce6 	bl	39b50 <std::__1::recursive_mutex::unlock()@plt>
+   167bc:	f9401728 	ldr	x8, [x25, #40]
+   167c0:	f85f83a9 	ldur	x9, [x29, #-8]
+   167c4:	eb09011f 	cmp	x8, x9
+   167c8:	54000801 	b.ne	168c8 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x32c>  // b.any
+   167cc:	a94b4ff4 	ldp	x20, x19, [sp, #176]
+   167d0:	a94a57f6 	ldp	x22, x21, [sp, #160]
+   167d4:	a9495ff8 	ldp	x24, x23, [sp, #144]
+   167d8:	a94867fa 	ldp	x26, x25, [sp, #128]
+   167dc:	a9476ffc 	ldp	x28, x27, [sp, #112]
+   167e0:	a9467bfd 	ldp	x29, x30, [sp, #96]
+   167e4:	910303ff 	add	sp, sp, #0xc0
+   167e8:	d65f03c0 	ret
+   167ec:	940003f3 	bl	177b8 <std::__1::basic_stringbuf<char, std::__1::char_traits<char>, std::__1::allocator<char> >::str() const@@Base+0x258>
+   167f0:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   167f4:	91372000 	add	x0, x0, #0xdc8
+   167f8:	94008bea 	bl	397a0 <__cxa_guard_acquire@plt>
+   167fc:	34fff220 	cbz	w0, 16640 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0xa4>
+   16800:	52800600 	mov	w0, #0x30                  	// #48
+   16804:	94008bd3 	bl	39750 <operator new(unsigned long)@plt>
+   16808:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   1680c:	52800028 	mov	w8, #0x1                   	// #1
+   16810:	f9425529 	ldr	x9, [x9, #1192]
+   16814:	b9000808 	str	w8, [x0, #8]
+   16818:	f9001000 	str	x0, [x0, #32]
+   1681c:	f906e300 	str	x0, [x24, #3520]
+   16820:	91004129 	add	x9, x9, #0x10
+   16824:	f9000009 	str	x9, [x0]
+   16828:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1682c:	91372000 	add	x0, x0, #0xdc8
+   16830:	94008be4 	bl	397c0 <__cxa_guard_release@plt>
+   16834:	17ffff83 	b	16640 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0xa4>
+   16838:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1683c:	9136a000 	add	x0, x0, #0xda8
+   16840:	94008bd8 	bl	397a0 <__cxa_guard_acquire@plt>
+   16844:	34fff2c0 	cbz	w0, 1669c <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x100>
+   16848:	52800500 	mov	w0, #0x28                  	// #40
+   1684c:	94008bc1 	bl	39750 <operator new(unsigned long)@plt>
+   16850:	aa0003f7 	mov	x23, x0
+   16854:	94008cc3 	bl	39b60 <std::__1::recursive_mutex::recursive_mutex()@plt>
+   16858:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1685c:	f906d317 	str	x23, [x24, #3488]
+   16860:	9136a000 	add	x0, x0, #0xda8
+   16864:	94008bd7 	bl	397c0 <__cxa_guard_release@plt>
+   16868:	17ffff8d 	b	1669c <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x100>
+   1686c:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16870:	91372000 	add	x0, x0, #0xdc8
+   16874:	94008bcb 	bl	397a0 <__cxa_guard_acquire@plt>
+   16878:	34fff700 	cbz	w0, 16758 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x1bc>
+   1687c:	52800600 	mov	w0, #0x30                  	// #48
+   16880:	94008bb4 	bl	39750 <operator new(unsigned long)@plt>
+   16884:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16888:	52800029 	mov	w9, #0x1                   	// #1
+   1688c:	d000012a 	adrp	x10, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16890:	f9425508 	ldr	x8, [x8, #1192]
+   16894:	b9000809 	str	w9, [x0, #8]
+   16898:	f9001000 	str	x0, [x0, #32]
+   1689c:	f906e140 	str	x0, [x10, #3520]
+   168a0:	91004108 	add	x8, x8, #0x10
+   168a4:	f9000008 	str	x8, [x0]
+   168a8:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   168ac:	91372000 	add	x0, x0, #0xdc8
+   168b0:	94008bc4 	bl	397c0 <__cxa_guard_release@plt>
+   168b4:	17ffffa9 	b	16758 <android::base::LogMessage::LogLine(char const*, unsigned int, android::base::LogSeverity, char const*, char const*)@@Base+0x1bc>
+   168b8:	aa1803e0 	mov	x0, x24
+   168bc:	94008c15 	bl	39910 <std::__1::__basic_string_common<true>::__throw_length_error() const@plt>
+   168c0:	528002a0 	mov	w0, #0x15                  	// #21
+   168c4:	94008b7b 	bl	396b0 <abort@plt>
+   168c8:	94008b7e 	bl	396c0 <__stack_chk_fail@plt>
+
+00000000000168cc <android::base::GetMinimumLogSeverity()@@Base>:
+   168cc:	a9bf7bfd 	stp	x29, x30, [sp, #-16]!
+   168d0:	910003fd 	mov	x29, sp
+   168d4:	528003c0 	mov	w0, #0x1e                  	// #30
+   168d8:	2a1f03e1 	mov	w1, wzr
+   168dc:	2a1f03e2 	mov	w2, wzr
+   168e0:	94008a64 	bl	39270 <fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >::grow(unsigned long)@@Base+0xe38>
+   168e4:	34000120 	cbz	w0, 16908 <android::base::GetMinimumLogSeverity()@@Base+0x3c>
+   168e8:	94008d36 	bl	39dc0 <__android_log_get_minimum_priority@plt>
+   168ec:	51000408 	sub	w8, w0, #0x1
+   168f0:	7100191f 	cmp	w8, #0x6
+   168f4:	54000148 	b.hi	1691c <android::base::GetMinimumLogSeverity()@@Base+0x50>  // b.pmore
+   168f8:	b0ffffa9 	adrp	x9, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   168fc:	9136d129 	add	x9, x9, #0xdb4
+   16900:	8b28c928 	add	x8, x9, w8, sxtw #2
+   16904:	14000003 	b	16910 <android::base::GetMinimumLogSeverity()@@Base+0x44>
+   16908:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   1690c:	91356108 	add	x8, x8, #0xd58
+   16910:	b9400100 	ldr	w0, [x8]
+   16914:	a8c17bfd 	ldp	x29, x30, [sp], #16
+   16918:	d65f03c0 	ret
+   1691c:	528000c0 	mov	w0, #0x6                   	// #6
+   16920:	a8c17bfd 	ldp	x29, x30, [sp], #16
+   16924:	d65f03c0 	ret
+
+0000000000016928 <android::base::ScopedLogSeverity::ScopedLogSeverity(android::base::LogSeverity)@@Base>:
+   16928:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   1692c:	a9014ff4 	stp	x20, x19, [sp, #16]
+   16930:	910003fd 	mov	x29, sp
+   16934:	2a0103f4 	mov	w20, w1
+   16938:	aa0003f3 	mov	x19, x0
+   1693c:	528003c0 	mov	w0, #0x1e                  	// #30
+   16940:	2a1f03e1 	mov	w1, wzr
+   16944:	2a1f03e2 	mov	w2, wzr
+   16948:	94008a4a 	bl	39270 <fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >::grow(unsigned long)@@Base+0xe38>
+   1694c:	340001a0 	cbz	w0, 16980 <android::base::ScopedLogSeverity::ScopedLogSeverity(android::base::LogSeverity)@@Base+0x58>
+   16950:	11000a88 	add	w8, w20, #0x2
+   16954:	7100169f 	cmp	w20, #0x5
+   16958:	528000e9 	mov	w9, #0x7                   	// #7
+   1695c:	1a893100 	csel	w0, w8, w9, cc	// cc = lo, ul, last
+   16960:	94008cd8 	bl	39cc0 <__android_log_set_minimum_priority@plt>
+   16964:	51000408 	sub	w8, w0, #0x1
+   16968:	71001d1f 	cmp	w8, #0x7
+   1696c:	54000122 	b.cs	16990 <android::base::ScopedLogSeverity::ScopedLogSeverity(android::base::LogSeverity)@@Base+0x68>  // b.hs, b.nlast
+   16970:	b0ffffa9 	adrp	x9, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   16974:	9136d129 	add	x9, x9, #0xdb4
+   16978:	b868d928 	ldr	w8, [x9, w8, sxtw #2]
+   1697c:	14000006 	b	16994 <android::base::ScopedLogSeverity::ScopedLogSeverity(android::base::LogSeverity)@@Base+0x6c>
+   16980:	d0000129 	adrp	x9, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16984:	b94d5928 	ldr	w8, [x9, #3416]
+   16988:	b90d5934 	str	w20, [x9, #3416]
+   1698c:	14000002 	b	16994 <android::base::ScopedLogSeverity::ScopedLogSeverity(android::base::LogSeverity)@@Base+0x6c>
+   16990:	528000c8 	mov	w8, #0x6                   	// #6
+   16994:	b9000268 	str	w8, [x19]
+   16998:	a9414ff4 	ldp	x20, x19, [sp, #16]
+   1699c:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   169a0:	d65f03c0 	ret
+
+00000000000169a4 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base>:
+   169a4:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   169a8:	f9000bf3 	str	x19, [sp, #16]
+   169ac:	910003fd 	mov	x29, sp
+   169b0:	b9400013 	ldr	w19, [x0]
+   169b4:	528003c0 	mov	w0, #0x1e                  	// #30
+   169b8:	2a1f03e1 	mov	w1, wzr
+   169bc:	2a1f03e2 	mov	w2, wzr
+   169c0:	94008a2c 	bl	39270 <fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >::grow(unsigned long)@@Base+0xe38>
+   169c4:	340000e0 	cbz	w0, 169e0 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x3c>
+   169c8:	11000a68 	add	w8, w19, #0x2
+   169cc:	7100167f 	cmp	w19, #0x5
+   169d0:	528000e9 	mov	w9, #0x7                   	// #7
+   169d4:	1a893100 	csel	w0, w8, w9, cc	// cc = lo, ul, last
+   169d8:	94008cba 	bl	39cc0 <__android_log_set_minimum_priority@plt>
+   169dc:	14000003 	b	169e8 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x44>
+   169e0:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   169e4:	b90d5913 	str	w19, [x8, #3416]
+   169e8:	f9400bf3 	ldr	x19, [sp, #16]
+   169ec:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   169f0:	d65f03c0 	ret
+   169f4:	d10103ff 	sub	sp, sp, #0x40
+   169f8:	a9017bfd 	stp	x29, x30, [sp, #16]
+   169fc:	910043fd 	add	x29, sp, #0x10
+   16a00:	a90257f6 	stp	x22, x21, [sp, #32]
+   16a04:	a9034ff4 	stp	x20, x19, [sp, #48]
+   16a08:	d53bd056 	mrs	x22, tpidr_el0
+   16a0c:	b0ffffa0 	adrp	x0, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   16a10:	f94016c8 	ldr	x8, [x22, #40]
+   16a14:	91317000 	add	x0, x0, #0xc5c
+   16a18:	f90007e8 	str	x8, [sp, #8]
+   16a1c:	94008ba9 	bl	398c0 <getenv@plt>
+   16a20:	b4000460 	cbz	x0, 16aac <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x108>
+   16a24:	d1000413 	sub	x19, x0, #0x1
+   16a28:	38401e68 	ldrb	w8, [x19, #1]!
+   16a2c:	51003909 	sub	w9, w8, #0xe
+   16a30:	7100811f 	cmp	w8, #0x20
+   16a34:	3a461922 	ccmn	w9, #0x6, #0x2, ne	// ne = any
+   16a38:	54ffff88 	b.hi	16a28 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x84>  // b.pmore
+   16a3c:	7100c11f 	cmp	w8, #0x30
+   16a40:	54000121 	b.ne	16a64 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0xc0>  // b.any
+   16a44:	39400668 	ldrb	w8, [x19, #1]
+   16a48:	52800214 	mov	w20, #0x10                  	// #16
+   16a4c:	7101e11f 	cmp	w8, #0x78
+   16a50:	540000c0 	b.eq	16a68 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0xc4>  // b.none
+   16a54:	7101611f 	cmp	w8, #0x58
+   16a58:	52800148 	mov	w8, #0xa                   	// #10
+   16a5c:	1a880294 	csel	w20, w20, w8, eq	// eq = none
+   16a60:	14000002 	b	16a68 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0xc4>
+   16a64:	52800154 	mov	w20, #0xa                   	// #10
+   16a68:	94008b46 	bl	39780 <__errno@plt>
+   16a6c:	aa0003f5 	mov	x21, x0
+   16a70:	b900001f 	str	wzr, [x0]
+   16a74:	910003e1 	mov	x1, sp
+   16a78:	aa1303e0 	mov	x0, x19
+   16a7c:	2a1403e2 	mov	w2, w20
+   16a80:	f90003ff 	str	xzr, [sp]
+   16a84:	94008cd3 	bl	39dd0 <strtoll@plt>
+   16a88:	b94002a8 	ldr	w8, [x21]
+   16a8c:	35000108 	cbnz	w8, 16aac <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x108>
+   16a90:	f94003e8 	ldr	x8, [sp]
+   16a94:	eb08027f 	cmp	x19, x8
+   16a98:	54000060 	b.eq	16aa4 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x100>  // b.none
+   16a9c:	39400108 	ldrb	w8, [x8]
+   16aa0:	34000388 	cbz	w8, 16b10 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x16c>
+   16aa4:	528002c8 	mov	w8, #0x16                  	// #22
+   16aa8:	b90002a8 	str	w8, [x21]
+   16aac:	b0ffffb3 	adrp	x19, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   16ab0:	910e5673 	add	x19, x19, #0x395
+   16ab4:	52800021 	mov	w1, #0x1                   	// #1
+   16ab8:	aa1303e0 	mov	x0, x19
+   16abc:	72a00101 	movk	w1, #0x8, lsl #16
+   16ac0:	94008bb8 	bl	399a0 <__open_2@plt>
+   16ac4:	3100041f 	cmn	w0, #0x1
+   16ac8:	540000e1 	b.ne	16ae4 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x140>  // b.any
+   16acc:	94008b2d 	bl	39780 <__errno@plt>
+   16ad0:	b9400008 	ldr	w8, [x0]
+   16ad4:	7100111f 	cmp	w8, #0x4
+   16ad8:	54fffee0 	b.eq	16ab4 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x110>  // b.none
+   16adc:	12800014 	mov	w20, #0xffffffff            	// #-1
+   16ae0:	14000002 	b	16ae8 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x144>
+   16ae4:	2a0003f4 	mov	w20, w0
+   16ae8:	f94016c8 	ldr	x8, [x22, #40]
+   16aec:	f94007e9 	ldr	x9, [sp, #8]
+   16af0:	eb09011f 	cmp	x8, x9
+   16af4:	540002c1 	b.ne	16b4c <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x1a8>  // b.any
+   16af8:	2a1403e0 	mov	w0, w20
+   16afc:	a9434ff4 	ldp	x20, x19, [sp, #48]
+   16b00:	a94257f6 	ldp	x22, x21, [sp, #32]
+   16b04:	a9417bfd 	ldp	x29, x30, [sp, #16]
+   16b08:	910103ff 	add	sp, sp, #0x40
+   16b0c:	d65f03c0 	ret
+   16b10:	aa0003f4 	mov	x20, x0
+   16b14:	d35ffc08 	lsr	x8, x0, #31
+   16b18:	b4000088 	cbz	x8, 16b28 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x184>
+   16b1c:	52800448 	mov	w8, #0x22                  	// #34
+   16b20:	b90002a8 	str	w8, [x21]
+   16b24:	17ffffe2 	b	16aac <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x108>
+   16b28:	2a1403e0 	mov	w0, w20
+   16b2c:	52800061 	mov	w1, #0x3                   	// #3
+   16b30:	94008cac 	bl	39de0 <fcntl@plt>
+   16b34:	3100041f 	cmn	w0, #0x1
+   16b38:	54fffba0 	b.eq	16aac <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x108>  // b.none
+   16b3c:	12000408 	and	w8, w0, #0x3
+   16b40:	7100051f 	cmp	w8, #0x1
+   16b44:	54fffd20 	b.eq	16ae8 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x144>  // b.none
+   16b48:	17ffffd9 	b	16aac <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x108>
+   16b4c:	94008add 	bl	396c0 <__stack_chk_fail@plt>
+   16b50:	d10443ff 	sub	sp, sp, #0x110
+   16b54:	a90f7bfd 	stp	x29, x30, [sp, #240]
+   16b58:	9103c3fd 	add	x29, sp, #0xf0
+   16b5c:	a9104ffc 	stp	x28, x19, [sp, #256]
+   16b60:	a93917a4 	stp	x4, x5, [x29, #-112]
+   16b64:	910003eb 	mov	x11, sp
+   16b68:	a93a1fa6 	stp	x6, x7, [x29, #-96]
+   16b6c:	928003ec 	mov	x12, #0xffffffffffffffe0    	// #-32
+   16b70:	ad0007e0 	stp	q0, q1, [sp]
+   16b74:	910083aa 	add	x10, x29, #0x20
+   16b78:	ad010fe2 	stp	q2, q3, [sp, #32]
+   16b7c:	9102016b 	add	x11, x11, #0x80
+   16b80:	ad0217e4 	stp	q4, q5, [sp, #64]
+   16b84:	f2dff00c 	movk	x12, #0xff80, lsl #32
+   16b88:	ad031fe6 	stp	q6, q7, [sp, #96]
+   16b8c:	d53bd053 	mrs	x19, tpidr_el0
+   16b90:	f9401669 	ldr	x9, [x19, #40]
+   16b94:	aa0303e8 	mov	x8, x3
+   16b98:	6f00e400 	movi	v0.2d, #0x0
+   16b9c:	aa0103e3 	mov	x3, x1
+   16ba0:	d10143a5 	sub	x5, x29, #0x50
+   16ba4:	aa0203e1 	mov	x1, x2
+   16ba8:	f81f83a9 	stur	x9, [x29, #-8]
+   16bac:	d101c3a9 	sub	x9, x29, #0x70
+   16bb0:	91008129 	add	x9, x9, #0x20
+   16bb4:	2a1f03e2 	mov	w2, wzr
+   16bb8:	ad3e83a0 	stp	q0, q0, [x29, #-48]
+   16bbc:	aa0803e4 	mov	x4, x8
+   16bc0:	a93e33ab 	stp	x11, x12, [x29, #-32]
+   16bc4:	a93d27aa 	stp	x10, x9, [x29, #-48]
+   16bc8:	ad7e87a0 	ldp	q0, q1, [x29, #-48]
+   16bcc:	ad3d87a0 	stp	q0, q1, [x29, #-80]
+   16bd0:	94008c88 	bl	39df0 <__vsnprintf_chk@plt>
+   16bd4:	f9401668 	ldr	x8, [x19, #40]
+   16bd8:	f85f83a9 	ldur	x9, [x29, #-8]
+   16bdc:	eb09011f 	cmp	x8, x9
+   16be0:	540000a1 	b.ne	16bf4 <android::base::ScopedLogSeverity::~ScopedLogSeverity()@@Base+0x250>  // b.any
+   16be4:	a9504ffc 	ldp	x28, x19, [sp, #256]
+   16be8:	a94f7bfd 	ldp	x29, x30, [sp, #240]
+   16bec:	910443ff 	add	sp, sp, #0x110
+   16bf0:	d65f03c0 	ret
+   16bf4:	94008ab3 	bl	396c0 <__stack_chk_fail@plt>
+   16bf8:	d65f03c0 	ret
+   16bfc:	14008add 	b	39770 <operator delete(void*)@plt>
+
+0000000000016c00 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::__clone() const@@Base>:
+   16c00:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   16c04:	f9000bf3 	str	x19, [sp, #16]
+   16c08:	910003fd 	mov	x29, sp
+   16c0c:	aa0003f3 	mov	x19, x0
+   16c10:	52800200 	mov	w0, #0x10                  	// #16
+   16c14:	94008acf 	bl	39750 <operator new(unsigned long)@plt>
+   16c18:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16c1c:	b9400a68 	ldr	w8, [x19, #8]
+   16c20:	f9425529 	ldr	x9, [x9, #1192]
+   16c24:	b9000808 	str	w8, [x0, #8]
+   16c28:	f9400bf3 	ldr	x19, [sp, #16]
+   16c2c:	91004129 	add	x9, x9, #0x10
+   16c30:	f9000009 	str	x9, [x0]
+   16c34:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   16c38:	d65f03c0 	ret
+
+0000000000016c3c <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::__clone(std::__1::__function::__base<void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>*) const@@Base>:
+   16c3c:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16c40:	f9425508 	ldr	x8, [x8, #1192]
+   16c44:	91004108 	add	x8, x8, #0x10
+   16c48:	f9000028 	str	x8, [x1]
+   16c4c:	b9400808 	ldr	w8, [x0, #8]
+   16c50:	b9000828 	str	w8, [x1, #8]
+   16c54:	d65f03c0 	ret
+
+0000000000016c58 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::destroy()@@Base>:
+   16c58:	d65f03c0 	ret
+
+0000000000016c5c <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::destroy_deallocate()@@Base>:
+   16c5c:	14008ac5 	b	39770 <operator delete(void*)@plt>
+
+0000000000016c60 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base>:
+   16c60:	b9400029 	ldr	w9, [x1]
+   16c64:	b94000a8 	ldr	w8, [x5]
+   16c68:	b940080a 	ldr	w10, [x0, #8]
+   16c6c:	7100013f 	cmp	w9, #0x0
+   16c70:	b9400041 	ldr	w1, [x2]
+   16c74:	f9400062 	ldr	x2, [x3]
+   16c78:	f9400083 	ldr	x3, [x4]
+   16c7c:	1a890140 	csel	w0, w10, w9, eq	// eq = none
+   16c80:	f94000c5 	ldr	x5, [x6]
+   16c84:	2a0803e4 	mov	w4, w8
+   16c88:	17fff997 	b	152e4 <android::base::LogdLogger::operator()(android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)@@Base+0x24>
+   16c8c:	d10183ff 	sub	sp, sp, #0x60
+   16c90:	a9047bfd 	stp	x29, x30, [sp, #64]
+   16c94:	910103fd 	add	x29, sp, #0x40
+   16c98:	f9002bf3 	str	x19, [sp, #80]
+   16c9c:	d53bd053 	mrs	x19, tpidr_el0
+   16ca0:	f9401668 	ldr	x8, [x19, #40]
+   16ca4:	f81f83a8 	stur	x8, [x29, #-8]
+   16ca8:	b9800808 	ldrsw	x8, [x0, #8]
+   16cac:	7100111f 	cmp	w8, #0x4
+   16cb0:	540000a8 	b.hi	16cc4 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x64>  // b.pmore
+   16cb4:	b0ffffa9 	adrp	x9, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   16cb8:	91368129 	add	x9, x9, #0xda0
+   16cbc:	b8687929 	ldr	w9, [x9, x8, lsl #2]
+   16cc0:	14000002 	b	16cc8 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x68>
+   16cc4:	2a1f03e9 	mov	w9, wzr
+   16cc8:	b9400c08 	ldr	w8, [x0, #12]
+   16ccc:	51000508 	sub	w8, w8, #0x1
+   16cd0:	7100191f 	cmp	w8, #0x6
+   16cd4:	540000a8 	b.hi	16ce8 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x88>  // b.pmore
+   16cd8:	b0ffffaa 	adrp	x10, b000 <fmt::v7::detail::basic_data<void>::powers_of_10_64@@Base-0x1040>
+   16cdc:	9136d14a 	add	x10, x10, #0xdb4
+   16ce0:	b868d94a 	ldr	w10, [x10, w8, sxtw #2]
+   16ce4:	14000002 	b	16cec <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x8c>
+   16ce8:	528000ca 	mov	w10, #0x6                   	// #6
+   16cec:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16cf0:	d000012b 	adrp	x11, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16cf4:	91372108 	add	x8, x8, #0xdc8
+   16cf8:	08dffd08 	ldarb	w8, [x8]
+   16cfc:	360003a8 	tbz	w8, #0, 16d70 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x110>
+   16d00:	f946e168 	ldr	x8, [x11, #3520]
+   16d04:	293e27aa 	stp	w10, w9, [x29, #-16]
+   16d08:	a941300b 	ldp	x11, x12, [x0, #16]
+   16d0c:	b9402009 	ldr	w9, [x0, #32]
+   16d10:	f940140a 	ldr	x10, [x0, #40]
+   16d14:	f9401100 	ldr	x0, [x8, #32]
+   16d18:	f81e83ab 	stur	x11, [x29, #-24]
+   16d1c:	f90013ec 	str	x12, [sp, #32]
+   16d20:	b9001fe9 	str	w9, [sp, #28]
+   16d24:	f9000bea 	str	x10, [sp, #16]
+   16d28:	b40005e0 	cbz	x0, 16de4 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x184>
+   16d2c:	f9400008 	ldr	x8, [x0]
+   16d30:	d10033a1 	sub	x1, x29, #0xc
+   16d34:	d10043a2 	sub	x2, x29, #0x10
+   16d38:	d10063a3 	sub	x3, x29, #0x18
+   16d3c:	910083e4 	add	x4, sp, #0x20
+   16d40:	910073e5 	add	x5, sp, #0x1c
+   16d44:	f9401908 	ldr	x8, [x8, #48]
+   16d48:	910043e6 	add	x6, sp, #0x10
+   16d4c:	d63f0100 	blr	x8
+   16d50:	f9401668 	ldr	x8, [x19, #40]
+   16d54:	f85f83a9 	ldur	x9, [x29, #-8]
+   16d58:	eb09011f 	cmp	x8, x9
+   16d5c:	54000461 	b.ne	16de8 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0x188>  // b.any
+   16d60:	a9447bfd 	ldp	x29, x30, [sp, #64]
+   16d64:	f9402bf3 	ldr	x19, [sp, #80]
+   16d68:	910183ff 	add	sp, sp, #0x60
+   16d6c:	d65f03c0 	ret
+   16d70:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16d74:	f90007e0 	str	x0, [sp, #8]
+   16d78:	91372108 	add	x8, x8, #0xdc8
+   16d7c:	290027ea 	stp	w10, w9, [sp]
+   16d80:	aa0803e0 	mov	x0, x8
+   16d84:	94008a87 	bl	397a0 <__cxa_guard_acquire@plt>
+   16d88:	294027ea 	ldp	w10, w9, [sp]
+   16d8c:	d000012b 	adrp	x11, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16d90:	2a0003e8 	mov	w8, w0
+   16d94:	f94007e0 	ldr	x0, [sp, #8]
+   16d98:	34fffb48 	cbz	w8, 16d00 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0xa0>
+   16d9c:	52800600 	mov	w0, #0x30                  	// #48
+   16da0:	94008a6c 	bl	39750 <operator new(unsigned long)@plt>
+   16da4:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16da8:	52800028 	mov	w8, #0x1                   	// #1
+   16dac:	f9425529 	ldr	x9, [x9, #1192]
+   16db0:	b9000808 	str	w8, [x0, #8]
+   16db4:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16db8:	f9001000 	str	x0, [x0, #32]
+   16dbc:	91004129 	add	x9, x9, #0x10
+   16dc0:	f906e100 	str	x0, [x8, #3520]
+   16dc4:	f9000009 	str	x9, [x0]
+   16dc8:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16dcc:	91372000 	add	x0, x0, #0xdc8
+   16dd0:	94008a7c 	bl	397c0 <__cxa_guard_release@plt>
+   16dd4:	294027ea 	ldp	w10, w9, [sp]
+   16dd8:	d000012b 	adrp	x11, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16ddc:	f94007e0 	ldr	x0, [sp, #8]
+   16de0:	17ffffc8 	b	16d00 <std::__1::__function::__func<android::base::LogdLogger, std::__1::allocator<android::base::LogdLogger>, void (android::base::LogId, android::base::LogSeverity, char const*, char const*, unsigned int, char const*)>::operator()(android::base::LogId&&, android::base::LogSeverity&&, char const*&&, char const*&&, unsigned int&&, char const*&&)@@Base+0xa0>
+   16de4:	94000275 	bl	177b8 <std::__1::basic_stringbuf<char, std::__1::char_traits<char>, std::__1::allocator<char> >::str() const@@Base+0x258>
+   16de8:	94008a36 	bl	396c0 <__stack_chk_fail@plt>
+
+0000000000016dec <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::__clone() const@@Base>:
+   16dec:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   16df0:	f9000bf3 	str	x19, [sp, #16]
+   16df4:	910003fd 	mov	x29, sp
+   16df8:	aa0003f3 	mov	x19, x0
+   16dfc:	52800200 	mov	w0, #0x10                  	// #16
+   16e00:	94008a54 	bl	39750 <operator new(unsigned long)@plt>
+   16e04:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16e08:	f9400668 	ldr	x8, [x19, #8]
+   16e0c:	f9425929 	ldr	x9, [x9, #1200]
+   16e10:	f9400bf3 	ldr	x19, [sp, #16]
+   16e14:	91004129 	add	x9, x9, #0x10
+   16e18:	a9002009 	stp	x9, x8, [x0]
+   16e1c:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   16e20:	d65f03c0 	ret
+
+0000000000016e24 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::__clone(std::__1::__function::__base<void (char const*)>*) const@@Base>:
+   16e24:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16e28:	f9425908 	ldr	x8, [x8, #1200]
+   16e2c:	91004108 	add	x8, x8, #0x10
+   16e30:	f9000028 	str	x8, [x1]
+   16e34:	f9400408 	ldr	x8, [x0, #8]
+   16e38:	f9000428 	str	x8, [x1, #8]
+   16e3c:	d65f03c0 	ret
+
+0000000000016e40 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::destroy()@@Base>:
+   16e40:	d65f03c0 	ret
+
+0000000000016e44 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::destroy_deallocate()@@Base>:
+   16e44:	14008a4b 	b	39770 <operator delete(void*)@plt>
+
+0000000000016e48 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base>:
+   16e48:	f9400028 	ldr	x8, [x1]
+   16e4c:	f9400401 	ldr	x1, [x0, #8]
+   16e50:	aa0803e0 	mov	x0, x8
+   16e54:	d61f0020 	br	x1
+   16e58:	d10103ff 	sub	sp, sp, #0x40
+   16e5c:	a9027bfd 	stp	x29, x30, [sp, #32]
+   16e60:	910083fd 	add	x29, sp, #0x20
+   16e64:	f9001bf3 	str	x19, [sp, #48]
+   16e68:	d53bd053 	mrs	x19, tpidr_el0
+   16e6c:	d0000129 	adrp	x9, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16e70:	f9401668 	ldr	x8, [x19, #40]
+   16e74:	f81f83a8 	stur	x8, [x29, #-8]
+   16e78:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16e7c:	91376108 	add	x8, x8, #0xdd8
+   16e80:	08dffd08 	ldarb	w8, [x8]
+   16e84:	36000248 	tbz	w8, #0, 16ecc <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0x84>
+   16e88:	f946e928 	ldr	x8, [x9, #3536]
+   16e8c:	f9000be0 	str	x0, [sp, #16]
+   16e90:	f9401108 	ldr	x8, [x8, #32]
+   16e94:	b4000508 	cbz	x8, 16f34 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0xec>
+   16e98:	f9400109 	ldr	x9, [x8]
+   16e9c:	910043e1 	add	x1, sp, #0x10
+   16ea0:	aa0803e0 	mov	x0, x8
+   16ea4:	f9401929 	ldr	x9, [x9, #48]
+   16ea8:	d63f0120 	blr	x9
+   16eac:	f9401668 	ldr	x8, [x19, #40]
+   16eb0:	f85f83a9 	ldur	x9, [x29, #-8]
+   16eb4:	eb09011f 	cmp	x8, x9
+   16eb8:	54000401 	b.ne	16f38 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0xf0>  // b.any
+   16ebc:	a9427bfd 	ldp	x29, x30, [sp, #32]
+   16ec0:	f9401bf3 	ldr	x19, [sp, #48]
+   16ec4:	910103ff 	add	sp, sp, #0x40
+   16ec8:	d65f03c0 	ret
+   16ecc:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16ed0:	f90007e0 	str	x0, [sp, #8]
+   16ed4:	91376108 	add	x8, x8, #0xdd8
+   16ed8:	aa0803e0 	mov	x0, x8
+   16edc:	94008a31 	bl	397a0 <__cxa_guard_acquire@plt>
+   16ee0:	d0000129 	adrp	x9, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16ee4:	2a0003e8 	mov	w8, w0
+   16ee8:	f94007e0 	ldr	x0, [sp, #8]
+   16eec:	34fffce8 	cbz	w8, 16e88 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0x40>
+   16ef0:	52800600 	mov	w0, #0x30                  	// #48
+   16ef4:	94008a17 	bl	39750 <operator new(unsigned long)@plt>
+   16ef8:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16efc:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16f00:	f9425908 	ldr	x8, [x8, #1200]
+   16f04:	f9425129 	ldr	x9, [x9, #1184]
+   16f08:	f9001000 	str	x0, [x0, #32]
+   16f0c:	91004108 	add	x8, x8, #0x10
+   16f10:	a9002408 	stp	x8, x9, [x0]
+   16f14:	d0000128 	adrp	x8, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16f18:	f906e900 	str	x0, [x8, #3536]
+   16f1c:	d0000120 	adrp	x0, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16f20:	91376000 	add	x0, x0, #0xdd8
+   16f24:	94008a27 	bl	397c0 <__cxa_guard_release@plt>
+   16f28:	d0000129 	adrp	x9, 3c000 <vtable for fmt::v7::basic_memory_buffer<unsigned int, 32ul, std::__1::allocator<unsigned int> >@@Base+0xda8>
+   16f2c:	f94007e0 	ldr	x0, [sp, #8]
+   16f30:	17ffffd6 	b	16e88 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0x40>
+   16f34:	94000221 	bl	177b8 <std::__1::basic_stringbuf<char, std::__1::char_traits<char>, std::__1::allocator<char> >::str() const@@Base+0x258>
+   16f38:	940089e2 	bl	396c0 <__stack_chk_fail@plt>
+   16f3c:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   16f40:	a9014ff4 	stp	x20, x19, [sp, #16]
+   16f44:	910003fd 	mov	x29, sp
+   16f48:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16f4c:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16f50:	aa0003f3 	mov	x19, x0
+   16f54:	aa0003f4 	mov	x20, x0
+   16f58:	f9426108 	ldr	x8, [x8, #1216]
+   16f5c:	f9426529 	ldr	x9, [x9, #1224]
+   16f60:	3941200b 	ldrb	w11, [x0, #72]
+   16f64:	9100610a 	add	x10, x8, #0x18
+   16f68:	91010108 	add	x8, x8, #0x40
+   16f6c:	91004129 	add	x9, x9, #0x10
+   16f70:	f900000a 	str	x10, [x0]
+   16f74:	f9003808 	str	x8, [x0, #112]
+   16f78:	f8008e89 	str	x9, [x20, #8]!
+   16f7c:	3600006b 	tbz	w11, #0, 16f88 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0x140>
+   16f80:	f9402e60 	ldr	x0, [x19, #88]
+   16f84:	940089fb 	bl	39770 <operator delete(void*)@plt>
+   16f88:	aa1403e0 	mov	x0, x20
+   16f8c:	94008b7d 	bl	39d80 <std::__1::basic_streambuf<char, std::__1::char_traits<char> >::~basic_streambuf()@plt>
+   16f90:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16f94:	aa1303e0 	mov	x0, x19
+   16f98:	f9426908 	ldr	x8, [x8, #1232]
+   16f9c:	91002101 	add	x1, x8, #0x8
+   16fa0:	94008b7c 	bl	39d90 <std::__1::basic_ostream<char, std::__1::char_traits<char> >::~basic_ostream()@plt>
+   16fa4:	9101c260 	add	x0, x19, #0x70
+   16fa8:	a9414ff4 	ldp	x20, x19, [sp, #16]
+   16fac:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   16fb0:	14008b7c 	b	39da0 <std::__1::basic_ios<char, std::__1::char_traits<char> >::~basic_ios()@plt>
+   16fb4:	a9be7bfd 	stp	x29, x30, [sp, #-32]!
+   16fb8:	a9014ff4 	stp	x20, x19, [sp, #16]
+   16fbc:	910003fd 	mov	x29, sp
+   16fc0:	b0000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   16fc4:	b0000129 	adrp	x9, 3b000 <strcmp@plt+0xb50>
+   16fc8:	aa0003f3 	mov	x19, x0
+   16fcc:	aa0003f4 	mov	x20, x0
+   16fd0:	f9426108 	ldr	x8, [x8, #1216]
+   16fd4:	f9426529 	ldr	x9, [x9, #1224]
+   16fd8:	3941200b 	ldrb	w11, [x0, #72]
+   16fdc:	9100610a 	add	x10, x8, #0x18
+   16fe0:	91010108 	add	x8, x8, #0x40
+   16fe4:	91004129 	add	x9, x9, #0x10
+   16fe8:	f900000a 	str	x10, [x0]
+   16fec:	f9003808 	str	x8, [x0, #112]
+   16ff0:	f8008e89 	str	x9, [x20, #8]!
+   16ff4:	3600006b 	tbz	w11, #0, 17000 <std::__1::__function::__func<void (*)(char const*), std::__1::allocator<void (*)(char const*)>, void (char const*)>::operator()(char const*&&)@@Base+0x1b8>
+   16ff8:	f9402e60 	ldr	x0, [x19, #88]
+   16ffc:	940089dd 	bl	39770 <operator delete(void*)@plt>
+   17000:	aa1403e0 	mov	x0, x20
+   17004:	94008b5f 	bl	39d80 <std::__1::basic_streambuf<char, std::__1::char_traits<char> >::~basic_streambuf()@plt>
+   17008:	90000128 	adrp	x8, 3b000 <strcmp@plt+0xb50>
+   1700c:	aa1303e0 	mov	x0, x19
+   17010:	f9426908 	ldr	x8, [x8, #1232]
+   17014:	91002101 	add	x1, x8, #0x8
+   17018:	94008b5e 	bl	39d90 <std::__1::basic_ostream<char, std::__1::char_traits<char> >::~basic_ostream()@plt>
+   1701c:	9101c260 	add	x0, x19, #0x70
+   17020:	94008b60 	bl	39da0 <std::__1::basic_ios<char, std::__1::char_traits<char> >::~basic_ios()@plt>
+   17024:	aa1303e0 	mov	x0, x19
+   17028:	a9414ff4 	ldp	x20, x19, [sp, #16]
+   1702c:	a8c27bfd 	ldp	x29, x30, [sp], #32
+   17030:	140089d0 	b	39770 <operator delete(void*)@plt>
+   17034:	a9bd7bfd 	stp	x29, x30, [sp, #-48]!
+   17038:	f9000bf5 	str	x21, [sp, #16]
+   1703c:	910003fd 	mov	x29, sp
+
+--- nearest libandroid_runtime symbols ---
+### 0x1c7414
+
+### 0x1cce84
+
+### 0x1c9710
+
+
+--- nearest libart symbol ---
+00000000004be2c8 t art::JNI<true>::FatalError(_JNIEnv*, char const*)
+
+SYMBOLIZE_AFTER_SECCOMP_SKIP_DONE

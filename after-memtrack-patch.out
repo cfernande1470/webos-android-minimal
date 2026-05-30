@@ -1,0 +1,656 @@
+--- kill android logd/logcat and stale capture ---
+--- prepare socket dir ---
+--- start direct logdw capture ---
+cap_pid=29309
+--- logdw socket ---
+srw-rw-rw-    1 root     root             0 May 30 00:45 /media/internal/android-usb/android-rootfs/dev/socket/logdw
+LOGDW_CAPTURE_READY path=/dev/socket/logdw fd=3
+--- clear dmesg ---
+--- start zygote/system_server ---
+--- cleanup old zygotes/wrappers ---
+
+--- sanity patches ---
+storage abort call @ 0x1ca198, should be 1f 20 03 d5:  1f 20 03 d5
+SetTaskProfiles call @ 0x1ca1b0, should be 20 00 80 52:  20 00 80 52
+SetTaskProfiles tbz @ 0x1ca208, should be 1f 20 03 d5:  1f 20 03 d5
+
+--- classpath ---
+BOOTCLASSPATH length: 1624
+SYSTEMSERVERCLASSPATH length: 463
+
+--- start zygote + system_server ---
+
+--- pids ---
+
+--- android-ish scan ---
+PID=29318 COMM=sh CMD=sh /tmp/try-zygote-start-system-server-v2.sh 
+  Name:	sh
+  State:	S (sleeping)
+  Tgid:	29318
+  Ngid:	0
+  Pid:	29318
+  PPid:	29299
+  TracerPid:	0
+  Uid:	0	0	0	0
+PID=4114 COMM=WebAppMgr CMD=/usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic 
+  Name:	WebAppMgr
+  State:	S (sleeping)
+  Tgid:	4114
+  Ngid:	0
+  Pid:	4114
+  PPid:	3021
+  TracerPid:	0
+  Uid:	505	505	505	505
+
+--- sockets ---
+srw-rw-rw-    1 root     root             0 May 30 00:45 usap_pool_primary
+srw-rw-rw-    1 root     root             0 May 30 00:45 zygote
+
+--- log tail ---
+--- collect ---
+--- pids ---
+wam       4114  3021  0 May29 ?        00:00:01 /usr/bin/WebAppMgr --type=zygote --disable-in-process-stack-traces --no-sandbox --no-sandbox --disable-quic
+root     19897     1  0 May29 ?        00:00:00 /media/internal/android-usb/android-sidecar/bin/property_service_ack_shim /media/internal/android-usb/android-rootfs/dev/socket/property_service
+root     29282     1  0 00:45 ?        00:00:00 /system/bin/servicemanager
+root     29283     1  0 00:45 ?        00:00:00 /system/bin/hwservicemanager
+root     29284     1  0 00:45 ?        00:00:00 /vendor/bin/vndservicemanager
+
+--- zygote log ---
+
+--- capture stderr ---
+LOGDW_CAPTURE_READY path=/dev/socket/logdw fd=3
+
+--- logdw fatal/exceptions ---
+rj4Q9AndroidRuntime >>>>>> START com.android.internal.os.ZygoteInit uid 0 <<<<<<
+rj:AndroidRuntime Using default boot image 
+rj :AndroidRuntime Leaving lock profiling enabled 
+rj:cutils-trace Error opening trace file: No such file or directory (2) 
+rj:zygote64 option[0]=-Xzygote 
+rj|:zygote64 option[1]=-Xdeny-art-apex-data-files 
+rjx:zygote64 option[2]=exit 
+rj:zygote64 option[3]=vfprintf 
+rj$#:zygote64 option[4]=sensitiveThread 
+rjI:zygote64 option[5]=-verbose:gc 
+rj0q:zygote64 option[6]=-XX:PerfettoHprof=true 
+rj:zygote64 option[7]=-XX:PerfettoJavaHeapStackProf=true 
+rj:zygote64 option[8]=-Xprimaryzygote 
+rj:zygote64 option[9]=-Xms8m 
+rj@:zygote64 option[10]=-Xmx512m 
+rj40:zygote64 option[11]=-XX:HeapGrowthLimit=192m 
+rjY:zygote64 option[12]=-XX:HeapMinFree=8m 
+rj:zygote64 option[13]=-XX:HeapMaxFree=16m 
+rj:zygote64 option[14]=-XX:HeapTargetUtilization=0.6 
+rj:zygote64 option[15]=-Xusejit:true 
+rj:zygote64 option[16]=-Xjitsaveprofilinginfo 
+rj):zygote64 option[17]=-XMadviseWillNeedVdexFileSize:104857600 
+rjU:zygote64 option[18]=-XMadviseWillNeedOdexFileSize:104857600 
+rjh:zygote64 option[19]=-XMadviseWillNeedArtFileSize:4294967295 
+rj0:zygote64 option[20]=-XjdwpOptions:suspend=n,server=y 
+rj:zygote64 option[21]=-XjdwpProvider:default 
+rj:zygote64 option[22]=-Xopaque-jni-ids:swapable 
+rj#:zygote64 option[23]=-Xlockprofthreshold:500 
+rj L:zygote64 option[24]=-Xcompiler-option 
+rjt:zygote64 option[25]=--instruction-set-variant=generic 
+rj:zygote64 option[26]=-Xcompiler-option 
+rj:zygote64 option[27]=--instruction-set-features=default 
+rj:zygote64 option[28]=-Xcompiler-option 
+rj:zygote64 option[29]=--generate-mini-debug-info 
+rjP>:zygote64 option[30]=-Ximage-compiler-option 
+rj<f:zygote64 option[31]=--runtime-arg 
+rj:zygote64 option[32]=-Ximage-compiler-option 
+rj:zygote64 option[33]=-Xms64m 
+rj$:zygote64 option[34]=-Ximage-compiler-option 
+rj\:zygote64 option[35]=--runtime-arg 
+rjdx:zygote64 option[36]=-Ximage-compiler-option 
+rjt:zygote64 option[37]=-Xmx64m 
+rjL:zygote64 option[38]=-Ximage-compiler-option 
+:zygote64 option[39]=--dirty-image-objects=/system/etc/dirty-image-objects 
+rj3:zygote64 option[40]=-Ximage-compiler-option 
+rj\:zygote64 option[41]=--instruction-set-variant=generic 
+rj:zygote64 option[42]=-Ximage-compiler-option 
+rjP:zygote64 option[43]=--instruction-set-features=default 
+rj:zygote64 option[44]=-Ximage-compiler-option 
+rj:zygote64 option[45]=--generate-mini-debug-info 
+rjp.:zygote64 option[46]=-Duser.locale=en-US 
+rjW:zygote64 option[47]=--cpu-abilist=arm64-v8a 
+rj:zygote64 option[48]=-Xcore-platform-api-policy:just-warn 
+rj:zygote64 option[49]=-Xfingerprint:waydroid/lineage_waydroid_arm64_only/waydroid_arm64_only:13/TQ3A.230901.001/eng.aleast.20260403.072834:userdebug/test-keys 
+rj;zygote64 ART APEX data files are untrusted. 
+rjP;zygote64 Core platform API reporting enabled, enforcing=false 
+rj ;zygote64 Time zone APEX ICU file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat 
+rjzygote64 I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt70l.dat 
+rj1zygote64 fcntl(F_ADD_SEALS) failed: Invalid argument, no memfd support. 
+rjD1zygote64 Falling back to ashmem implementation for JIT zygote mapping 
+rj 16 ashmem Unable to open ashmem device /dev/ashmem89186ff2-684d-4810-8e23-866a9bc61396 (error = No such file or directory) and /dev/ashmem(error = No such file or directory) 
+rj7zygote64 Failed to create JIT Code Cache: Failed to create zygote mapping: No such file or directory 
+rj8zygote64 Missing code cache, cannot create JIT. 
+rj7Zygote begin preload 
+rj(J9 Zygote Calling ZygoteHooks.beginPreload() 
+rjH Zygote64Timing BeginPreload took to complete: 143ms 
+rj Zygote Preloading classes... 
+rjd Zygote ...preloaded 0 classes in 0ms. 
+rj Zygote64Timing PreloadClasses took to complete: 1ms 
+rjd5!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.base-V1.0-java.jar 
+rj!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.manager-V1.0-java.jar 
+rj8z!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.test.base.jar 
+rj!Zygote64Timing CacheNonBootClasspathClassLoaders took to complete: 16ms 
+rjE&Zygote Preloading resources... 
+rj)Zygote ...preloaded 64 resources in 48ms. 
+rjz)Zygote ...preloaded 41 resources in 9ms. 
+rj6)Zygote ...preloaded 8 resource in 4ms. 
+rj)Zygote64Timing PreloadResources took to complete: 138ms 
+rj'*Zygote Preloading shared libraries... 
+rj0+zygote64 Unable to find pattern file or unable to map it for am 
+rj(X+Zygote Called ZygoteHooks.endPreload() 
+rjXg+Zygote Installed AndroidKeyStoreProvider in 1ms. 
+rj+Zygote Warmed up JCA providers in 10ms. 
+rj +Zygote end preload 
+rj+Zygote64Timing ZygotePreload took to complete: 332ms 
+rj0-zygote64 Explicit concurrent copying GC freed 32762(1544KB) AllocSpace objects, 11(288KB) LOS objects, 95% free, 1274KB/25MB, paused 75us,28us total 28.316ms 
+rj.zygote64 Explicit concurrent copying GC freed 2275(125KB) AllocSpace objects, 0(0B) LOS objects, 95% free, 1180KB/25MB, paused 49us,26us total 19.609ms 
+rjw.Zygote64Timing PostZygoteInitGC took to complete: 50ms 
+rj.Zygote64Timing ZygoteInit took to complete: 402ms 
+rjp.Zygote Unable to fetch Zygote socket file descriptor 
+rj.Zygote Unable to fetch USAP pool socket file descriptor 
+rjZygote Forked child process 29345 
+rjZygote System server process 29345 has been created 
+rj0U) Zygote Accepting command socket connections 
+rjCzygote64 open() failed for /dev/cgroup_info/cgroup.rc: No such file or directory 
+rj4libprocessgroup CgroupMap::LoadRcFile called for [29345] failed 
+rj<system_server Failed to upload odrefresh metrics: file parsing error. 
+rj\sSystemServerTiming InitBeforeStartServices 
+rjSystemServer persist.sys.timezone is not valid (); setting to GMT. 
+rjSystemServer Entered the Android system server! 
+y SystemServerTiming InitBeforeStartServices took to complete: 213ms 
+rjZygote System zygote died with fatal exception
+java.lang.RuntimeException: Unable to instantiate Application():java.lang.IllegalArgumentException
+	at com.android.server.SystemServer.createSystemContext(SystemServer.java:1039)
+	at com.android.server.SystemServer.run(SystemServer.java:883)
+	at com.android.server.SystemServer.main(SystemServer.java:650)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+Caused by: java.lang.IllegalArgumentException
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+rjAndroidRuntime Shutting down VM
+rjHAndroidRuntime *** FATAL EXCEPTION IN SYSTEM PROCESS: main
+java.lang.RuntimeException: Unable to instantiate Application():java.lang.IllegalArgumentException
+	at com.android.server.SystemServer.createSystemContext(SystemServer.java:1039)
+	at com.android.server.SystemServer.run(SystemServer.java:883)
+	at com.android.server.SystemServer.main(SystemServer.java:650)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+Caused by: java.lang.IllegalArgumentException
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+rjAndroidRuntime Error reporting crash
+java.lang.IllegalArgumentException
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+	at android.app.ActivityManager$1.create(ActivityManager.java:4705)
+	at android.app.ActivityManager$1.create(ActivityManager.java:4702)
+	at android.app.ActivityManager.getService(ActivityManager.java:4693)
+	at com.android.internal.os.RuntimeInit$KillApplicationHandler.uncaughtException(RuntimeInit.java:156)
+	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1073)
+	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1068)
+	at java.lang.Thread.dispatchUncaughtException(Thread.java:2306)
+rj(+Zygote Zygote failed to write to system_server FD: No such file or directory 
+rjpZygote Process 29345 exited due to signal 9 (Killed) 
+rjwZygote Exit zygote because system server (pid 29345) has terminated 
+
+--- raw logdw tail ---
+
+--- packet bytes=89 time=1780094732.973251720 ---
+rj4Q9AndroidRuntime >>>>>> START com.android.internal.os.ZygoteInit uid 0 <<<<<<
+ 
+
+--- packet bytes=24 time=1780094732.973519340 ---
+rjQ:
+
+--- packet bytes=52 time=1780094732.986241820 ---
+rj:AndroidRuntime Using default boot image 
+
+--- packet bytes=58 time=1780094732.986336820 ---
+rj :AndroidRuntime Leaving lock profiling enabled 
+
+--- packet bytes=81 time=1780094732.988036200 ---
+rj:cutils-trace Error opening trace file: No such file or directory (2) 
+
+--- packet bytes=40 time=1780094732.988516860 ---
+rj:zygote64 option[0]=-Xzygote 
+
+--- packet bytes=58 time=1780094732.988536900 ---
+rj|:zygote64 option[1]=-Xdeny-art-apex-data-files 
+
+--- packet bytes=36 time=1780094732.988547540 ---
+rjx:zygote64 option[2]=exit 
+
+--- packet bytes=40 time=1780094732.988557700 ---
+rj:zygote64 option[3]=vfprintf 
+
+--- packet bytes=47 time=1780094732.988567600 ---
+rj$#:zygote64 option[4]=sensitiveThread 
+
+--- packet bytes=43 time=1780094732.988577500 ---
+rjI:zygote64 option[5]=-verbose:gc 
+
+--- packet bytes=54 time=1780094732.988587200 ---
+rj0q:zygote64 option[6]=-XX:PerfettoHprof=true 
+
+--- packet bytes=66 time=1780094732.988597120 ---
+rj:zygote64 option[7]=-XX:PerfettoJavaHeapStackProf=true 
+
+--- packet bytes=47 time=1780094732.988606920 ---
+rj:zygote64 option[8]=-Xprimaryzygote 
+
+--- packet bytes=38 time=1780094732.988616500 ---
+rj:zygote64 option[9]=-Xms8m 
+
+--- packet bytes=41 time=1780094732.988626040 ---
+rj@:zygote64 option[10]=-Xmx512m 
+
+--- packet bytes=57 time=1780094732.988652000 ---
+rj40:zygote64 option[11]=-XX:HeapGrowthLimit=192m 
+
+--- packet bytes=51 time=1780094732.988662820 ---
+rjY:zygote64 option[12]=-XX:HeapMinFree=8m 
+
+--- packet bytes=52 time=1780094732.988672880 ---
+rj:zygote64 option[13]=-XX:HeapMaxFree=16m 
+
+--- packet bytes=62 time=1780094732.988682700 ---
+rj:zygote64 option[14]=-XX:HeapTargetUtilization=0.6 
+
+--- packet bytes=46 time=1780094732.988692420 ---
+rj:zygote64 option[15]=-Xusejit:true 
+
+--- packet bytes=55 time=1780094732.988701960 ---
+rj:zygote64 option[16]=-Xjitsaveprofilinginfo 
+
+--- packet bytes=72 time=1780094732.988711500 ---
+rj):zygote64 option[17]=-XMadviseWillNeedVdexFileSize:104857600 
+
+--- packet bytes=72 time=1780094732.988721340 ---
+rjU:zygote64 option[18]=-XMadviseWillNeedOdexFileSize:104857600 
+
+--- packet bytes=72 time=1780094732.988731120 ---
+rjh:zygote64 option[19]=-XMadviseWillNeedArtFileSize:4294967295 
+
+--- packet bytes=65 time=1780094732.988741080 ---
+rj0:zygote64 option[20]=-XjdwpOptions:suspend=n,server=y 
+
+--- packet bytes=55 time=1780094732.988750940 ---
+rj:zygote64 option[21]=-XjdwpProvider:default 
+
+--- packet bytes=58 time=1780094732.988760560 ---
+rj:zygote64 option[22]=-Xopaque-jni-ids:swapable 
+
+--- packet bytes=56 time=1780094732.988770200 ---
+rj#:zygote64 option[23]=-Xlockprofthreshold:500 
+
+--- packet bytes=50 time=1780094732.988779840 ---
+rj L:zygote64 option[24]=-Xcompiler-option 
+
+--- packet bytes=66 time=1780094732.988789440 ---
+rjt:zygote64 option[25]=--instruction-set-variant=generic 
+
+--- packet bytes=50 time=1780094732.988799100 ---
+rj:zygote64 option[26]=-Xcompiler-option 
+
+--- packet bytes=67 time=1780094732.988808680 ---
+rj:zygote64 option[27]=--instruction-set-features=default 
+
+--- packet bytes=50 time=1780094732.988818460 ---
+rj:zygote64 option[28]=-Xcompiler-option 
+
+--- packet bytes=59 time=1780094732.988828040 ---
+rj:zygote64 option[29]=--generate-mini-debug-info 
+
+--- packet bytes=56 time=1780094732.988837560 ---
+rjP>:zygote64 option[30]=-Ximage-compiler-option 
+
+--- packet bytes=46 time=1780094732.988847100 ---
+rj<f:zygote64 option[31]=--runtime-arg 
+
+--- packet bytes=56 time=1780094732.988856720 ---
+rj:zygote64 option[32]=-Ximage-compiler-option 
+
+--- packet bytes=40 time=1780094732.988866220 ---
+rj:zygote64 option[33]=-Xms64m 
+
+--- packet bytes=56 time=1780094732.988875780 ---
+rj$:zygote64 option[34]=-Ximage-compiler-option 
+
+--- packet bytes=46 time=1780094732.988885380 ---
+rj\:zygote64 option[35]=--runtime-arg 
+
+--- packet bytes=56 time=1780094732.988982360 ---
+rjdx:zygote64 option[36]=-Ximage-compiler-option 
+
+--- packet bytes=40 time=1780094732.989033300 ---
+rjt:zygote64 option[37]=-Xmx64m 
+
+--- packet bytes=56 time=1780094732.989045680 ---
+rjL:zygote64 option[38]=-Ximage-compiler-option 
+
+--- packet bytes=86 time=1780094732.989055940 ---
+rj
+:zygote64 option[39]=--dirty-image-objects=/system/etc/dirty-image-objects 
+
+--- packet bytes=56 time=1780094732.989066280 ---
+rj3:zygote64 option[40]=-Ximage-compiler-option 
+
+--- packet bytes=66 time=1780094732.989076160 ---
+rj\:zygote64 option[41]=--instruction-set-variant=generic 
+
+--- packet bytes=56 time=1780094732.989085920 ---
+rj:zygote64 option[42]=-Ximage-compiler-option 
+
+--- packet bytes=67 time=1780094732.989095460 ---
+rjP:zygote64 option[43]=--instruction-set-features=default 
+
+--- packet bytes=56 time=1780094732.989105260 ---
+rj:zygote64 option[44]=-Ximage-compiler-option 
+
+--- packet bytes=59 time=1780094732.989114720 ---
+rj:zygote64 option[45]=--generate-mini-debug-info 
+
+--- packet bytes=52 time=1780094732.989124320 ---
+rjp.:zygote64 option[46]=-Duser.locale=en-US 
+
+--- packet bytes=56 time=1780094732.989133660 ---
+rjW:zygote64 option[47]=--cpu-abilist=arm64-v8a 
+
+--- packet bytes=69 time=1780094732.989159460 ---
+rj:zygote64 option[48]=-Xcore-platform-api-policy:just-warn 
+
+--- packet bytes=169 time=1780094732.989171660 ---
+rj:zygote64 option[49]=-Xfingerprint:waydroid/lineage_waydroid_arm64_only/waydroid_arm64_only:13/TQ3A.230901.001/eng.aleast.20260403.072834:userdebug/test-keys 
+
+--- packet bytes=56 time=1780094732.999045160 ---
+rj;zygote64 ART APEX data files are untrusted. 
+
+--- packet bytes=74 time=1780094732.999379180 ---
+rjP;zygote64 Core platform API reporting enabled, enforcing=false 
+
+--- packet bytes=100 time=1780094733.315604920 ---
+rj ;zygote64 Time zone APEX ICU file found: /apex/com.android.tzdata/etc/icu/icu_tzdata.dat 
+
+--- packet bytes=91 time=1780094733.315752700 ---
+rjzygote64 I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt70l.dat 
+
+--- packet bytes=41 time=1780094733.338670680 ---
+rjl.TENS 	200284993 
+
+--- packet bytes=84 time=1780094733.338777400 ---
+rj1zygote64 fcntl(F_ADD_SEALS) failed: Invalid argument, no memfd support. 
+
+--- packet bytes=82 time=1780094733.338824920 ---
+rjD1zygote64 Falling back to ashmem implementation for JIT zygote mapping 
+
+--- packet bytes=183 time=1780094733.339115860 ---
+rj 16 ashmem Unable to open ashmem device /dev/ashmem89186ff2-684d-4810-8e23-866a9bc61396 (error = No such file or directory) and /dev/ashmem(error = No such file or directory) 
+
+--- packet bytes=113 time=1780094733.339216380 ---
+rj7zygote64 Failed to create JIT Code Cache: Failed to create zygote mapping: No such file or directory 
+
+--- packet bytes=60 time=1780094733.339228980 ---
+rj8zygote64 Missing code cache, cannot create JIT. 
+
+--- packet bytes=24 time=1780094733.406275300 ---
+rjl66 H
+
+--- packet bytes=33 time=1780094733.406398660 ---
+rj7Zygote begin preload 
+
+--- packet bytes=54 time=1780094733.406424220 ---
+rj(J9 Zygote Calling ZygoteHooks.beginPreload() 
+
+--- packet bytes=64 time=1780094733.548639560 ---
+rjH Zygote64Timing BeginPreload took to complete: 143ms 
+
+--- packet bytes=41 time=1780094733.548976820 ---
+rj Zygote Preloading classes... 
+
+--- packet bytes=50 time=1780094733.549392100 ---
+rjd Zygote ...preloaded 0 classes in 0ms. 
+
+--- packet bytes=64 time=1780094733.549556300 ---
+rj Zygote64Timing PreloadClasses took to complete: 1ms 
+
+--- packet bytes=117 time=1780094733.557203360 ---
+rjd5!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.base-V1.0-java.jar 
+
+--- packet bytes=120 time=1780094733.562366000 ---
+rj!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.hidl.manager-V1.0-java.jar 
+
+--- packet bytes=107 time=1780094733.566121720 ---
+rj8z!ApplicationLoaders Created zygote-cached class loader: /system/framework/android.test.base.jar 
+
+--- packet bytes=84 time=1780094733.566206320 ---
+rj!Zygote64Timing CacheNonBootClasspathClassLoaders took to complete: 16ms 
+
+--- packet bytes=43 time=1780094733.642178920 ---
+rjE&Zygote Preloading resources... 
+
+--- packet bytes=140 time=1780094733.657302240 ---
+rj,'Resources Preloaded drawable resource #0x108028e (android:drawable/dialog_background_material) that varies with configuration!! 
+
+--- packet bytes=54 time=1780094733.689768180 ---
+rj)Zygote ...preloaded 64 resources in 48ms. 
+
+--- packet bytes=53 time=1780094733.699231340 ---
+rjz)Zygote ...preloaded 41 resources in 9ms. 
+
+--- packet bytes=51 time=1780094733.703396540 ---
+rj6)Zygote ...preloaded 8 resource in 4ms. 
+
+--- packet bytes=68 time=1780094733.703456120 ---
+rj)Zygote64Timing PreloadResources took to complete: 138ms 
+
+--- packet bytes=50 time=1780094733.720480400 ---
+rj'*Zygote Preloading shared libraries... 
+
+--- packet bytes=76 time=1780094733.724674200 ---
+rj0+zygote64 Unable to find pattern file or unable to map it for am 
+
+--- packet bytes=51 time=1780094733.727243200 ---
+rj(X+Zygote Called ZygoteHooks.endPreload() 
+
+--- packet bytes=61 time=1780094733.728228880 ---
+rjXg+Zygote Installed AndroidKeyStoreProvider in 1ms. 
+
+--- packet bytes=52 time=1780094733.737778420 ---
+rj+Zygote Warmed up JCA providers in 10ms. 
+
+--- packet bytes=31 time=1780094733.737891920 ---
+rj +Zygote end preload 
+
+--- packet bytes=24 time=1780094733.737903400 ---
+rj+
+
+--- packet bytes=65 time=1780094733.737913640 ---
+rj+Zygote64Timing ZygotePreload took to complete: 332ms 
+
+--- packet bytes=170 time=1780094733.766561480 ---
+rj0-zygote64 Explicit concurrent copying GC freed 32762(1544KB) AllocSpace objects, 11(288KB) LOS objects, 95% free, 1274KB/25MB, paused 75us,28us total 28.316ms 
+
+--- packet bytes=164 time=1780094733.787789220 ---
+rj.zygote64 Explicit concurrent copying GC freed 2275(125KB) AllocSpace objects, 0(0B) LOS objects, 95% free, 1180KB/25MB, paused 49us,26us total 19.609ms 
+
+--- packet bytes=67 time=1780094733.787923240 ---
+rjw.Zygote64Timing PostZygoteInitGC took to complete: 50ms 
+
+--- packet bytes=62 time=1780094733.787938560 ---
+rj.Zygote64Timing ZygoteInit took to complete: 402ms 
+
+--- packet bytes=65 time=1780094733.787989180 ---
+rjp.Zygote Unable to fetch Zygote socket file descriptor 
+
+--- packet bytes=68 time=1780094733.788001180 ---
+rj.Zygote Unable to fetch USAP pool socket file descriptor 
+
+--- packet bytes=46 time=1780094735.018478500 ---
+rjZygote Forked child process 29345 
+
+--- packet bytes=64 time=1780094735.018582960 ---
+rjZygote System server process 29345 has been created 
+
+--- packet bytes=56 time=1780094735.019521440 ---
+rj0U) Zygote Accepting command socket connections 
+
+--- packet bytes=93 time=1780094735.096613700 ---
+rjCzygote64 open() failed for /dev/cgroup_info/cgroup.rc: No such file or directory 
+
+--- packet bytes=76 time=1780094735.096735780 ---
+rj4libprocessgroup CgroupMap::LoadRcFile called for [29345] failed 
+
+--- packet bytes=82 time=1780094735.099548220 ---
+rj<system_server Failed to upload odrefresh metrics: file parsing error. 
+
+--- packet bytes=55 time=1780094735.113695480 ---
+rj\sSystemServerTiming InitBeforeStartServices 
+
+--- packet bytes=40 time=1780094735.114313080 ---
+rj@
+
+--- packet bytes=79 time=1780094735.114492900 ---
+rjSystemServer persist.sys.timezone is not valid (); setting to GMT. 
+
+--- packet bytes=60 time=1780094735.114637660 ---
+rjSystemServer Entered the Android system server! 
+
+--- packet bytes=24 time=1780094735.114652180 ---
+rjT
+
+--- packet bytes=97 time=1780094735.325286840 ---
+drjaParcel Expecting header 0x564e4452 but found 0x53595354. Mixing copies of libbinder? 
+
+--- packet bytes=79 time=1780094735.326740180 ---
+rj<
+y SystemServerTiming InitBeforeStartServices took to complete: 213ms 
+
+--- packet bytes=1623 time=1780094735.327575000 ---
+rjZygote System zygote died with fatal exception
+java.lang.RuntimeException: Unable to instantiate Application():java.lang.IllegalArgumentException
+	at android.app.ActivityThread.attach(ActivityThread.java:7652)
+	at android.app.ActivityThread.systemMain(ActivityThread.java:7682)
+	at com.android.server.SystemServer.createSystemContext(SystemServer.java:1039)
+	at com.android.server.SystemServer.run(SystemServer.java:883)
+	at com.android.server.SystemServer.main(SystemServer.java:650)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+Caused by: java.lang.IllegalArgumentException
+	at android.os.BinderProxy.transactNative(Native Method)
+	at android.os.BinderProxy.transact(BinderProxy.java:584)
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+	at android.hardware.display.DisplayManagerGlobal.getInstance(DisplayManagerGlobal.java:153)
+	at android.app.ResourcesManager.getDisplayMetrics(ResourcesManager.java:333)
+	at android.app.ResourcesManager.getDisplayMetrics(ResourcesManager.java:325)
+	at android.app.ContextImpl.createSystemContext(ContextImpl.java:3057)
+	at android.app.ActivityThread.getSystemContext(ActivityThread.java:2722)
+	at android.app.ActivityThread.attach(ActivityThread.java:7647)
+	... 7 more
+ 
+
+--- packet bytes=45 time=1780094735.327648080 ---
+rjAndroidRuntime Shutting down VM
+ 
+
+--- packet bytes=1635 time=1780094735.328127360 ---
+rjHAndroidRuntime *** FATAL EXCEPTION IN SYSTEM PROCESS: main
+java.lang.RuntimeException: Unable to instantiate Application():java.lang.IllegalArgumentException
+	at android.app.ActivityThread.attach(ActivityThread.java:7652)
+	at android.app.ActivityThread.systemMain(ActivityThread.java:7682)
+	at com.android.server.SystemServer.createSystemContext(SystemServer.java:1039)
+	at com.android.server.SystemServer.run(SystemServer.java:883)
+	at com.android.server.SystemServer.main(SystemServer.java:650)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:548)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:915)
+Caused by: java.lang.IllegalArgumentException
+	at android.os.BinderProxy.transactNative(Native Method)
+	at android.os.BinderProxy.transact(BinderProxy.java:584)
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+	at android.hardware.display.DisplayManagerGlobal.getInstance(DisplayManagerGlobal.java:153)
+	at android.app.ResourcesManager.getDisplayMetrics(ResourcesManager.java:333)
+	at android.app.ResourcesManager.getDisplayMetrics(ResourcesManager.java:325)
+	at android.app.ContextImpl.createSystemContext(ContextImpl.java:3057)
+	at android.app.ActivityThread.getSystemContext(ActivityThread.java:2722)
+	at android.app.ActivityThread.attach(ActivityThread.java:7647)
+	... 7 more
+ 
+
+--- packet bytes=20 time=1780094735.328579120 ---
+drj,]
+
+--- packet bytes=97 time=1780094735.328594660 ---
+drj,]Parcel Expecting header 0x564e4452 but found 0x53595354. Mixing copies of libbinder? 
+
+--- packet bytes=1050 time=1780094735.329143540 ---
+rjAndroidRuntime Error reporting crash
+java.lang.IllegalArgumentException
+	at android.os.BinderProxy.transactNative(Native Method)
+	at android.os.BinderProxy.transact(BinderProxy.java:584)
+	at android.os.IServiceManager$Stub$Proxy.checkService(IServiceManager.java:421)
+	at android.os.ServiceManagerProxy.getService(ServiceManagerNative.java:63)
+	at android.os.ServiceManager.rawGetService(ServiceManager.java:372)
+	at android.os.ServiceManager.getService(ServiceManager.java:147)
+	at android.app.ActivityManager$1.create(ActivityManager.java:4705)
+	at android.app.ActivityManager$1.create(ActivityManager.java:4702)
+	at android.util.Singleton.get(Singleton.java:43)
+	at android.app.ActivityManager.getService(ActivityManager.java:4693)
+	at com.android.internal.os.RuntimeInit$KillApplicationHandler.uncaughtException(RuntimeInit.java:156)
+	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1073)
+	at java.lang.ThreadGroup.uncaughtException(ThreadGroup.java:1068)
+	at java.lang.Thread.dispatchUncaughtException(Thread.java:2306)
+ 
+
+--- packet bytes=54 time=1780094735.329229320 ---
+rjpProcess Sending signal. PID: 29345 SIG: 9 
+
+--- packet bytes=89 time=1780094735.398981660 ---
+rj(+Zygote Zygote failed to write to system_server FD: No such file or directory 
+
+--- packet bytes=65 time=1780094735.399116380 ---
+rjpZygote Process 29345 exited due to signal 9 (Killed) 
+
+--- packet bytes=80 time=1780094735.399130080 ---
+rjwZygote Exit zygote because system server (pid 29345) has terminated 
+
+--- dmesg focused ---
+[13375.992836] binder: binder: WEBOS accept ioctl 0x40046210 no-op
+[13375.992869] binder: binder_alloc_shim: binder_mmap enter filp=ffffffc08adddc00 vma=ffffffc08b9ddbb0 start=0x7efac78000 end=0x7efad76000 flags=0x200071
+[13375.992893] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004600000 end=ffffff8004601000 vma=ffffffc08b9ddbb0
+[13375.992898] binder: binder_alloc_shim: before __get_free_page GFP_KERNEL=0x24000c0
+[13375.992904] binder: binder_alloc_shim: after __get_free_page addr=0xffffffc087841000
+[13375.992908] binder: binder_alloc_shim: virt_to_page page=ffffffbdc21e1040
+[13375.992913] binder: binder_alloc_shim: before vm_insert_page user_page_addr=0x7efac78000 page=ffffffbdc21e1040
+[13375.992923] binder: binder_alloc_shim: after vm_insert_page ret=0
+[13376.204151] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8002d81000 end=ffffff8002d81000 vma=          (null)
+[13376.204280] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[13376.204309] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8002d81000 end=ffffff8002d80000 vma=          (null)
+[13376.204317] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[13376.207255] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8002d81000 end=ffffff8002d81000 vma=          (null)
+[13376.208242] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[13376.208276] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8002d81000 end=ffffff8002d80000 vma=          (null)
+[13376.208285] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+[13376.210624] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8002d81000 end=ffffff8002d81000 vma=          (null)
+[13376.210799] binder: binder_alloc_shim: update_page_range enter allocate=1 start=ffffff8004601000 end=ffffff8004601000 vma=          (null)
+[13376.210820] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8002d81000 end=ffffff8002d80000 vma=          (null)
+[13376.210855] binder: binder_alloc_shim: update_page_range enter allocate=0 start=ffffff8004601000 end=ffffff8004600000 vma=          (null)
+
+AFTER_LOGDW_SYSTEMSERVER_DONE

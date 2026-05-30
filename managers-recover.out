@@ -1,0 +1,20 @@
+--- kill managers ---
+--- start system servicemanager only on /dev/binder ---
+--- start hwservicemanager ---
+--- start vndservicemanager ---
+--- pids ---
+
+--- servicemanager maps: libbinder source ---
+servicemanager_pid=
+
+--- service list smoke ---
+chroot: can't change root directory to '/media/internal/android-usb/android-rootfs': No such file or directory
+
+--- manager stderr ---
+### servicemanager
+chroot: can't change root directory to '/media/internal/android-usb/android-rootfs': No such file or directory
+### hwservicemanager
+chroot: can't change root directory to '/media/internal/android-usb/android-rootfs': No such file or directory
+### vndservicemanager
+chroot: can't change root directory to '/media/internal/android-usb/android-rootfs': No such file or directory
+RESTART_MANAGERS_SYSTEM_BINDER_CLEAN_DONE

@@ -1,0 +1,2 @@
+   862: 000000000006d568  1212 FUNC    GLOBAL DEFAULT   14 _ZN7android47android_server_PowerManagerService_userActivityEliii
+   992: 000000000006ddc8   440 FUNC    GLOBAL DEFAULT   14 _ZN7android43register_android_server_PowerManagerServiceEP7_JNIEnv

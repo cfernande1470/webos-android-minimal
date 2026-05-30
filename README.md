@@ -12,8 +12,11 @@ vndbinder
 vndservicemanager: alive
 servicemanager: alive
 hwservicemanager: alive
+zygote64: alive
+system_server: alive
 
 FINAL_USB_3DOMAIN_BINDER_OK
+FINAL_ANDROID_ZYGOTE_SYSTEM_SERVER_OK
 FINAL_USB_INSTALL_OK
 ```
 
@@ -25,7 +28,8 @@ The current goal is not to boot a full Android UI yet. The goal is to bring up t
 - assemble an Android rootfs from Waydroid arm64 system/vendor images on USB storage;
 - fix Android dynamic linker/APEX visibility inside the chroot;
 - generate linkerconfig and property-area state far enough for the service managers;
-- start the real Android `servicemanager`, `hwservicemanager`, and `vndservicemanager`.
+- start the real Android `servicemanager`, `hwservicemanager`, and `vndservicemanager`;
+- patch the known webOS/Android runtime blockers and launch `zygote64` with `system_server`.
 
 ## Safety warning
 
@@ -76,10 +80,12 @@ kernel/
 
 src/
   property_service_ack_shim.c
+  zygote_socket_wrap.c
 
 scripts/
   build-binder.sh
   build-property-shim.sh
+  build-zygote-socket-wrap.sh
 
 install.sh
 .gitignore
@@ -116,9 +122,15 @@ Minimal static aarch64 helper that creates `/dev/socket/property_service` inside
 
 This is not a full Android property service implementation. It is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write.
 
+### `src/zygote_socket_wrap.c`
+
+Small static aarch64 helper that creates the host-side `zygote` and `usap_pool_primary` sockets, passes them to Android as `ANDROID_SOCKET_*` file descriptors, then chroots and execs `/system/bin/app_process64`.
+
+This avoids depending on webOS init socket activation for zygote.
+
 ### `install.sh`
 
-Single entry point. It builds the module and shim, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, and starts the three Android service managers.
+Single entry point. It builds the module and helper binaries, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, starts the three Android service managers, patches `libandroid_runtime.so` for the current TV kernel/userspace constraints, and starts `zygote64` plus `system_server`.
 
 ## Quick start
 
@@ -149,6 +161,7 @@ Expected final result:
 
 ```text
 FINAL_USB_3DOMAIN_BINDER_OK
+FINAL_ANDROID_ZYGOTE_SYSTEM_SERVER_OK
 FINAL_USB_INSTALL_OK
 ```
 
@@ -206,7 +219,9 @@ control host
         ├── start property socket ACK shim
         ├── start vndservicemanager
         ├── start servicemanager
-        └── start hwservicemanager
+        ├── start hwservicemanager
+        ├── bind-mount patched libandroid_runtime.so
+        └── start zygote64 with system_server
 ```
 
 ## Binder module notes
@@ -320,6 +335,8 @@ binder.ko build and load
 /system/bin/servicemanager alive
 /system/bin/hwservicemanager alive
 /vendor/bin/vndservicemanager alive
+zygote64 alive
+system_server alive
 ```
 
 A successful run ends with:
@@ -330,6 +347,9 @@ vndservicemanager: <pid>
 servicemanager: <pid>
 hwservicemanager: <pid>
 FINAL_USB_3DOMAIN_BINDER_OK
+
+ZYGOTE_SYSTEM_SERVER_OK
+FINAL_ANDROID_ZYGOTE_SYSTEM_SERVER_OK
 
 FINAL_USB_INSTALL_OK
 ```
@@ -481,9 +501,17 @@ FD transfer smoke against real servicemanager
 
 These should be optional diagnostics, not part of the default installer.
 
-### M5: Zygote only after HAL/property baseline
+### M5: Replace runtime binary patches with source-level fixes
 
-Do not jump directly to zygote/system_server until enough of the service-manager, property, linkerconfig, and HAL baseline is stable.
+The installer currently uses a bounded `libandroid_runtime.so` bind-mount patch for the TV-specific blockers found during zygote/system_server bring-up:
+
+```text
+task profile/runtime abort paths
+file-descriptor allowlist/reopen paths
+seccomp filter helpers
+```
+
+This is acceptable for reproducing the current milestone, but it should eventually become a cleaner compatibility layer or documented source-level Android userspace patch set.
 
 ### M6: Android UI path through native webOS Wayland
 

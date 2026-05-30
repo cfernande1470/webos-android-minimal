@@ -1,0 +1,20 @@
+--- kill managers ---
+--- verify no libbinder mounts ---
+--- start servicemanager ---
+--- start hwservicemanager ---
+--- start vndservicemanager ---
+--- managers ---
+root     29282 29273  1 00:45 ?        00:00:00 /system/bin/servicemanager
+root     29283 29273  1 00:45 ?        00:00:00 /system/bin/hwservicemanager
+root     29284 29273  1 00:45 ?        00:00:00 /vendor/bin/vndservicemanager
+
+--- manager stderr ---
+SELinux: Loaded service_contexts from:
+    /system/etc/selinux/plat_hwservice_contexts
+    /vendor/etc/selinux/vendor_hwservice_contexts
+
+--- service list smoke ---
+Found 0 services:
+service_list_rc=0
+
+RESTART_ANDROID_MANAGERS_CLEAN_DONE

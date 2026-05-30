@@ -1,0 +1,81 @@
+--- recuperar /apex base visible ---
+-rwxr-xr-x    1 root     2000       1782376 Apr  3 07:36 /media/internal/android-usb/android-rootfs/apex/com.android.runtime/bin/linker64
+
+--- limpiar bind sources anteriores ---
+
+--- capturar APEX reales como bind sources ---
+APEX com.android.adbd
+APEX com.android.adservices
+APEX com.android.appsearch
+APEX com.android.art
+APEX com.android.btservices
+APEX com.android.conscrypt
+APEX com.android.extservices
+APEX com.android.i18n
+APEX com.android.ipsec
+APEX com.android.media
+APEX com.android.media.swcodec
+APEX com.android.mediaprovider
+APEX com.android.neuralnetworks
+APEX com.android.ondevicepersonalization
+APEX com.android.os.statsd
+APEX com.android.permission
+APEX com.android.resolv
+APEX com.android.runtime
+APEX com.android.scheduling
+APEX com.android.sdkext
+APEX com.android.tethering
+APEX com.android.tzdata
+APEX com.android.uwb
+APEX com.android.vndk.current
+APEX com.android.wifi
+
+--- montar /apex overlay escribible ---
+
+--- crear /apex/apex-info-list.xml Android 13 compatible ---
+-rw-r--r--    1 root     root          6718 May 30 11:04 /media/internal/android-usb/android-rootfs/apex/apex-info-list.xml
+  <apex-info moduleName="com.android.art" modulePath="/apex/com.android.art" preinstalledModulePath="/system/apex/com.android.art" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="false"/>
+  <apex-info moduleName="com.android.runtime" modulePath="/apex/com.android.runtime" preinstalledModulePath="/system/apex/com.android.runtime" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="false"/>
+  <apex-info moduleName="com.android.vndk.current" modulePath="/apex/com.android.vndk.current" preinstalledModulePath="/system/apex/com.android.vndk.current" versionCode="1" versionName="1" isFactory="true" isActive="true" lastUpdateMillis="0" provideSharedApexLibs="true"/>
+
+--- validar rutas preinstalledModulePath ---
+OK   com.android.adbd /system/apex/com.android.adbd
+OK   com.android.adservices /system/apex/com.android.adservices
+OK   com.android.appsearch /system/apex/com.android.appsearch
+OK   com.android.art /system/apex/com.android.art
+OK   com.android.btservices /system/apex/com.android.btservices
+OK   com.android.conscrypt /system/apex/com.android.conscrypt
+OK   com.android.extservices /system/apex/com.android.extservices
+OK   com.android.i18n /system/apex/com.android.i18n
+OK   com.android.ipsec /system/apex/com.android.ipsec
+OK   com.android.media /system/apex/com.android.media
+OK   com.android.media.swcodec /system/apex/com.android.media.swcodec
+OK   com.android.mediaprovider /system/apex/com.android.mediaprovider
+OK   com.android.neuralnetworks /system/apex/com.android.neuralnetworks
+OK   com.android.ondevicepersonalization /system/apex/com.android.ondevicepersonalization
+OK   com.android.os.statsd /system/apex/com.android.os.statsd
+OK   com.android.permission /system/apex/com.android.permission
+OK   com.android.resolv /system/apex/com.android.resolv
+OK   com.android.runtime /system/apex/com.android.runtime
+OK   com.android.scheduling /system/apex/com.android.scheduling
+OK   com.android.sdkext /system/apex/com.android.sdkext
+OK   com.android.tethering /system/apex/com.android.tethering
+OK   com.android.tzdata /system/apex/com.android.tzdata
+OK   com.android.uwb /system/apex/com.android.uwb
+OK   com.android.vndk.current /system/apex/com.android.vndk.current
+OK   com.android.wifi /system/apex/com.android.wifi
+
+--- regenerar /linkerconfig ---
+umount linkerconfig layer: tmpfs /media/internal/android-usb/android-rootfs/linkerconfig tmpfs rw,nosuid,nodev,noexec,relatime,mode=755 0 0
+umount linkerconfig layer: tmpfs /media/internal/android-usb/android-rootfs/linkerconfig tmpfs rw,relatime 0 0
+--- ejecutar linkerconfig ---
+
+--- linkerconfig rc/log ---
+rc=134
+Aborted
+
+--- dmesg linkerconfig/apex tail ---
+[  836.509261] linkerconfig: Failed to get realpath from /product: No such file or directory
+[  836.509392] linkerconfig: Failed to get realpath from /system_ext: No such file or directory
+[  836.509618] linkerconfig: Unable to access VNDK APEX at path: /apex/com.android.vndk.v33: No such file or directory
+[  836.598021] linkerconfig: Check failed: !"undefined var" LLNDK_LIBRARIES_VENDOR is not defined

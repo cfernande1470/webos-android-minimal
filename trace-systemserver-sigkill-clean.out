@@ -1,0 +1,1613 @@
+TR=/sys/kernel/debug/tracing
+--- stop old android bits ---
+--- reset trace ---
+--- trace event formats ---
+name: signal_generate
+ID: 75
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
+
+	field:int sig;	offset:8;	size:4;	signed:1;
+	field:int errno;	offset:12;	size:4;	signed:1;
+	field:int code;	offset:16;	size:4;	signed:1;
+	field:char comm[16];	offset:20;	size:16;	signed:0;
+	field:pid_t pid;	offset:36;	size:4;	signed:1;
+	field:int group;	offset:40;	size:4;	signed:1;
+	field:int result;	offset:44;	size:4;	signed:1;
+
+print fmt: "sig=%d errno=%d code=%d comm=%s pid=%d grp=%d res=%d", REC->sig, REC->errno, REC->code, REC->comm, REC->pid, REC->group, REC->result
+name: sched_process_exit
+ID: 196
+format:
+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
+	field:int common_pid;	offset:4;	size:4;	signed:1;
+
+	field:char comm[16];	offset:8;	size:16;	signed:0;
+	field:pid_t pid;	offset:24;	size:4;	signed:1;
+	field:int prio;	offset:28;	size:4;	signed:1;
+
+print fmt: "comm=%s pid=%d prio=%d", REC->comm, REC->pid, REC->prio
+--- clear old zygote log ---
+--- start tracing ---
+--- run zygote script in background ---
+runpid=13497
+--- killed pid ---
+TARGET=
+--- zygote log ---
+
+--- try stdout tail ---
+--- cleanup old zygotes/wrappers ---
+
+--- sanity patches ---
+storage abort call @ 0x1ca198, should be 1f 20 03 d5:  1f 20 03 d5
+SetTaskProfiles call @ 0x1ca1b0, should be 20 00 80 52:  20 00 80 52
+SetTaskProfiles tbz @ 0x1ca208, should be 1f 20 03 d5:  1f 20 03 d5
+
+--- classpath ---
+BOOTCLASSPATH length: 1624
+SYSTEMSERVERCLASSPATH length: 463
+
+--- start zygote + system_server ---
+
+--- try stderr tail ---
+
+--- full trace matches target/sig/system_server ---
+12:           <...>-13498 [002] ...1 11213.766682: sched_process_exit: comm=seq pid=13498 prio=120
+13:           <...>-13498 [002] dn.3 11213.766868: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+14:              sh-13486 [002] d..2 11213.766909: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+19:           <...>-13499 [001] ...1 11213.768310: sched_process_exit: comm=mkdir pid=13499 prio=120
+20:           <...>-13499 [001] d..3 11213.768358: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+21:           <...>-13497 [000] d..2 11213.768448: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+22:           <...>-13500 [000] ...1 11213.772374: sched_process_exit: comm=grep pid=13500 prio=120
+23:           <...>-13500 [000] d..3 11213.772418: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+24:              sh-13486 [002] d..2 11213.772709: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+25:           <...>-13501 [002] ...1 11213.795673: sched_process_exit: comm=killall pid=13501 prio=120
+26:           <...>-13501 [002] d..3 11213.795931: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+27:           <...>-13497 [000] d..2 11213.796018: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+28:           <...>-13503 [001] ...1 11213.799895: sched_process_exit: comm=pidof pid=13503 prio=120
+29:           <...>-13503 [001] dn.3 11213.799955: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13502 grp=1 res=0
+30:           <...>-13502 [001] d..2 11213.800061: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+31:           <...>-13502 [001] ...1 11213.800409: sched_process_exit: comm=sh pid=13502 prio=120
+32:           <...>-13502 [001] d..3 11213.800439: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+33:              sh-13486 [002] d..2 11213.800445: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+34:           <...>-13505 [002] ...1 11213.803823: sched_process_exit: comm=sleep pid=13505 prio=120
+35:           <...>-13505 [002] dn.3 11213.803882: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+36:              sh-13486 [002] d..2 11213.803929: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+37:           <...>-13506 [001] ...1 11213.807426: sched_process_exit: comm=grep pid=13506 prio=120
+38:           <...>-13506 [001] d..3 11213.807475: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+39:              sh-13486 [002] d..2 11213.807518: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+45:           <...>-13508 [002] ...1 11213.836794: sched_process_exit: comm=pidof pid=13508 prio=120
+46:           <...>-13508 [002] d..3 11213.836852: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13507 grp=1 res=0
+47:           <...>-13507 [001] d..2 11213.836945: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+48:           <...>-13507 [001] ...1 11213.837326: sched_process_exit: comm=sh pid=13507 prio=120
+49:           <...>-13507 [001] d..3 11213.837353: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+50:              sh-13486 [002] d..2 11213.837360: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+51:           <...>-13509 [001] ...1 11213.840953: sched_process_exit: comm=sleep pid=13509 prio=120
+52:           <...>-13509 [001] d..3 11213.841007: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+53:              sh-13486 [002] d..2 11213.841060: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+54:           <...>-13510 [001] ...1 11213.844597: sched_process_exit: comm=grep pid=13510 prio=120
+55:           <...>-13510 [001] d..3 11213.844648: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+56:              sh-13486 [002] d..2 11213.844701: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+65:           <...>-13512 [002] ...1 11213.874793: sched_process_exit: comm=pidof pid=13512 prio=120
+66:           <...>-13512 [002] d..3 11213.874843: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13511 grp=1 res=0
+67:           <...>-13511 [001] d..2 11213.874929: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+68:           <...>-13511 [001] ...1 11213.875309: sched_process_exit: comm=sh pid=13511 prio=120
+69:           <...>-13511 [001] d..3 11213.875336: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+70:              sh-13486 [002] d..2 11213.875340: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+71:           <...>-13513 [001] ...1 11213.879055: sched_process_exit: comm=sleep pid=13513 prio=120
+72:           <...>-13513 [001] d..3 11213.879106: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+73:              sh-13486 [002] d..2 11213.879149: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+74:           <...>-13514 [002] ...1 11213.882769: sched_process_exit: comm=grep pid=13514 prio=120
+75:           <...>-13514 [002] dn.3 11213.882824: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+76:              sh-13486 [002] d..2 11213.882870: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+78:           <...>-13516 [002] ...1 11213.910689: sched_process_exit: comm=pidof pid=13516 prio=120
+79:           <...>-13516 [002] d..3 11213.910736: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13515 grp=1 res=0
+80:           <...>-13515 [001] d..2 11213.910810: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+81:           <...>-13515 [001] ...1 11213.911121: sched_process_exit: comm=sh pid=13515 prio=120
+82:           <...>-13515 [001] d..3 11213.911142: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+83:              sh-13486 [002] d..2 11213.911149: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+84:           <...>-13517 [002] ...1 11213.915357: sched_process_exit: comm=sleep pid=13517 prio=120
+85:           <...>-13517 [002] dn.3 11213.915414: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+86:              sh-13486 [002] d..2 11213.915460: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+87:           <...>-13518 [001] ...1 11213.919112: sched_process_exit: comm=grep pid=13518 prio=120
+88:           <...>-13518 [001] d..3 11213.919166: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+89:              sh-13486 [000] d..2 11213.919289: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+93:           <...>-13520 [001] ...1 11213.945339: sched_process_exit: comm=pidof pid=13520 prio=120
+94:           <...>-13520 [001] d..3 11213.945396: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13519 grp=1 res=0
+95:           <...>-13519 [002] d..2 11213.945485: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+96:           <...>-13519 [002] ...1 11213.945848: sched_process_exit: comm=sh pid=13519 prio=120
+97:           <...>-13519 [002] d..3 11213.945876: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+98:              sh-13486 [002] d..2 11213.945916: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+100:           <...>-13521 [001] ...1 11213.949643: sched_process_exit: comm=sleep pid=13521 prio=120
+101:           <...>-13521 [001] d..3 11213.949694: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+102:              sh-13486 [002] d..2 11213.949744: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+103:           <...>-13522 [002] ...1 11213.955178: sched_process_exit: comm=grep pid=13522 prio=120
+104:           <...>-13522 [002] dn.3 11213.955242: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+105:              sh-13486 [002] d..2 11213.955287: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+109:           <...>-13524 [002] ...1 11213.983466: sched_process_exit: comm=pidof pid=13524 prio=120
+110:           <...>-13524 [002] d..3 11213.983521: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13523 grp=1 res=0
+111:           <...>-13523 [001] d..2 11213.983605: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+112:           <...>-13523 [001] ...1 11213.983959: sched_process_exit: comm=sh pid=13523 prio=120
+113:           <...>-13523 [001] d..3 11213.984008: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+114:              sh-13486 [002] d..2 11213.984019: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+115:           <...>-13525 [002] ...1 11213.987707: sched_process_exit: comm=sleep pid=13525 prio=120
+116:           <...>-13525 [002] dn.3 11213.987765: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+117:              sh-13486 [002] d..2 11213.987811: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+118:           <...>-13526 [002] ...1 11213.991126: sched_process_exit: comm=grep pid=13526 prio=120
+119:           <...>-13526 [002] dn.3 11213.991178: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+120:              sh-13486 [002] d..2 11213.991222: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+127:           <...>-13528 [000] ...1 11214.021368: sched_process_exit: comm=pidof pid=13528 prio=120
+128:           <...>-13528 [000] d..3 11214.021415: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13527 grp=1 res=0
+129:           <...>-13527 [001] d..2 11214.021504: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+130:           <...>-13527 [001] ...1 11214.021832: sched_process_exit: comm=sh pid=13527 prio=120
+131:           <...>-13527 [001] d..3 11214.021858: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+132:              sh-13486 [002] d..2 11214.021865: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+133:           <...>-13529 [002] ...1 11214.025385: sched_process_exit: comm=sleep pid=13529 prio=120
+134:           <...>-13529 [002] dn.3 11214.025438: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+135:              sh-13486 [002] d..2 11214.025482: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+138:           <...>-13530 [001] ...1 11214.029177: sched_process_exit: comm=grep pid=13530 prio=120
+139:           <...>-13530 [001] d..3 11214.029226: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+140:              sh-13486 [002] d..2 11214.029276: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+145:           <...>-13532 [000] ...1 11214.063865: sched_process_exit: comm=pidof pid=13532 prio=120
+146:           <...>-13532 [000] d..3 11214.063928: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13531 grp=1 res=0
+147:           <...>-13531 [001] d..2 11214.064011: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+148:           <...>-13531 [001] ...1 11214.064382: sched_process_exit: comm=sh pid=13531 prio=120
+149:           <...>-13531 [001] d..3 11214.064407: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+150:              sh-13486 [002] d..2 11214.064413: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+151:           <...>-13533 [002] ...1 11214.069248: sched_process_exit: comm=sleep pid=13533 prio=120
+152:           <...>-13533 [002] dn.3 11214.069300: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+153:              sh-13486 [002] d..2 11214.069345: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+154:           <...>-13534 [001] ...1 11214.073041: sched_process_exit: comm=grep pid=13534 prio=120
+155:           <...>-13534 [001] d..3 11214.073113: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+156:              sh-13486 [002] d..2 11214.074202: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+159:           <...>-13536 [000] ...1 11214.108982: sched_process_exit: comm=pidof pid=13536 prio=120
+160:           <...>-13536 [000] d..3 11214.109030: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13535 grp=1 res=0
+161:           <...>-13535 [001] d..2 11214.109108: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+162:           <...>-13535 [001] ...1 11214.109640: sched_process_exit: comm=sh pid=13535 prio=120
+163:           <...>-13535 [001] d..3 11214.109664: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+164:              sh-13486 [002] d..2 11214.109671: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+165:           <...>-13537 [000] ...1 11214.114310: sched_process_exit: comm=sleep pid=13537 prio=120
+166:           <...>-13537 [000] d..3 11214.114358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+167:              sh-13486 [002] d..2 11214.114416: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+170:           <...>-13538 [001] ...1 11214.118198: sched_process_exit: comm=grep pid=13538 prio=120
+171:           <...>-13538 [001] d..3 11214.118242: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+172:              sh-13486 [002] d..2 11214.118294: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+177:           <...>-13540 [001] ...1 11214.159155: sched_process_exit: comm=pidof pid=13540 prio=120
+178:           <...>-13540 [001] d..3 11214.159220: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13539 grp=1 res=0
+179:           <...>-13539 [000] d..2 11214.159319: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+180:           <...>-13539 [000] ...1 11214.159712: sched_process_exit: comm=sh pid=13539 prio=120
+181:           <...>-13539 [000] d..3 11214.159824: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+182:              sh-13486 [002] d..2 11214.159897: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+183:           <...>-13541 [001] ...1 11214.166050: sched_process_exit: comm=sleep pid=13541 prio=120
+184:           <...>-13541 [001] d..3 11214.166584: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+185:              sh-13486 [002] d..2 11214.166707: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+186:           <...>-13542 [000] ...1 11214.194914: sched_process_exit: comm=grep pid=13542 prio=120
+187:           <...>-13542 [000] d..3 11214.194983: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+188:              sh-13486 [002] d..2 11214.195042: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+193:           <...>-13544 [001] ...1 11214.228471: sched_process_exit: comm=pidof pid=13544 prio=120
+194:           <...>-13544 [001] d..3 11214.228526: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13543 grp=1 res=0
+195:           <...>-13543 [000] d..2 11214.228612: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+196:           <...>-13543 [000] ...1 11214.228973: sched_process_exit: comm=sh pid=13543 prio=120
+197:           <...>-13543 [000] d..3 11214.229000: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+198:              sh-13486 [002] d..2 11214.229011: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+199:           <...>-13545 [001] ...1 11214.232663: sched_process_exit: comm=sleep pid=13545 prio=120
+200:           <...>-13545 [001] d..3 11214.232721: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+201:              sh-13486 [002] d..2 11214.232800: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+202:           <...>-13546 [002] ...1 11214.236640: sched_process_exit: comm=grep pid=13546 prio=120
+203:           <...>-13546 [002] dn.3 11214.236699: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+204:              sh-13486 [002] d..2 11214.236747: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+205:           <...>-13548 [002] ...1 11214.264207: sched_process_exit: comm=pidof pid=13548 prio=120
+206:           <...>-13548 [002] d..3 11214.264263: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13547 grp=1 res=0
+207:           <...>-13547 [000] d..2 11214.264355: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+208:           <...>-13547 [000] ...1 11214.264695: sched_process_exit: comm=sh pid=13547 prio=120
+209:           <...>-13547 [000] d..3 11214.264720: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+210:              sh-13486 [002] d..2 11214.264732: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+211:           <...>-13549 [001] ...1 11214.268484: sched_process_exit: comm=sleep pid=13549 prio=120
+212:           <...>-13549 [001] d..3 11214.268546: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+213:              sh-13486 [002] d..2 11214.268595: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+214:           <...>-13550 [001] ...1 11214.272501: sched_process_exit: comm=grep pid=13550 prio=120
+215:           <...>-13550 [001] d..3 11214.272570: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+216:              sh-13486 [002] d..2 11214.273062: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+223:           <...>-13552 [002] ...1 11214.302527: sched_process_exit: comm=pidof pid=13552 prio=120
+224:           <...>-13552 [002] d..3 11214.302584: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13551 grp=1 res=0
+225:           <...>-13551 [001] d..2 11214.302673: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+226:           <...>-13551 [001] ...1 11214.303043: sched_process_exit: comm=sh pid=13551 prio=120
+227:           <...>-13551 [001] d..3 11214.303069: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+228:              sh-13486 [002] d..2 11214.303080: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+229:           <...>-13553 [003] ...1 11214.307293: sched_process_exit: comm=sleep pid=13553 prio=120
+230:           <...>-13553 [003] d..3 11214.307340: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+231:              sh-13486 [002] d..2 11214.307384: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+234:           <...>-13554 [003] ...1 11214.310988: sched_process_exit: comm=grep pid=13554 prio=120
+235:           <...>-13554 [003] d..3 11214.311034: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+236:              sh-13486 [002] d..2 11214.311080: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+237:           <...>-13556 [001] ...1 11214.338999: sched_process_exit: comm=pidof pid=13556 prio=120
+238:           <...>-13556 [001] d..3 11214.339063: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13555 grp=1 res=0
+239:           <...>-13555 [003] d..2 11214.339158: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+240:           <...>-13555 [003] ...1 11214.339538: sched_process_exit: comm=sh pid=13555 prio=120
+241:           <...>-13555 [003] d..3 11214.339566: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+242:              sh-13486 [002] d..2 11214.339571: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+243:           <...>-13557 [002] ...1 11214.343245: sched_process_exit: comm=sleep pid=13557 prio=120
+244:           <...>-13557 [002] dn.3 11214.343293: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+245:              sh-13486 [002] d..2 11214.343338: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+246:           <...>-13558 [001] ...1 11214.346945: sched_process_exit: comm=grep pid=13558 prio=120
+247:           <...>-13558 [001] d..3 11214.346997: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+248:              sh-13486 [002] d..2 11214.347042: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+257:           <...>-13560 [002] ...1 11214.374915: sched_process_exit: comm=pidof pid=13560 prio=120
+258:           <...>-13560 [002] d..3 11214.374970: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13559 grp=1 res=0
+259:           <...>-13559 [003] d..2 11214.375058: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+260:           <...>-13559 [003] ...1 11214.375423: sched_process_exit: comm=sh pid=13559 prio=120
+261:           <...>-13559 [003] d..3 11214.375448: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+262:              sh-13486 [002] d..2 11214.375459: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+263:           <...>-13561 [001] ...1 11214.379485: sched_process_exit: comm=sleep pid=13561 prio=120
+264:           <...>-13561 [001] d..3 11214.379548: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+265:              sh-13486 [002] d..2 11214.379604: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+266:           <...>-13562 [001] ...1 11214.383724: sched_process_exit: comm=grep pid=13562 prio=120
+267:           <...>-13562 [001] d..3 11214.383789: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+268:              sh-13486 [002] d..2 11214.383836: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+271:           <...>-13564 [001] ...1 11214.410299: sched_process_exit: comm=pidof pid=13564 prio=120
+272:           <...>-13564 [001] dn.3 11214.410354: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13563 grp=1 res=0
+273:           <...>-13563 [001] d..2 11214.410436: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+274:           <...>-13563 [001] ...1 11214.410773: sched_process_exit: comm=sh pid=13563 prio=120
+275:           <...>-13563 [001] d..3 11214.410799: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+276:              sh-13486 [002] d..2 11214.410803: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+277:           <...>-13565 [002] ...1 11214.415984: sched_process_exit: comm=sleep pid=13565 prio=120
+278:           <...>-13565 [002] dn.3 11214.416042: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+279:              sh-13486 [002] d..2 11214.416091: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+280:           <...>-13566 [001] ...1 11214.419974: sched_process_exit: comm=grep pid=13566 prio=120
+281:           <...>-13566 [001] d..3 11214.420034: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+282:              sh-13486 [002] d..2 11214.420082: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+287:           <...>-13568 [002] ...1 11214.447420: sched_process_exit: comm=pidof pid=13568 prio=120
+288:           <...>-13568 [002] d..3 11214.447480: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13567 grp=1 res=0
+289:           <...>-13567 [001] d..2 11214.447564: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+291:           <...>-13567 [001] ...1 11214.447983: sched_process_exit: comm=sh pid=13567 prio=120
+292:           <...>-13567 [001] d..3 11214.448017: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+293:              sh-13486 [002] d..2 11214.448022: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+294:           <...>-13569 [003] ...1 11214.451942: sched_process_exit: comm=sleep pid=13569 prio=120
+295:           <...>-13569 [003] d..3 11214.451992: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+296:              sh-13486 [000] d..2 11214.452124: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+297:           <...>-13570 [002] ...1 11214.456726: sched_process_exit: comm=grep pid=13570 prio=120
+298:           <...>-13570 [002] d..3 11214.456782: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+299:              sh-13486 [000] d..2 11214.456838: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+302:           <...>-13572 [002] ...1 11214.485174: sched_process_exit: comm=pidof pid=13572 prio=120
+303:           <...>-13572 [002] d..3 11214.485225: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13571 grp=1 res=0
+304:           <...>-13571 [003] d..2 11214.485307: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+305:           <...>-13571 [003] ...1 11214.485641: sched_process_exit: comm=sh pid=13571 prio=120
+306:           <...>-13571 [003] d..3 11214.485664: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+307:              sh-13486 [000] d..2 11214.485669: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+308:           <...>-13573 [001] ...1 11214.489213: sched_process_exit: comm=sleep pid=13573 prio=120
+309:           <...>-13573 [001] d..3 11214.489251: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+310:              sh-13486 [000] d..2 11214.489301: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+311:           <...>-13574 [002] ...1 11214.495302: sched_process_exit: comm=grep pid=13574 prio=120
+312:           <...>-13574 [002] d..3 11214.495375: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+313:              sh-13486 [000] d..2 11214.495461: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+315:           <...>-13576 [003] ...1 11214.525154: sched_process_exit: comm=pidof pid=13576 prio=120
+316:           <...>-13576 [003] dn.3 11214.525217: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13575 grp=1 res=0
+317:           <...>-13575 [003] d..2 11214.525301: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+318:           <...>-13575 [003] ...1 11214.525647: sched_process_exit: comm=sh pid=13575 prio=120
+319:           <...>-13575 [003] d..3 11214.525683: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+320:              sh-13486 [000] d..2 11214.525690: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+324:           <...>-13577 [000] ...1 11214.532284: sched_process_exit: comm=sleep pid=13577 prio=120
+325:           <...>-13577 [000] dn.3 11214.532358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+326:              sh-13486 [000] d..2 11214.532410: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+330:           <...>-13578 [001] ...1 11214.541063: sched_process_exit: comm=grep pid=13578 prio=120
+331:           <...>-13578 [001] d..3 11214.541121: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+332:              sh-13486 [000] d..2 11214.541177: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+335:           <...>-13580 [001] ...1 11214.567307: sched_process_exit: comm=pidof pid=13580 prio=120
+336:           <...>-13580 [001] d..3 11214.567356: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13579 grp=1 res=0
+337:           <...>-13579 [002] d..2 11214.567438: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+338:           <...>-13579 [002] ...1 11214.567811: sched_process_exit: comm=sh pid=13579 prio=120
+339:           <...>-13579 [002] d..3 11214.567839: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+340:              sh-13486 [000] d..2 11214.567844: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+341:           <...>-13581 [002] ...1 11214.571218: sched_process_exit: comm=sleep pid=13581 prio=120
+342:           <...>-13581 [002] d..3 11214.571259: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+343:              sh-13486 [000] d..2 11214.571392: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+344:           <...>-13582 [001] ...1 11214.575435: sched_process_exit: comm=grep pid=13582 prio=120
+345:           <...>-13582 [001] d..3 11214.575498: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+346:              sh-13486 [000] d..2 11214.575561: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+350:           <...>-13584 [002] ...1 11214.602567: sched_process_exit: comm=pidof pid=13584 prio=120
+351:           <...>-13584 [002] d..3 11214.602615: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13583 grp=1 res=0
+352:           <...>-13583 [001] d..2 11214.602705: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+353:           <...>-13583 [001] ...1 11214.603067: sched_process_exit: comm=sh pid=13583 prio=120
+354:           <...>-13583 [001] d..3 11214.603091: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+355:              sh-13486 [000] d..2 11214.603096: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+356:           <...>-13585 [002] ...1 11214.606581: sched_process_exit: comm=sleep pid=13585 prio=120
+357:           <...>-13585 [002] d..3 11214.606616: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+358:              sh-13486 [000] d..2 11214.606658: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+359:           <...>-13586 [000] ...1 11214.610233: sched_process_exit: comm=grep pid=13586 prio=120
+360:           <...>-13586 [000] dn.3 11214.610275: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+361:              sh-13486 [000] d..2 11214.610315: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+367:           <...>-13588 [001] ...1 11214.637333: sched_process_exit: comm=pidof pid=13588 prio=120
+368:           <...>-13588 [001] d..3 11214.637388: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13587 grp=1 res=0
+369:           <...>-13587 [002] d..2 11214.637473: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+370:           <...>-13587 [002] ...1 11214.637874: sched_process_exit: comm=sh pid=13587 prio=120
+371:           <...>-13587 [002] d..3 11214.637901: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+372:              sh-13486 [000] d..2 11214.637906: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+373:           <...>-13589 [000] ...1 11214.642042: sched_process_exit: comm=sleep pid=13589 prio=120
+374:           <...>-13589 [000] dn.3 11214.642086: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+375:              sh-13486 [000] d..2 11214.642126: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+376:           <...>-13590 [002] ...1 11214.645528: sched_process_exit: comm=grep pid=13590 prio=120
+377:           <...>-13590 [002] d..3 11214.645572: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+378:              sh-13486 [000] d..2 11214.645617: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+382:           <...>-13592 [000] ...1 11214.674576: sched_process_exit: comm=pidof pid=13592 prio=120
+383:           <...>-13592 [000] d..3 11214.674627: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13591 grp=1 res=0
+384:           <...>-13591 [002] d..2 11214.674737: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+385:           <...>-13591 [002] ...1 11214.675089: sched_process_exit: comm=sh pid=13591 prio=120
+386:           <...>-13591 [002] d..3 11214.675113: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+387:              sh-13486 [003] d..2 11214.675195: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+388:           <...>-13593 [002] ...1 11214.678814: sched_process_exit: comm=sleep pid=13593 prio=120
+389:           <...>-13593 [002] d..3 11214.678867: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+390:              sh-13486 [003] d..2 11214.678915: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+391:           <...>-13594 [002] ...1 11214.682874: sched_process_exit: comm=grep pid=13594 prio=120
+392:           <...>-13594 [002] d..3 11214.682933: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+393:              sh-13486 [003] d..2 11214.682988: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+399:           <...>-13596 [000] ...1 11214.713941: sched_process_exit: comm=pidof pid=13596 prio=120
+400:           <...>-13596 [000] dn.3 11214.714002: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13595 grp=1 res=0
+401:           <...>-13595 [000] d..2 11214.714083: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+402:           <...>-13595 [000] ...1 11214.714422: sched_process_exit: comm=sh pid=13595 prio=120
+403:           <...>-13595 [000] d..3 11214.714446: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+404:              sh-13486 [003] d..2 11214.714452: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+407:           <...>-13597 [001] ...1 11214.718203: sched_process_exit: comm=sleep pid=13597 prio=120
+408:           <...>-13597 [001] d..3 11214.718257: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+409:              sh-13486 [003] d..2 11214.718303: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+410:           <...>-13598 [001] ...1 11214.721871: sched_process_exit: comm=grep pid=13598 prio=120
+411:           <...>-13598 [001] d..3 11214.721917: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+412:              sh-13486 [003] d..2 11214.721959: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+413:           <...>-13600 [000] ...1 11214.750927: sched_process_exit: comm=pidof pid=13600 prio=120
+414:           <...>-13600 [000] dn.3 11214.750993: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13599 grp=1 res=0
+415:           <...>-13599 [000] d..2 11214.751069: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+416:           <...>-13599 [000] ...1 11214.751463: sched_process_exit: comm=sh pid=13599 prio=120
+417:           <...>-13599 [000] d..3 11214.751488: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+418:              sh-13486 [003] d..2 11214.751497: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+419:           <...>-13601 [003] ...1 11214.755895: sched_process_exit: comm=sleep pid=13601 prio=120
+420:           <...>-13601 [003] dn.3 11214.755949: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+421:              sh-13486 [003] d..2 11214.755998: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+424:           <...>-13602 [003] ...1 11214.759538: sched_process_exit: comm=grep pid=13602 prio=120
+425:           <...>-13602 [003] dn.3 11214.759589: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+426:              sh-13486 [003] d..2 11214.759634: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+430:           <...>-13604 [002] ...1 11214.790968: sched_process_exit: comm=pidof pid=13604 prio=120
+431:           <...>-13604 [002] dn.3 11214.791017: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13603 grp=1 res=0
+432:           <...>-13603 [002] d..2 11214.791090: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+433:           <...>-13603 [002] ...1 11214.791420: sched_process_exit: comm=sh pid=13603 prio=120
+434:           <...>-13603 [002] d..3 11214.791444: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+435:              sh-13486 [003] d..2 11214.791447: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+436:           <...>-13605 [003] ...1 11214.795199: sched_process_exit: comm=sleep pid=13605 prio=120
+437:           <...>-13605 [003] dn.3 11214.795264: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+438:              sh-13486 [003] d..2 11214.795313: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+439:           <...>-13606 [001] ...1 11214.799142: sched_process_exit: comm=grep pid=13606 prio=120
+440:           <...>-13606 [001] d..3 11214.799193: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+441:              sh-13486 [003] d..2 11214.799237: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+442:           <...>-13504 [002] ...1 11214.800404: sched_process_exit: comm=sleep pid=13504 prio=120
+443:           <...>-13504 [002] d..3 11214.800441: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+444:           <...>-13497 [000] d..2 11214.800746: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+448:           <...>-13609 [000] ...1 11214.807699: sched_process_exit: comm=rm pid=13609 prio=120
+449:           <...>-13609 [000] dn.3 11214.807754: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+450:           <...>-13497 [000] d..2 11214.807808: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+451:           <...>-13610 [003] ...1 11214.811620: sched_process_exit: comm=od pid=13610 prio=120
+452:           <...>-13610 [003] d..3 11214.811682: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+453:           <...>-13497 [000] d..2 11214.811729: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+454:           <...>-13611 [003] ...1 11214.816368: sched_process_exit: comm=od pid=13611 prio=120
+455:           <...>-13611 [003] d..3 11214.816433: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+456:           <...>-13497 [000] d..2 11214.816481: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+457:           <...>-13612 [003] ...1 11214.820572: sched_process_exit: comm=od pid=13612 prio=120
+458:           <...>-13612 [003] d..3 11214.820636: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+459:           <...>-13497 [000] d..2 11214.820681: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+460:           <...>-13614 [000] ...1 11214.826808: sched_process_exit: comm=sed pid=13614 prio=120
+461:           <...>-13614 [000] d..3 11214.826872: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+462:           <...>-13613 [003] d..2 11214.826920: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+463:           <...>-13608 [001] ...1 11214.827477: sched_process_exit: comm=pidof pid=13608 prio=120
+464:           <...>-13608 [001] d..3 11214.827518: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13607 grp=1 res=0
+465:           <...>-13607 [000] d..2 11214.827624: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+466:           <...>-13607 [000] ...1 11214.827943: sched_process_exit: comm=sh pid=13607 prio=120
+467:           <...>-13607 [000] d..3 11214.827969: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+468:              sh-13486 [003] d..2 11214.827972: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+469:           <...>-13615 [002] ...1 11214.828919: sched_process_exit: comm=tail pid=13615 prio=120
+470:           <...>-13615 [002] d..3 11214.828990: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+471:           <...>-13613 [003] d..2 11214.829031: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+472:           <...>-13616 [003] ...1 11214.829325: sched_process_exit: comm=tr pid=13616 prio=120
+473:           <...>-13616 [003] dn.3 11214.829378: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+474:           <...>-13613 [003] d..2 11214.829407: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+475:           <...>-13613 [003] ...1 11214.829618: sched_process_exit: comm=ash pid=13613 prio=120
+476:           <...>-13613 [003] d..3 11214.829637: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+477:           <...>-13497 [003] d..2 11214.829686: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+478:           <...>-13617 [001] ...1 11214.831889: sched_process_exit: comm=sleep pid=13617 prio=120
+479:           <...>-13617 [001] d..3 11214.831945: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+480:              sh-13486 [003] d..2 11214.831999: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+482:           <...>-13619 [003] ...1 11214.840087: sched_process_exit: comm=grep pid=13619 prio=120
+483:           <...>-13619 [003] dn.3 11214.840166: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+484:              sh-13486 [003] d..2 11214.840223: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+485:           <...>-13620 [000] ...1 11214.840368: sched_process_exit: comm=sed pid=13620 prio=120
+486:           <...>-13620 [000] d..3 11214.840412: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+487:           <...>-13618 [001] d..2 11214.840443: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+488:           <...>-13621 [000] ...1 11214.840733: sched_process_exit: comm=tail pid=13621 prio=120
+489:           <...>-13621 [000] d..3 11214.840784: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+490:           <...>-13618 [001] d..2 11214.840833: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+491:           <...>-13622 [001] ...1 11214.841033: sched_process_exit: comm=tr pid=13622 prio=120
+492:           <...>-13622 [001] dn.3 11214.841075: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+493:           <...>-13618 [001] d..2 11214.841092: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+494:           <...>-13618 [001] ...1 11214.841287: sched_process_exit: comm=ash pid=13618 prio=120
+495:           <...>-13618 [001] d..3 11214.841305: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+496:           <...>-13497 [003] d..2 11214.841309: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+500:           <...>-13626 [002] ...1 11214.849258: sched_process_exit: comm=sed pid=13626 prio=120
+501:           <...>-13626 [002] d..3 11214.849321: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+502:           <...>-13625 [000] d..2 11214.849569: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+503:           <...>-13627 [000] ...1 11214.849854: sched_process_exit: comm=tail pid=13627 prio=120
+504:           <...>-13627 [000] dn.3 11214.849910: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+505:           <...>-13625 [000] d..2 11214.849951: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+506:           <...>-13628 [001] ...1 11214.850096: sched_process_exit: comm=tr pid=13628 prio=120
+507:           <...>-13628 [001] d..3 11214.850164: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+508:           <...>-13625 [000] d..2 11214.850190: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+509:           <...>-13625 [000] ...1 11214.850448: sched_process_exit: comm=ash pid=13625 prio=120
+510:           <...>-13625 [000] d..3 11214.850470: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+511:           <...>-13497 [003] d..2 11214.850480: signal_deliver: sig=17 errno=0 code=262145 sa_handler=b77c79 sa_flags=4000000
+517:           <...>-13624 [003] ...1 11214.868538: sched_process_exit: comm=pidof pid=13624 prio=120
+518:           <...>-13624 [003] d..3 11214.868595: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13623 grp=1 res=0
+519:           <...>-13623 [001] d..2 11214.868686: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+520:           <...>-13623 [001] ...1 11214.869076: sched_process_exit: comm=sh pid=13623 prio=120
+521:           <...>-13623 [001] d..3 11214.869103: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+522:              sh-13486 [003] d..2 11214.869112: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+523:           <...>-13631 [000] ...1 11214.873100: sched_process_exit: comm=sleep pid=13631 prio=120
+524:           <...>-13631 [000] d..3 11214.873147: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+525:              sh-13486 [003] d..2 11214.873184: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+526:           <...>-13632 [001] ...1 11214.877134: sched_process_exit: comm=grep pid=13632 prio=120
+527:           <...>-13632 [001] d..3 11214.877188: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+528:              sh-13486 [003] d..2 11214.877230: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+548:           <...>-13634 [003] ...1 11214.903839: sched_process_exit: comm=pidof pid=13634 prio=120
+549:           <...>-13634 [003] d..3 11214.903892: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13633 grp=1 res=0
+550:           <...>-13633 [000] d..2 11214.903984: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+551:           <...>-13633 [000] ...1 11214.904348: sched_process_exit: comm=sh pid=13633 prio=120
+552:           <...>-13633 [000] d..3 11214.904376: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+553:              sh-13486 [003] d..2 11214.904391: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+554:           <...>-13635 [001] ...1 11214.908265: sched_process_exit: comm=sleep pid=13635 prio=120
+555:           <...>-13635 [001] d..3 11214.908323: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+556:              sh-13486 [003] d..2 11214.908365: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+557:           <...>-13636 [001] ...1 11214.912194: sched_process_exit: comm=grep pid=13636 prio=120
+558:           <...>-13636 [001] d..3 11214.912247: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+559:              sh-13486 [003] d..2 11214.912293: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+561:           <...>-13638 [003] ...1 11214.938428: sched_process_exit: comm=pidof pid=13638 prio=120
+562:           <...>-13638 [003] d..3 11214.938492: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13637 grp=1 res=0
+563:           <...>-13637 [001] d..2 11214.938580: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+564:           <...>-13637 [001] ...1 11214.938962: sched_process_exit: comm=sh pid=13637 prio=120
+565:           <...>-13637 [001] d..3 11214.938988: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+566:              sh-13486 [003] d..2 11214.938998: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+567:           <...>-13639 [003] ...1 11214.942836: sched_process_exit: comm=sleep pid=13639 prio=120
+568:           <...>-13639 [003] dn.3 11214.942901: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+569:              sh-13486 [003] d..2 11214.942952: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+570:           <...>-13640 [001] ...1 11214.946932: sched_process_exit: comm=grep pid=13640 prio=120
+571:           <...>-13640 [001] d..3 11214.946990: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+572:              sh-13486 [003] d..2 11214.947039: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+577:           <...>-13642 [003] ...1 11214.972733: sched_process_exit: comm=pidof pid=13642 prio=120
+578:           <...>-13642 [003] d..3 11214.972801: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13641 grp=1 res=0
+579:           <...>-13641 [001] d..2 11214.972908: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+580:           <...>-13641 [001] ...1 11214.973339: sched_process_exit: comm=sh pid=13641 prio=120
+581:           <...>-13641 [001] d..3 11214.973380: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+582:              sh-13486 [003] d..2 11214.973392: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+584:           <...>-13643 [001] ...1 11214.977734: sched_process_exit: comm=sleep pid=13643 prio=120
+585:           <...>-13643 [001] d..3 11214.977787: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+586:              sh-13486 [003] d..2 11214.977835: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+587:           <...>-13644 [003] ...1 11214.981826: sched_process_exit: comm=grep pid=13644 prio=120
+588:           <...>-13644 [003] dn.3 11214.981896: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+589:              sh-13486 [003] d..2 11214.981947: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+593:           <...>-13646 [003] ...1 11215.007993: sched_process_exit: comm=pidof pid=13646 prio=120
+594:           <...>-13646 [003] d..3 11215.008049: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13645 grp=1 res=0
+595:           <...>-13645 [001] d..2 11215.008140: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+596:           <...>-13645 [001] ...1 11215.008681: sched_process_exit: comm=sh pid=13645 prio=120
+597:           <...>-13645 [001] d..3 11215.008712: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+598:              sh-13486 [003] d..2 11215.008722: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+599:           <...>-13647 [003] ...1 11215.012844: sched_process_exit: comm=sleep pid=13647 prio=120
+600:           <...>-13647 [003] dn.3 11215.012930: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+601:              sh-13486 [003] d..2 11215.013042: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+602:           <...>-13648 [001] ...1 11215.017471: sched_process_exit: comm=grep pid=13648 prio=120
+603:           <...>-13648 [001] d..3 11215.017533: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+604:              sh-13486 [003] d..2 11215.017704: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+609:           <...>-13650 [000] ...1 11215.048237: sched_process_exit: comm=pidof pid=13650 prio=120
+610:           <...>-13650 [000] dn.3 11215.048295: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13649 grp=1 res=0
+611:           <...>-13649 [000] d..2 11215.048377: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+612:           <...>-13649 [000] ...1 11215.048696: sched_process_exit: comm=sh pid=13649 prio=120
+613:           <...>-13649 [000] d..3 11215.048722: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+614:              sh-13486 [003] d..2 11215.048730: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+615:           <...>-13651 [001] ...1 11215.053279: sched_process_exit: comm=sleep pid=13651 prio=120
+616:           <...>-13651 [001] d..3 11215.053371: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+617:              sh-13486 [003] d..2 11215.053445: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+622:           <...>-13652 [001] ...1 11215.058278: sched_process_exit: comm=grep pid=13652 prio=120
+623:           <...>-13652 [001] d..3 11215.058355: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+624:              sh-13486 [003] d..2 11215.058409: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+625:           <...>-13654 [000] ...1 11215.089145: sched_process_exit: comm=pidof pid=13654 prio=120
+626:           <...>-13654 [000] d..3 11215.089202: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13653 grp=1 res=0
+627:           <...>-13653 [001] d..2 11215.089294: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+628:           <...>-13653 [001] ...1 11215.089665: sched_process_exit: comm=sh pid=13653 prio=120
+629:           <...>-13653 [001] d..3 11215.089700: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+630:              sh-13486 [003] d..2 11215.089844: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+631:           <...>-13655 [002] ...1 11215.094660: sched_process_exit: comm=sleep pid=13655 prio=120
+632:           <...>-13655 [002] d..3 11215.094727: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+633:              sh-13486 [003] d..2 11215.094794: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+637:           <...>-13656 [003] ...1 11215.099237: sched_process_exit: comm=grep pid=13656 prio=120
+638:           <...>-13656 [003] dn.3 11215.099308: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+639:              sh-13486 [003] d..2 11215.099364: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+641:           <...>-13658 [001] ...1 11215.126665: sched_process_exit: comm=pidof pid=13658 prio=120
+642:           <...>-13658 [001] d..3 11215.126719: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13657 grp=1 res=0
+643:           <...>-13657 [002] d..2 11215.126807: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+644:           <...>-13657 [002] ...1 11215.127144: sched_process_exit: comm=sh pid=13657 prio=120
+645:           <...>-13657 [002] d..3 11215.127169: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+646:              sh-13486 [003] d..2 11215.127173: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+647:           <...>-13659 [001] ...1 11215.130933: sched_process_exit: comm=sleep pid=13659 prio=120
+648:           <...>-13659 [001] d..3 11215.130980: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+649:              sh-13486 [003] d..2 11215.131028: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+654:           <...>-13660 [001] ...1 11215.148870: sched_process_exit: comm=grep pid=13660 prio=120
+655:           <...>-13660 [001] d..3 11215.148930: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+656:              sh-13486 [003] d..2 11215.148989: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+659:           <...>-13662 [000] ...1 11215.183462: sched_process_exit: comm=pidof pid=13662 prio=120
+660:           <...>-13662 [000] d..3 11215.183531: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13661 grp=1 res=0
+661:           <...>-13661 [002] d..2 11215.183629: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+662:           <...>-13661 [002] ...1 11215.184046: sched_process_exit: comm=sh pid=13661 prio=120
+663:           <...>-13661 [002] d..3 11215.184085: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+664:              sh-13486 [003] d..2 11215.184095: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+666:           <...>-13663 [001] ...1 11215.188210: sched_process_exit: comm=sleep pid=13663 prio=120
+667:           <...>-13663 [001] d..3 11215.188266: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+668:              sh-13486 [003] d..2 11215.188323: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+669:           <...>-13664 [001] ...1 11215.192349: sched_process_exit: comm=grep pid=13664 prio=120
+670:           <...>-13664 [001] d..3 11215.192409: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+671:              sh-13486 [003] d..2 11215.192459: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+674:           <...>-13666 [002] ...1 11215.221776: sched_process_exit: comm=pidof pid=13666 prio=120
+675:           <...>-13666 [002] d..3 11215.221839: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13665 grp=1 res=0
+676:           <...>-13665 [001] d..2 11215.221932: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+677:           <...>-13665 [001] ...1 11215.222367: sched_process_exit: comm=sh pid=13665 prio=120
+678:           <...>-13665 [001] d..3 11215.222397: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+679:              sh-13486 [003] d..2 11215.222403: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+680:           <...>-13667 [002] ...1 11215.226416: sched_process_exit: comm=sleep pid=13667 prio=120
+681:           <...>-13667 [002] d..3 11215.226479: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+682:              sh-13486 [003] d..2 11215.226541: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+686:           <...>-13668 [002] ...1 11215.230319: sched_process_exit: comm=grep pid=13668 prio=120
+687:           <...>-13668 [002] d..3 11215.230373: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+688:              sh-13486 [003] d..2 11215.230433: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+692:           <...>-13670 [001] ...1 11215.258960: sched_process_exit: comm=pidof pid=13670 prio=120
+693:           <...>-13670 [001] d..3 11215.259031: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13669 grp=1 res=0
+694:           <...>-13669 [002] d..2 11215.259158: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+695:           <...>-13669 [002] ...1 11215.259618: sched_process_exit: comm=sh pid=13669 prio=120
+696:           <...>-13669 [002] d..3 11215.259665: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+697:              sh-13486 [003] d..2 11215.259691: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+698:           <...>-13671 [001] ...1 11215.263882: sched_process_exit: comm=sleep pid=13671 prio=120
+699:           <...>-13671 [001] d..3 11215.263944: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+700:              sh-13486 [003] d..2 11215.264008: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+701:           <...>-13672 [001] ...1 11215.269003: sched_process_exit: comm=grep pid=13672 prio=120
+702:           <...>-13672 [001] d..3 11215.269084: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+703:              sh-13486 [003] d..2 11215.269165: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+705:           <...>-13674 [002] ...1 11215.305617: sched_process_exit: comm=pidof pid=13674 prio=120
+706:           <...>-13674 [002] d..3 11215.305686: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13673 grp=1 res=0
+707:           <...>-13673 [001] d..2 11215.305783: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+708:           <...>-13673 [001] ...1 11215.306206: sched_process_exit: comm=sh pid=13673 prio=120
+709:           <...>-13673 [001] d..3 11215.306246: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+710:              sh-13486 [003] d..2 11215.306259: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+712:           <...>-13675 [001] ...1 11215.310357: sched_process_exit: comm=sleep pid=13675 prio=120
+713:           <...>-13675 [001] d..3 11215.310415: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+714:              sh-13486 [003] d..2 11215.310460: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+715:           <...>-13676 [000] ...1 11215.315541: sched_process_exit: comm=grep pid=13676 prio=120
+716:           <...>-13676 [000] d..3 11215.315596: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+717:              sh-13486 [003] d..2 11215.315648: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+721:           <...>-13678 [000] ...1 11215.349720: sched_process_exit: comm=pidof pid=13678 prio=120
+722:           <...>-13678 [000] d..3 11215.349777: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13677 grp=1 res=0
+723:           <...>-13677 [001] d..2 11215.349858: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+724:           <...>-13677 [001] ...1 11215.350231: sched_process_exit: comm=sh pid=13677 prio=120
+725:           <...>-13677 [001] d..3 11215.350258: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+726:              sh-13486 [003] d..2 11215.350275: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+727:           <...>-13679 [001] ...1 11215.354268: sched_process_exit: comm=sleep pid=13679 prio=120
+728:           <...>-13679 [001] d..3 11215.354348: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+729:              sh-13486 [003] d..2 11215.354410: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+734:           <...>-13680 [001] ...1 11215.358506: sched_process_exit: comm=grep pid=13680 prio=120
+735:           <...>-13680 [001] d..3 11215.358563: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+736:              sh-13486 [003] d..2 11215.358622: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+737:           <...>-13682 [002] ...1 11215.394249: sched_process_exit: comm=pidof pid=13682 prio=120
+738:           <...>-13682 [002] d..3 11215.394308: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13681 grp=1 res=0
+739:           <...>-13681 [000] d..2 11215.394403: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+740:           <...>-13681 [000] ...1 11215.394776: sched_process_exit: comm=sh pid=13681 prio=120
+741:           <...>-13681 [000] d..3 11215.394811: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+742:              sh-13486 [003] d..2 11215.394819: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+744:           <...>-13683 [001] ...1 11215.399018: sched_process_exit: comm=sleep pid=13683 prio=120
+745:           <...>-13683 [001] d..3 11215.399076: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+746:              sh-13486 [003] d..2 11215.399126: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+747:           <...>-13684 [001] ...1 11215.402931: sched_process_exit: comm=grep pid=13684 prio=120
+748:           <...>-13684 [001] d..3 11215.402994: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+749:              sh-13486 [003] d..2 11215.403056: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+753:           <...>-4771  [002] d..2 11215.408953: signal_generate: sig=23 errno=0 code=-6 comm=wireguard-go pid=4781 grp=0 res=0
+754:           <...>-4781  [003] d..2 11215.408968: signal_deliver: sig=23 errno=0 code=-6 sa_handler=83de0 sa_flags=18000004
+755:           <...>-13686 [002] ...1 11215.430926: sched_process_exit: comm=pidof pid=13686 prio=120
+756:           <...>-13686 [002] d..3 11215.430981: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13685 grp=1 res=0
+757:           <...>-13685 [001] d..2 11215.431069: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+758:           <...>-13685 [001] ...1 11215.431444: sched_process_exit: comm=sh pid=13685 prio=120
+759:           <...>-13685 [001] d..3 11215.431480: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+760:              sh-13486 [003] d..2 11215.431489: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+761:           <...>-13687 [001] ...1 11215.435623: sched_process_exit: comm=sleep pid=13687 prio=120
+762:           <...>-13687 [001] d..3 11215.435691: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+763:              sh-13486 [003] d..2 11215.435745: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+764:           <...>-13688 [001] ...1 11215.439770: sched_process_exit: comm=grep pid=13688 prio=120
+765:           <...>-13688 [001] d..3 11215.439830: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+766:              sh-13486 [003] d..2 11215.439885: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+771:           <...>-13690 [002] ...1 11215.468569: sched_process_exit: comm=pidof pid=13690 prio=120
+772:           <...>-13690 [002] d..3 11215.468627: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13689 grp=1 res=0
+773:           <...>-13689 [001] d..2 11215.468725: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+774:           <...>-13689 [001] ...1 11215.469111: sched_process_exit: comm=sh pid=13689 prio=120
+775:           <...>-13689 [001] d..3 11215.469143: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+776:              sh-13486 [003] d..2 11215.469152: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+777:           <...>-13691 [001] ...1 11215.472882: sched_process_exit: comm=sleep pid=13691 prio=120
+778:           <...>-13691 [001] d..3 11215.472943: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+779:              sh-13486 [003] d..2 11215.472995: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+780:           <...>-13692 [001] ...1 11215.476817: sched_process_exit: comm=grep pid=13692 prio=120
+781:           <...>-13692 [001] d..3 11215.476880: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+782:              sh-13486 [003] d..2 11215.476940: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+786:           <...>-13694 [001] ...1 11215.504531: sched_process_exit: comm=pidof pid=13694 prio=120
+787:           <...>-13694 [001] d..3 11215.504588: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13693 grp=1 res=0
+788:           <...>-13693 [000] d..2 11215.504680: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+789:           <...>-13693 [000] ...1 11215.505032: sched_process_exit: comm=sh pid=13693 prio=120
+790:           <...>-13693 [000] d..3 11215.505060: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+791:              sh-13486 [003] d..2 11215.505074: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+792:           <...>-13699 [001] ...1 11215.509135: sched_process_exit: comm=sleep pid=13699 prio=120
+793:           <...>-13699 [001] d..3 11215.509197: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+794:              sh-13486 [003] d..2 11215.509247: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+795:           <...>-13700 [000] ...1 11215.513252: sched_process_exit: comm=grep pid=13700 prio=120
+796:           <...>-13700 [000] d..3 11215.514358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+797:              sh-13486 [003] d..2 11215.514427: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+805:           <...>-13702 [002] ...1 11215.541780: sched_process_exit: comm=pidof pid=13702 prio=120
+806:           <...>-13702 [002] d..3 11215.541832: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13701 grp=1 res=0
+807:           <...>-13701 [000] d..2 11215.541917: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+808:           <...>-13701 [000] ...1 11215.542272: sched_process_exit: comm=sh pid=13701 prio=120
+809:           <...>-13701 [000] d..3 11215.542299: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+810:              sh-13486 [003] d..2 11215.542305: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+811:           <...>-13703 [000] ...1 11215.547088: sched_process_exit: comm=sleep pid=13703 prio=120
+812:           <...>-13703 [000] d..3 11215.547150: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+813:              sh-13486 [003] d..2 11215.547203: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+814:           <...>-13704 [000] ...1 11215.551304: sched_process_exit: comm=grep pid=13704 prio=120
+815:           <...>-13704 [000] d..3 11215.551428: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+816:              sh-13486 [003] d..2 11215.551484: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+822:           <...>-13706 [000] ...1 11215.590860: sched_process_exit: comm=pidof pid=13706 prio=120
+823:           <...>-13706 [000] d..3 11215.590908: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13705 grp=1 res=0
+824:           <...>-13705 [001] d..2 11215.590992: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+825:           <...>-13705 [001] ...1 11215.591341: sched_process_exit: comm=sh pid=13705 prio=120
+826:           <...>-13705 [001] d..3 11215.591367: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+827:              sh-13486 [003] d..2 11215.591374: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+828:           <...>-13707 [001] ...1 11215.595450: sched_process_exit: comm=sleep pid=13707 prio=120
+829:           <...>-13707 [001] d..3 11215.595512: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+830:              sh-13486 [003] d..2 11215.595566: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+831:           <...>-13708 [001] ...1 11215.599272: sched_process_exit: comm=grep pid=13708 prio=120
+832:           <...>-13708 [001] d..3 11215.599344: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+833:              sh-13486 [003] d..2 11215.599396: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+835:           <...>-13710 [001] ...1 11215.626024: sched_process_exit: comm=pidof pid=13710 prio=120
+836:           <...>-13710 [001] d..3 11215.626079: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13709 grp=1 res=0
+837:           <...>-13709 [000] d..2 11215.626168: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+838:           <...>-13709 [000] ...1 11215.626562: sched_process_exit: comm=sh pid=13709 prio=120
+839:           <...>-13709 [000] d..3 11215.626589: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+840:              sh-13486 [003] d..2 11215.626602: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+841:           <...>-13711 [001] ...1 11215.630174: sched_process_exit: comm=sleep pid=13711 prio=120
+842:           <...>-13711 [001] d..3 11215.630226: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+843:              sh-13486 [003] d..2 11215.630267: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+844:           <...>-13712 [001] ...1 11215.633861: sched_process_exit: comm=grep pid=13712 prio=120
+845:           <...>-13712 [001] d..3 11215.633920: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+846:              sh-13486 [003] d..2 11215.633974: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+852:           <...>-13714 [001] ...1 11215.661161: sched_process_exit: comm=pidof pid=13714 prio=120
+853:           <...>-13714 [001] d..3 11215.661208: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13713 grp=1 res=0
+854:           <...>-13713 [000] d..2 11215.661296: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+855:           <...>-13713 [000] ...1 11215.661643: sched_process_exit: comm=sh pid=13713 prio=120
+856:           <...>-13713 [000] d..3 11215.661668: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+857:              sh-13486 [003] d..2 11215.661678: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+858:           <...>-13715 [001] ...1 11215.665262: sched_process_exit: comm=sleep pid=13715 prio=120
+859:           <...>-13715 [001] d..3 11215.665312: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+860:              sh-13486 [003] d..2 11215.665357: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+861:           <...>-13716 [001] ...1 11215.669033: sched_process_exit: comm=grep pid=13716 prio=120
+862:           <...>-13716 [001] d..3 11215.669086: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+863:              sh-13486 [003] d..2 11215.669131: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+870:           <...>-13718 [001] ...1 11215.701314: sched_process_exit: comm=pidof pid=13718 prio=120
+871:           <...>-13718 [001] dn.3 11215.701376: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13717 grp=1 res=0
+872:           <...>-13717 [001] d..2 11215.701495: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+873:           <...>-13717 [001] ...1 11215.701854: sched_process_exit: comm=sh pid=13717 prio=120
+874:           <...>-13717 [001] d..3 11215.701887: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+875:              sh-13486 [003] d..2 11215.701895: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+876:           <...>-13719 [001] ...1 11215.705865: sched_process_exit: comm=sleep pid=13719 prio=120
+877:           <...>-13719 [001] d..3 11215.705931: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+878:              sh-13486 [003] d..2 11215.705985: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+879:           <...>-13720 [001] ...1 11215.709971: sched_process_exit: comm=grep pid=13720 prio=120
+880:           <...>-13720 [001] d..3 11215.710030: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+881:              sh-13486 [003] d..2 11215.710094: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+883:           <...>-13722 [000] ...1 11215.754898: sched_process_exit: comm=pidof pid=13722 prio=120
+884:           <...>-13722 [000] dn.3 11215.754961: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13721 grp=1 res=0
+885:           <...>-13721 [000] d..2 11215.755058: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+886:           <...>-13721 [000] ...1 11215.755424: sched_process_exit: comm=sh pid=13721 prio=120
+887:           <...>-13721 [000] d..3 11215.755454: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+888:              sh-13486 [003] d..2 11215.755469: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+891:           <...>-13723 [001] ...1 11215.759451: sched_process_exit: comm=sleep pid=13723 prio=120
+892:           <...>-13723 [001] d..3 11215.759506: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+893:              sh-13486 [003] d..2 11215.759566: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+894:           <...>-13724 [001] ...1 11215.763328: sched_process_exit: comm=grep pid=13724 prio=120
+895:           <...>-13724 [001] d..3 11215.763394: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+896:              sh-13486 [003] d..2 11215.763460: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+899:           <...>-13726 [001] ...1 11215.791502: sched_process_exit: comm=pidof pid=13726 prio=120
+900:           <...>-13726 [001] d..3 11215.791560: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13725 grp=1 res=0
+901:           <...>-13725 [000] d..2 11215.791746: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+902:           <...>-13725 [000] ...1 11215.792103: sched_process_exit: comm=sh pid=13725 prio=120
+903:           <...>-13725 [000] d..3 11215.792134: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+904:              sh-13486 [003] d..2 11215.792147: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+905:           <...>-13727 [001] ...1 11215.796125: sched_process_exit: comm=sleep pid=13727 prio=120
+906:           <...>-13727 [001] d..3 11215.796190: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+907:              sh-13486 [003] d..2 11215.796254: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+912:           <...>-13728 [001] .n.1 11215.800518: sched_process_exit: comm=grep pid=13728 prio=120
+913:           <...>-13728 [001] d..3 11215.800601: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+914:              sh-13486 [003] d..2 11215.800662: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+915:           <...>-13730 [000] ...1 11215.834931: sched_process_exit: comm=pidof pid=13730 prio=120
+916:           <...>-13730 [000] dn.3 11215.835009: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13729 grp=1 res=0
+917:           <...>-13729 [000] d..2 11215.835107: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+918:           <...>-13729 [000] ...1 11215.835453: sched_process_exit: comm=sh pid=13729 prio=120
+919:           <...>-13729 [000] d..3 11215.835488: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+920:              sh-13486 [003] d..2 11215.835500: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+924:           <...>-7194  [001] ...1 11215.837658: sched_process_exit: comm=kworker/dying pid=7194 prio=120
+926:           <...>-13731 [001] ...1 11215.840041: sched_process_exit: comm=sleep pid=13731 prio=120
+927:           <...>-13731 [001] d..3 11215.840102: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+928:              sh-13486 [003] d..2 11215.840165: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+929:           <...>-13732 [001] ...1 11215.844372: sched_process_exit: comm=grep pid=13732 prio=120
+930:           <...>-13732 [001] d..3 11215.844438: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+931:              sh-13486 [003] d..2 11215.844550: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+932:           pidof-13734 [003] ...1 11215.870635: sched_process_exit: comm=pidof pid=13734 prio=120
+933:           pidof-13734 [003] d..3 11215.870691: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13733 grp=1 res=0
+934:              sh-13733 [001] d..2 11215.870775: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+935:              sh-13733 [001] ...1 11215.871108: sched_process_exit: comm=sh pid=13733 prio=120
+936:              sh-13733 [001] d..3 11215.871136: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+937:              sh-13486 [003] d..2 11215.871148: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+938:           sleep-13735 [003] ...1 11215.874693: sched_process_exit: comm=sleep pid=13735 prio=120
+939:           sleep-13735 [003] dn.3 11215.874757: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+940:              sh-13486 [003] d..2 11215.874820: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+941:            grep-13736 [003] ...1 11215.878535: sched_process_exit: comm=grep pid=13736 prio=120
+942:            grep-13736 [003] dn.3 11215.878598: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+943:              sh-13486 [003] d..2 11215.878647: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+948:           pidof-13738 [003] ...1 11215.904604: sched_process_exit: comm=pidof pid=13738 prio=120
+949:           pidof-13738 [003] d..3 11215.904672: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13737 grp=1 res=0
+950:              sh-13737 [001] d..2 11215.904772: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+951:              sh-13737 [001] ...1 11215.905192: sched_process_exit: comm=sh pid=13737 prio=120
+952:              sh-13737 [001] d..3 11215.905222: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+953:              sh-13486 [003] d..2 11215.905231: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+954:           sleep-13739 [003] ...1 11215.909015: sched_process_exit: comm=sleep pid=13739 prio=120
+955:           sleep-13739 [003] dn.3 11215.909085: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+956:              sh-13486 [003] d..2 11215.909135: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+957:            grep-13740 [001] ...1 11215.912758: sched_process_exit: comm=grep pid=13740 prio=120
+958:            grep-13740 [001] d..3 11215.912839: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+959:              sh-13486 [003] d..2 11215.912889: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+965:           pidof-13742 [003] ...1 11215.939826: sched_process_exit: comm=pidof pid=13742 prio=120
+966:           pidof-13742 [003] d..3 11215.939888: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13741 grp=1 res=0
+967:              sh-13741 [001] d..2 11215.939991: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+968:              sh-13741 [001] ...1 11215.940397: sched_process_exit: comm=sh pid=13741 prio=120
+969:              sh-13741 [001] d..3 11215.940430: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+970:              sh-13486 [003] d..2 11215.940443: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+971:           sleep-13743 [003] ...1 11215.944045: sched_process_exit: comm=sleep pid=13743 prio=120
+972:           sleep-13743 [003] dn.3 11215.944111: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+973:              sh-13486 [003] d..2 11215.944162: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+976:            grep-13744 [003] ...1 11215.947933: sched_process_exit: comm=grep pid=13744 prio=120
+977:            grep-13744 [003] dn.3 11215.947990: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+978:              sh-13486 [003] d..2 11215.948038: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+979:  HeapTaskDaemon-13695 [002] ...1 11215.953924: sched_process_exit: comm=HeapTaskDaemon pid=13695 prio=120
+980: ReferenceQueueD-13696 [002] ...1 11215.954415: sched_process_exit: comm=ReferenceQueueD pid=13696 prio=120
+981: FinalizerDaemon-13697 [002] ...1 11215.954736: sched_process_exit: comm=FinalizerDaemon pid=13697 prio=120
+982: FinalizerWatchd-13698 [002] ...1 11215.955044: sched_process_exit: comm=FinalizerWatchd pid=13698 prio=120
+986:           pidof-13746 [000] ...1 11215.980793: sched_process_exit: comm=pidof pid=13746 prio=120
+987:           pidof-13746 [000] d..3 11215.980844: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13745 grp=1 res=0
+988:              sh-13745 [001] d..2 11215.980928: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+989:              sh-13745 [001] ...1 11215.981294: sched_process_exit: comm=sh pid=13745 prio=120
+990:              sh-13745 [001] d..3 11215.981325: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+991:              sh-13486 [003] d..2 11215.981329: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+992:           sleep-13747 [001] ...1 11215.985132: sched_process_exit: comm=sleep pid=13747 prio=120
+993:           sleep-13747 [001] d..3 11215.985192: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+994:              sh-13486 [003] d..2 11215.985235: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+995:            grep-13748 [003] ...1 11215.989312: sched_process_exit: comm=grep pid=13748 prio=120
+996:            grep-13748 [003] dn.3 11215.989373: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+997:              sh-13486 [003] d..2 11215.989421: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1005:           pidof-13750 [003] ...1 11216.015515: sched_process_exit: comm=pidof pid=13750 prio=120
+1006:           pidof-13750 [003] d..3 11216.015578: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13749 grp=1 res=0
+1007:              sh-13749 [001] d..2 11216.015698: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1008:              sh-13749 [001] ...1 11216.016268: sched_process_exit: comm=sh pid=13749 prio=120
+1009:              sh-13749 [001] d..3 11216.016299: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1010:              sh-13486 [003] d..2 11216.016306: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1011:           sleep-13751 [000] ...1 11216.022025: sched_process_exit: comm=sleep pid=13751 prio=120
+1012:           sleep-13751 [000] d..3 11216.022085: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1013:              sh-13486 [003] d..2 11216.022145: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1014:            grep-13752 [001] ...1 11216.026080: sched_process_exit: comm=grep pid=13752 prio=120
+1015:            grep-13752 [001] d..3 11216.026146: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1016:              sh-13486 [003] d..2 11216.026205: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1018:           pidof-13754 [003] ...1 11216.051639: sched_process_exit: comm=pidof pid=13754 prio=120
+1019:           pidof-13754 [003] d..3 11216.051698: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13753 grp=1 res=0
+1020:              sh-13753 [001] d..2 11216.051796: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1021:              sh-13753 [001] ...1 11216.052172: sched_process_exit: comm=sh pid=13753 prio=120
+1022:              sh-13753 [001] d..3 11216.052202: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1023:              sh-13486 [003] d..2 11216.052212: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1024:           sleep-13755 [002] ...1 11216.056798: sched_process_exit: comm=sleep pid=13755 prio=120
+1025:           sleep-13755 [002] d..3 11216.056858: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1026:              sh-13486 [003] d..2 11216.056913: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1027:            grep-13756 [002] ...1 11216.061368: sched_process_exit: comm=grep pid=13756 prio=120
+1028:            grep-13756 [002] d..3 11216.061424: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1029:              sh-13486 [003] d..2 11216.061486: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1039:           pidof-13758 [001] ...1 11216.089412: sched_process_exit: comm=pidof pid=13758 prio=120
+1040:           pidof-13758 [001] d..3 11216.089471: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13757 grp=1 res=0
+1041:              sh-13757 [002] d..2 11216.089564: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1042:              sh-13757 [002] ...1 11216.089928: sched_process_exit: comm=sh pid=13757 prio=120
+1043:              sh-13757 [002] d..3 11216.089957: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1044:              sh-13486 [003] d..2 11216.089961: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1045:           sleep-13759 [001] ...1 11216.094015: sched_process_exit: comm=sleep pid=13759 prio=120
+1046:           sleep-13759 [001] d..3 11216.094081: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1047:              sh-13486 [003] d..2 11216.094138: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1048:            grep-13760 [002] ...1 11216.099444: sched_process_exit: comm=grep pid=13760 prio=120
+1049:            grep-13760 [002] d..3 11216.099508: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1050:              sh-13486 [003] d..2 11216.099567: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1055:           pidof-13762 [000] ...1 11216.129645: sched_process_exit: comm=pidof pid=13762 prio=120
+1056:           pidof-13762 [000] d..3 11216.129707: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13761 grp=1 res=0
+1057:              sh-13761 [002] d..2 11216.129810: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1058:              sh-13761 [002] ...1 11216.130186: sched_process_exit: comm=sh pid=13761 prio=120
+1059:              sh-13761 [002] d..3 11216.130214: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1060:              sh-13486 [003] d..2 11216.130221: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1061:           sleep-13763 [001] ...1 11216.135048: sched_process_exit: comm=sleep pid=13763 prio=120
+1062:           sleep-13763 [001] d..3 11216.135113: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1063:              sh-13486 [003] d..2 11216.135172: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1065:            grep-13764 [000] ...1 11216.140754: sched_process_exit: comm=grep pid=13764 prio=120
+1066:            grep-13764 [000] d..3 11216.140811: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1067:              sh-13486 [003] d..2 11216.140867: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1069:           pidof-13766 [003] ...1 11216.167743: sched_process_exit: comm=pidof pid=13766 prio=120
+1070:           pidof-13766 [003] d..3 11216.167799: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13765 grp=1 res=0
+1071:              sh-13765 [000] d..2 11216.167896: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1072:              sh-13765 [000] ...1 11216.168282: sched_process_exit: comm=sh pid=13765 prio=120
+1073:              sh-13765 [000] d..3 11216.168319: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1074:              sh-13486 [003] d..2 11216.168324: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1075:           sleep-13767 [001] ...1 11216.172128: sched_process_exit: comm=sleep pid=13767 prio=120
+1076:           sleep-13767 [001] d..3 11216.172188: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1077:              sh-13486 [003] d..2 11216.172242: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1078:            grep-13768 [001] ...1 11216.176969: sched_process_exit: comm=grep pid=13768 prio=120
+1079:            grep-13768 [001] d..3 11216.177076: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1080:              sh-13486 [003] d..2 11216.177140: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1085:           pidof-13770 [000] ...1 11216.207220: sched_process_exit: comm=pidof pid=13770 prio=120
+1086:           pidof-13770 [000] d..3 11216.207277: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13769 grp=1 res=0
+1087:              sh-13769 [001] d..2 11216.207359: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1089:              sh-13769 [001] ...1 11216.207817: sched_process_exit: comm=sh pid=13769 prio=120
+1090:              sh-13769 [001] d..3 11216.207847: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1091:              sh-13486 [003] d..2 11216.207854: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1092:           sleep-13771 [001] ...1 11216.211536: sched_process_exit: comm=sleep pid=13771 prio=120
+1093:           sleep-13771 [001] d..3 11216.211602: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1094:              sh-13486 [003] d..2 11216.211660: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1095:            grep-13772 [001] ...1 11216.216035: sched_process_exit: comm=grep pid=13772 prio=120
+1096:            grep-13772 [001] d..3 11216.216108: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1097:              sh-13486 [003] d..2 11216.216178: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1101:           pidof-13774 [000] ...1 11216.247103: sched_process_exit: comm=pidof pid=13774 prio=120
+1102:           pidof-13774 [000] dn.3 11216.247160: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13773 grp=1 res=0
+1103:              sh-13773 [000] d..2 11216.247241: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1104:              sh-13773 [000] ...1 11216.247631: sched_process_exit: comm=sh pid=13773 prio=120
+1105:              sh-13773 [000] d..3 11216.247668: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1107:              sh-13486 [003] d..2 11216.247674: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1108:           sleep-13775 [000] ...1 11216.253559: sched_process_exit: comm=sleep pid=13775 prio=120
+1109:           sleep-13775 [000] d..3 11216.253648: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1110:              sh-13486 [003] d..2 11216.253712: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1114:            grep-13776 [003] ...1 11216.257760: sched_process_exit: comm=grep pid=13776 prio=120
+1115:            grep-13776 [003] dn.3 11216.257817: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1116:              sh-13486 [003] d..2 11216.257871: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1117:           pidof-13778 [000] ...1 11216.287783: sched_process_exit: comm=pidof pid=13778 prio=120
+1118:           pidof-13778 [000] d..3 11216.287840: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13777 grp=1 res=0
+1119:              sh-13777 [001] d..2 11216.287930: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1120:              sh-13777 [001] ...1 11216.288284: sched_process_exit: comm=sh pid=13777 prio=120
+1121:              sh-13777 [001] d..3 11216.288311: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1122:              sh-13486 [003] d..2 11216.288316: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1123:           sleep-13779 [000] ...1 11216.293949: sched_process_exit: comm=sleep pid=13779 prio=120
+1124:           sleep-13779 [000] d..3 11216.294010: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1125:              sh-13486 [003] d..2 11216.294075: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1130:            grep-13780 [000] ...1 11216.299434: sched_process_exit: comm=grep pid=13780 prio=120
+1131:            grep-13780 [000] d..3 11216.299489: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1132:              sh-13486 [003] d..2 11216.299536: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1133:           pidof-13782 [003] ...1 11216.326101: sched_process_exit: comm=pidof pid=13782 prio=120
+1134:           pidof-13782 [003] d..3 11216.326157: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13781 grp=1 res=0
+1135:              sh-13781 [000] d..2 11216.326250: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1136:              sh-13781 [000] ...1 11216.326619: sched_process_exit: comm=sh pid=13781 prio=120
+1137:              sh-13781 [000] d..3 11216.326644: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1138:              sh-13486 [003] d..2 11216.326654: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1139:           sleep-13783 [003] ...1 11216.337395: sched_process_exit: comm=sleep pid=13783 prio=120
+1140:           sleep-13783 [003] dn.3 11216.337482: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1141:              sh-13486 [003] d..2 11216.337535: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1146:            grep-13784 [003] ...1 11216.349377: sched_process_exit: comm=grep pid=13784 prio=120
+1147:            grep-13784 [003] dn.3 11216.349442: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1148:              sh-13486 [003] d..2 11216.349490: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1150:           pidof-13786 [000] ...1 11216.381596: sched_process_exit: comm=pidof pid=13786 prio=120
+1151:           pidof-13786 [000] dn.3 11216.381655: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13785 grp=1 res=0
+1152:              sh-13785 [000] d..2 11216.381737: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1153:              sh-13785 [000] ...1 11216.382064: sched_process_exit: comm=sh pid=13785 prio=120
+1154:              sh-13785 [000] d..3 11216.382090: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1155:              sh-13486 [003] d..2 11216.382094: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1156:           sleep-13787 [003] ...1 11216.385758: sched_process_exit: comm=sleep pid=13787 prio=120
+1157:           sleep-13787 [003] dn.3 11216.385826: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1158:              sh-13486 [003] d..2 11216.385882: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1160:            grep-13788 [003] ...1 11216.389635: sched_process_exit: comm=grep pid=13788 prio=120
+1161:            grep-13788 [003] dn.3 11216.389695: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1162:              sh-13486 [003] d..2 11216.389739: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1165:           pidof-13790 [000] ...1 11216.422142: sched_process_exit: comm=pidof pid=13790 prio=120
+1166:           pidof-13790 [000] d..3 11216.422197: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13789 grp=1 res=0
+1167:              sh-13789 [001] d..2 11216.422289: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1168:              sh-13789 [001] ...1 11216.422666: sched_process_exit: comm=sh pid=13789 prio=120
+1169:              sh-13789 [001] d..3 11216.422693: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1170:              sh-13486 [003] d..2 11216.422699: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1171:           sleep-13791 [003] ...1 11216.426349: sched_process_exit: comm=sleep pid=13791 prio=120
+1172:           sleep-13791 [003] dn.3 11216.426426: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1173:              sh-13486 [003] d..2 11216.426479: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1175:            grep-13792 [000] ...1 11216.430494: sched_process_exit: comm=grep pid=13792 prio=120
+1176:            grep-13792 [000] d..3 11216.430548: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1177:              sh-13486 [003] d..2 11216.430591: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1181:           pidof-13794 [000] ...1 11216.463288: sched_process_exit: comm=pidof pid=13794 prio=120
+1182:           pidof-13794 [000] dn.3 11216.463350: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13793 grp=1 res=0
+1183:              sh-13793 [000] d..2 11216.463441: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1184:              sh-13793 [000] ...1 11216.463818: sched_process_exit: comm=sh pid=13793 prio=120
+1185:              sh-13793 [000] d..3 11216.463846: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1186:              sh-13486 [003] d..2 11216.463852: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1187:           sleep-13795 [003] ...1 11216.468164: sched_process_exit: comm=sleep pid=13795 prio=120
+1188:           sleep-13795 [003] dn.3 11216.468233: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1189:              sh-13486 [003] d..2 11216.468283: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1190:            grep-13796 [000] ...1 11216.473057: sched_process_exit: comm=grep pid=13796 prio=120
+1191:            grep-13796 [000] d..3 11216.473116: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1192:              sh-13486 [003] d..2 11216.473166: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1197:           pidof-13798 [000] ...1 11216.506501: sched_process_exit: comm=pidof pid=13798 prio=120
+1198:           pidof-13798 [000] d..3 11216.506558: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13797 grp=1 res=0
+1199:              sh-13797 [001] d..2 11216.506650: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1200:              sh-13797 [001] ...1 11216.507041: sched_process_exit: comm=sh pid=13797 prio=120
+1201:              sh-13797 [001] d..3 11216.507071: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1202:              sh-13486 [003] d..2 11216.507076: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1203:           sleep-13799 [003] ...1 11216.510621: sched_process_exit: comm=sleep pid=13799 prio=120
+1204:           sleep-13799 [003] dn.3 11216.510683: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1205:              sh-13486 [003] d..2 11216.510730: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1206:            grep-13800 [001] ...1 11216.514552: sched_process_exit: comm=grep pid=13800 prio=120
+1207:            grep-13800 [001] d..3 11216.514609: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1208:              sh-13486 [003] d..2 11216.514658: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1213:           pidof-13802 [003] ...1 11216.542248: sched_process_exit: comm=pidof pid=13802 prio=120
+1214:           pidof-13802 [003] d..3 11216.542304: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13801 grp=1 res=0
+1215:              sh-13801 [001] d..2 11216.542393: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1216:              sh-13801 [001] ...1 11216.542781: sched_process_exit: comm=sh pid=13801 prio=120
+1217:              sh-13801 [001] d..3 11216.542808: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1218:              sh-13486 [003] d..2 11216.542816: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1219:           sleep-13803 [001] ...1 11216.546717: sched_process_exit: comm=sleep pid=13803 prio=120
+1220:           sleep-13803 [001] d..3 11216.546778: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1221:              sh-13486 [003] d..2 11216.546826: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1222:            grep-13804 [003] ...1 11216.550623: sched_process_exit: comm=grep pid=13804 prio=120
+1223:            grep-13804 [003] dn.3 11216.550683: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1224:              sh-13486 [003] d..2 11216.550732: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1226:           pidof-13806 [003] ...1 11216.584579: sched_process_exit: comm=pidof pid=13806 prio=120
+1227:           pidof-13806 [003] d..3 11216.584641: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13805 grp=1 res=0
+1228:              sh-13805 [001] d..2 11216.584736: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1229:              sh-13805 [001] ...1 11216.585135: sched_process_exit: comm=sh pid=13805 prio=120
+1230:              sh-13805 [001] d..3 11216.585164: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1231:              sh-13486 [003] d..2 11216.585174: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1233:           sleep-13807 [003] ...1 11216.588989: sched_process_exit: comm=sleep pid=13807 prio=120
+1234:           sleep-13807 [003] dn.3 11216.589056: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1235:              sh-13486 [003] d..2 11216.589107: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1236:            grep-13808 [001] ...1 11216.592903: sched_process_exit: comm=grep pid=13808 prio=120
+1237:            grep-13808 [001] d..3 11216.592961: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1238:              sh-13486 [003] d..2 11216.593019: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1245:           pidof-13810 [001] ...1 11216.620638: sched_process_exit: comm=pidof pid=13810 prio=120
+1246:           pidof-13810 [001] dn.3 11216.620699: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13809 grp=1 res=0
+1247:              sh-13809 [001] d..2 11216.620799: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1248:              sh-13809 [001] ...1 11216.621149: sched_process_exit: comm=sh pid=13809 prio=120
+1249:              sh-13809 [001] d..3 11216.621178: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1250:              sh-13486 [003] d..2 11216.621183: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1251:           sleep-13811 [003] ...1 11216.625083: sched_process_exit: comm=sleep pid=13811 prio=120
+1252:           sleep-13811 [003] dn.3 11216.625149: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1253:              sh-13486 [003] d..2 11216.625197: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1255:            grep-13812 [003] ...1 11216.631823: sched_process_exit: comm=grep pid=13812 prio=120
+1256:            grep-13812 [003] dn.3 11216.631893: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1257:              sh-13486 [003] d..2 11216.631943: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1261:           pidof-13814 [001] ...1 11216.662744: sched_process_exit: comm=pidof pid=13814 prio=120
+1262:           pidof-13814 [001] dn.3 11216.662802: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13813 grp=1 res=0
+1263:              sh-13813 [001] d..2 11216.662883: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1264:              sh-13813 [001] ...1 11216.663250: sched_process_exit: comm=sh pid=13813 prio=120
+1265:              sh-13813 [001] d..3 11216.663289: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1266:              sh-13486 [003] d..2 11216.665311: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1268:           sleep-13815 [001] ...1 11216.669531: sched_process_exit: comm=sleep pid=13815 prio=120
+1269:           sleep-13815 [001] d..3 11216.669595: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1270:              sh-13486 [003] d..2 11216.669655: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1271:            grep-13816 [000] ...1 11216.676447: sched_process_exit: comm=grep pid=13816 prio=120
+1272:            grep-13816 [000] d..3 11216.676492: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1273:              sh-13486 [003] d..2 11216.676549: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1277:           pidof-13818 [003] ...1 11216.704059: sched_process_exit: comm=pidof pid=13818 prio=120
+1278:           pidof-13818 [003] d..3 11216.704116: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13817 grp=1 res=0
+1279:              sh-13817 [000] d..2 11216.704205: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1280:              sh-13817 [000] ...1 11216.704577: sched_process_exit: comm=sh pid=13817 prio=120
+1281:              sh-13817 [000] d..3 11216.704606: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1282:              sh-13486 [003] d..2 11216.704615: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1283:           sleep-13819 [000] ...1 11216.709529: sched_process_exit: comm=sleep pid=13819 prio=120
+1284:           sleep-13819 [000] d..3 11216.709587: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1285:              sh-13486 [003] d..2 11216.709629: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1286:            grep-13820 [003] ...1 11216.713489: sched_process_exit: comm=grep pid=13820 prio=120
+1287:            grep-13820 [003] dn.3 11216.713558: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1288:              sh-13486 [003] d..2 11216.713609: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1290:           pidof-13822 [000] ...1 11216.743871: sched_process_exit: comm=pidof pid=13822 prio=120
+1291:           pidof-13822 [000] dn.3 11216.743930: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13821 grp=1 res=0
+1292:              sh-13821 [000] d..2 11216.744008: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1293:              sh-13821 [000] ...1 11216.744362: sched_process_exit: comm=sh pid=13821 prio=120
+1294:              sh-13821 [000] d..3 11216.744391: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1295:              sh-13486 [003] d..2 11216.744397: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1300:           sleep-13823 [000] ...1 11216.749145: sched_process_exit: comm=sleep pid=13823 prio=120
+1301:           sleep-13823 [000] d..3 11216.749198: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1302:              sh-13486 [003] d..2 11216.749247: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1303:            grep-13824 [003] ...1 11216.752921: sched_process_exit: comm=grep pid=13824 prio=120
+1304:            grep-13824 [003] dn.3 11216.752985: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1305:              sh-13486 [003] d..2 11216.753037: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1309:           pidof-13826 [003] ...1 11216.795307: sched_process_exit: comm=pidof pid=13826 prio=120
+1310:           pidof-13826 [003] d..3 11216.795368: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13825 grp=1 res=0
+1311:              sh-13825 [000] d..2 11216.795465: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1312:              sh-13825 [000] ...1 11216.795845: sched_process_exit: comm=sh pid=13825 prio=120
+1313:              sh-13825 [000] d..3 11216.795873: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1314:              sh-13486 [003] d..2 11216.795883: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1315:           sleep-13827 [000] ...1 11216.799845: sched_process_exit: comm=sleep pid=13827 prio=120
+1316:           sleep-13827 [000] d..3 11216.799899: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1317:              sh-13486 [003] d..2 11216.799947: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1318:            grep-13828 [000] ...1 11216.804123: sched_process_exit: comm=grep pid=13828 prio=120
+1319:            grep-13828 [000] d..3 11216.804180: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1320:              sh-13486 [003] d..2 11216.804227: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1325:           pidof-13830 [003] ...1 11216.831561: sched_process_exit: comm=pidof pid=13830 prio=120
+1326:           pidof-13830 [003] d..3 11216.831620: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13829 grp=1 res=0
+1327:              sh-13829 [000] d..2 11216.831710: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1328:              sh-13829 [000] ...1 11216.832066: sched_process_exit: comm=sh pid=13829 prio=120
+1329:              sh-13829 [000] d..3 11216.832091: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1330:              sh-13486 [003] d..2 11216.832102: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1331:           sleep-13831 [001] ...1 11216.836276: sched_process_exit: comm=sleep pid=13831 prio=120
+1332:           sleep-13831 [001] d..3 11216.836337: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1333:              sh-13486 [003] d..2 11216.836391: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1334:            grep-13832 [003] ...1 11216.840639: sched_process_exit: comm=grep pid=13832 prio=120
+1335:            grep-13832 [003] dn.3 11216.840700: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1336:              sh-13486 [003] d..2 11216.840746: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1341:           pidof-13834 [003] ...1 11216.869893: sched_process_exit: comm=pidof pid=13834 prio=120
+1342:           pidof-13834 [003] d..3 11216.869943: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13833 grp=1 res=0
+1343:              sh-13833 [000] d..2 11216.870030: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+1344:              sh-13833 [000] ...1 11216.870402: sched_process_exit: comm=sh pid=13833 prio=120
+1345:              sh-13833 [000] d..3 11216.870429: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+1346:              sh-13486 [003] d..2 11216.870439: signal_deliver: sig=17 errno=0 code=262145 sa_handler=7cec79 sa_flags=4000000
+
+--- trace around signal_generate ---
+13:           <...>-13498 [002] dn.3 11213.766868: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+20:           <...>-13499 [001] d..3 11213.768358: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+23:           <...>-13500 [000] d..3 11213.772418: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+26:           <...>-13501 [002] d..3 11213.795931: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+29:           <...>-13503 [001] dn.3 11213.799955: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13502 grp=1 res=0
+32:           <...>-13502 [001] d..3 11213.800439: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+35:           <...>-13505 [002] dn.3 11213.803882: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+38:           <...>-13506 [001] d..3 11213.807475: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+46:           <...>-13508 [002] d..3 11213.836852: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13507 grp=1 res=0
+49:           <...>-13507 [001] d..3 11213.837353: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+52:           <...>-13509 [001] d..3 11213.841007: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+55:           <...>-13510 [001] d..3 11213.844648: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+66:           <...>-13512 [002] d..3 11213.874843: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13511 grp=1 res=0
+69:           <...>-13511 [001] d..3 11213.875336: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+72:           <...>-13513 [001] d..3 11213.879106: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+75:           <...>-13514 [002] dn.3 11213.882824: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+79:           <...>-13516 [002] d..3 11213.910736: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13515 grp=1 res=0
+82:           <...>-13515 [001] d..3 11213.911142: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+85:           <...>-13517 [002] dn.3 11213.915414: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+88:           <...>-13518 [001] d..3 11213.919166: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+94:           <...>-13520 [001] d..3 11213.945396: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13519 grp=1 res=0
+97:           <...>-13519 [002] d..3 11213.945876: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+101:           <...>-13521 [001] d..3 11213.949694: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+104:           <...>-13522 [002] dn.3 11213.955242: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+110:           <...>-13524 [002] d..3 11213.983521: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13523 grp=1 res=0
+113:           <...>-13523 [001] d..3 11213.984008: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+116:           <...>-13525 [002] dn.3 11213.987765: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+119:           <...>-13526 [002] dn.3 11213.991178: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+128:           <...>-13528 [000] d..3 11214.021415: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13527 grp=1 res=0
+131:           <...>-13527 [001] d..3 11214.021858: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+134:           <...>-13529 [002] dn.3 11214.025438: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+139:           <...>-13530 [001] d..3 11214.029226: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+146:           <...>-13532 [000] d..3 11214.063928: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13531 grp=1 res=0
+149:           <...>-13531 [001] d..3 11214.064407: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+152:           <...>-13533 [002] dn.3 11214.069300: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+155:           <...>-13534 [001] d..3 11214.073113: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+160:           <...>-13536 [000] d..3 11214.109030: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13535 grp=1 res=0
+163:           <...>-13535 [001] d..3 11214.109664: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+166:           <...>-13537 [000] d..3 11214.114358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+171:           <...>-13538 [001] d..3 11214.118242: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+178:           <...>-13540 [001] d..3 11214.159220: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13539 grp=1 res=0
+181:           <...>-13539 [000] d..3 11214.159824: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+184:           <...>-13541 [001] d..3 11214.166584: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+187:           <...>-13542 [000] d..3 11214.194983: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+194:           <...>-13544 [001] d..3 11214.228526: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13543 grp=1 res=0
+197:           <...>-13543 [000] d..3 11214.229000: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+200:           <...>-13545 [001] d..3 11214.232721: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+203:           <...>-13546 [002] dn.3 11214.236699: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+206:           <...>-13548 [002] d..3 11214.264263: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13547 grp=1 res=0
+209:           <...>-13547 [000] d..3 11214.264720: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+212:           <...>-13549 [001] d..3 11214.268546: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+215:           <...>-13550 [001] d..3 11214.272570: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+224:           <...>-13552 [002] d..3 11214.302584: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13551 grp=1 res=0
+227:           <...>-13551 [001] d..3 11214.303069: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+230:           <...>-13553 [003] d..3 11214.307340: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+235:           <...>-13554 [003] d..3 11214.311034: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+238:           <...>-13556 [001] d..3 11214.339063: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13555 grp=1 res=0
+241:           <...>-13555 [003] d..3 11214.339566: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+244:           <...>-13557 [002] dn.3 11214.343293: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+247:           <...>-13558 [001] d..3 11214.346997: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+258:           <...>-13560 [002] d..3 11214.374970: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13559 grp=1 res=0
+261:           <...>-13559 [003] d..3 11214.375448: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+264:           <...>-13561 [001] d..3 11214.379548: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+267:           <...>-13562 [001] d..3 11214.383789: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+272:           <...>-13564 [001] dn.3 11214.410354: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13563 grp=1 res=0
+275:           <...>-13563 [001] d..3 11214.410799: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+278:           <...>-13565 [002] dn.3 11214.416042: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+281:           <...>-13566 [001] d..3 11214.420034: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+288:           <...>-13568 [002] d..3 11214.447480: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13567 grp=1 res=0
+292:           <...>-13567 [001] d..3 11214.448017: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+295:           <...>-13569 [003] d..3 11214.451992: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+298:           <...>-13570 [002] d..3 11214.456782: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+303:           <...>-13572 [002] d..3 11214.485225: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13571 grp=1 res=0
+306:           <...>-13571 [003] d..3 11214.485664: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+309:           <...>-13573 [001] d..3 11214.489251: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+312:           <...>-13574 [002] d..3 11214.495375: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+316:           <...>-13576 [003] dn.3 11214.525217: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13575 grp=1 res=0
+319:           <...>-13575 [003] d..3 11214.525683: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+325:           <...>-13577 [000] dn.3 11214.532358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+331:           <...>-13578 [001] d..3 11214.541121: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+336:           <...>-13580 [001] d..3 11214.567356: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13579 grp=1 res=0
+339:           <...>-13579 [002] d..3 11214.567839: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+342:           <...>-13581 [002] d..3 11214.571259: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+345:           <...>-13582 [001] d..3 11214.575498: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+351:           <...>-13584 [002] d..3 11214.602615: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13583 grp=1 res=0
+354:           <...>-13583 [001] d..3 11214.603091: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+357:           <...>-13585 [002] d..3 11214.606616: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+360:           <...>-13586 [000] dn.3 11214.610275: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+368:           <...>-13588 [001] d..3 11214.637388: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13587 grp=1 res=0
+371:           <...>-13587 [002] d..3 11214.637901: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+374:           <...>-13589 [000] dn.3 11214.642086: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+377:           <...>-13590 [002] d..3 11214.645572: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+383:           <...>-13592 [000] d..3 11214.674627: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13591 grp=1 res=0
+386:           <...>-13591 [002] d..3 11214.675113: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+389:           <...>-13593 [002] d..3 11214.678867: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+392:           <...>-13594 [002] d..3 11214.682933: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+400:           <...>-13596 [000] dn.3 11214.714002: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13595 grp=1 res=0
+403:           <...>-13595 [000] d..3 11214.714446: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+408:           <...>-13597 [001] d..3 11214.718257: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+411:           <...>-13598 [001] d..3 11214.721917: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+414:           <...>-13600 [000] dn.3 11214.750993: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13599 grp=1 res=0
+417:           <...>-13599 [000] d..3 11214.751488: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+420:           <...>-13601 [003] dn.3 11214.755949: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+425:           <...>-13602 [003] dn.3 11214.759589: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+431:           <...>-13604 [002] dn.3 11214.791017: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13603 grp=1 res=0
+434:           <...>-13603 [002] d..3 11214.791444: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+437:           <...>-13605 [003] dn.3 11214.795264: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+440:           <...>-13606 [001] d..3 11214.799193: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+443:           <...>-13504 [002] d..3 11214.800441: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+449:           <...>-13609 [000] dn.3 11214.807754: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+452:           <...>-13610 [003] d..3 11214.811682: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+455:           <...>-13611 [003] d..3 11214.816433: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+458:           <...>-13612 [003] d..3 11214.820636: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+461:           <...>-13614 [000] d..3 11214.826872: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+464:           <...>-13608 [001] d..3 11214.827518: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13607 grp=1 res=0
+467:           <...>-13607 [000] d..3 11214.827969: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+470:           <...>-13615 [002] d..3 11214.828990: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+473:           <...>-13616 [003] dn.3 11214.829378: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13613 grp=1 res=0
+476:           <...>-13613 [003] d..3 11214.829637: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+479:           <...>-13617 [001] d..3 11214.831945: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+483:           <...>-13619 [003] dn.3 11214.840166: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+486:           <...>-13620 [000] d..3 11214.840412: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+489:           <...>-13621 [000] d..3 11214.840784: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+492:           <...>-13622 [001] dn.3 11214.841075: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13618 grp=1 res=0
+495:           <...>-13618 [001] d..3 11214.841305: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+501:           <...>-13626 [002] d..3 11214.849321: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+504:           <...>-13627 [000] dn.3 11214.849910: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+507:           <...>-13628 [001] d..3 11214.850164: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13625 grp=1 res=0
+510:           <...>-13625 [000] d..3 11214.850470: signal_generate: sig=17 errno=0 code=262145 comm=ash pid=13497 grp=1 res=0
+518:           <...>-13624 [003] d..3 11214.868595: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13623 grp=1 res=0
+521:           <...>-13623 [001] d..3 11214.869103: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+524:           <...>-13631 [000] d..3 11214.873147: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+527:           <...>-13632 [001] d..3 11214.877188: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+549:           <...>-13634 [003] d..3 11214.903892: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13633 grp=1 res=0
+552:           <...>-13633 [000] d..3 11214.904376: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+555:           <...>-13635 [001] d..3 11214.908323: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+558:           <...>-13636 [001] d..3 11214.912247: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+562:           <...>-13638 [003] d..3 11214.938492: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13637 grp=1 res=0
+565:           <...>-13637 [001] d..3 11214.938988: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+568:           <...>-13639 [003] dn.3 11214.942901: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+571:           <...>-13640 [001] d..3 11214.946990: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+578:           <...>-13642 [003] d..3 11214.972801: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13641 grp=1 res=0
+581:           <...>-13641 [001] d..3 11214.973380: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+585:           <...>-13643 [001] d..3 11214.977787: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+588:           <...>-13644 [003] dn.3 11214.981896: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+594:           <...>-13646 [003] d..3 11215.008049: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13645 grp=1 res=0
+597:           <...>-13645 [001] d..3 11215.008712: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+600:           <...>-13647 [003] dn.3 11215.012930: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+603:           <...>-13648 [001] d..3 11215.017533: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+610:           <...>-13650 [000] dn.3 11215.048295: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13649 grp=1 res=0
+613:           <...>-13649 [000] d..3 11215.048722: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+616:           <...>-13651 [001] d..3 11215.053371: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+623:           <...>-13652 [001] d..3 11215.058355: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+626:           <...>-13654 [000] d..3 11215.089202: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13653 grp=1 res=0
+629:           <...>-13653 [001] d..3 11215.089700: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+632:           <...>-13655 [002] d..3 11215.094727: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+638:           <...>-13656 [003] dn.3 11215.099308: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+642:           <...>-13658 [001] d..3 11215.126719: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13657 grp=1 res=0
+645:           <...>-13657 [002] d..3 11215.127169: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+648:           <...>-13659 [001] d..3 11215.130980: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+655:           <...>-13660 [001] d..3 11215.148930: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+660:           <...>-13662 [000] d..3 11215.183531: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13661 grp=1 res=0
+663:           <...>-13661 [002] d..3 11215.184085: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+667:           <...>-13663 [001] d..3 11215.188266: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+670:           <...>-13664 [001] d..3 11215.192409: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+675:           <...>-13666 [002] d..3 11215.221839: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13665 grp=1 res=0
+678:           <...>-13665 [001] d..3 11215.222397: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+681:           <...>-13667 [002] d..3 11215.226479: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+687:           <...>-13668 [002] d..3 11215.230373: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+693:           <...>-13670 [001] d..3 11215.259031: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13669 grp=1 res=0
+696:           <...>-13669 [002] d..3 11215.259665: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+699:           <...>-13671 [001] d..3 11215.263944: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+702:           <...>-13672 [001] d..3 11215.269084: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+706:           <...>-13674 [002] d..3 11215.305686: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13673 grp=1 res=0
+709:           <...>-13673 [001] d..3 11215.306246: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+713:           <...>-13675 [001] d..3 11215.310415: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+716:           <...>-13676 [000] d..3 11215.315596: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+722:           <...>-13678 [000] d..3 11215.349777: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13677 grp=1 res=0
+725:           <...>-13677 [001] d..3 11215.350258: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+728:           <...>-13679 [001] d..3 11215.354348: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+735:           <...>-13680 [001] d..3 11215.358563: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+738:           <...>-13682 [002] d..3 11215.394308: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13681 grp=1 res=0
+741:           <...>-13681 [000] d..3 11215.394811: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+745:           <...>-13683 [001] d..3 11215.399076: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+748:           <...>-13684 [001] d..3 11215.402994: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+753:           <...>-4771  [002] d..2 11215.408953: signal_generate: sig=23 errno=0 code=-6 comm=wireguard-go pid=4781 grp=0 res=0
+756:           <...>-13686 [002] d..3 11215.430981: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13685 grp=1 res=0
+759:           <...>-13685 [001] d..3 11215.431480: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+762:           <...>-13687 [001] d..3 11215.435691: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+765:           <...>-13688 [001] d..3 11215.439830: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+772:           <...>-13690 [002] d..3 11215.468627: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13689 grp=1 res=0
+775:           <...>-13689 [001] d..3 11215.469143: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+778:           <...>-13691 [001] d..3 11215.472943: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+781:           <...>-13692 [001] d..3 11215.476880: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+787:           <...>-13694 [001] d..3 11215.504588: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13693 grp=1 res=0
+790:           <...>-13693 [000] d..3 11215.505060: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+793:           <...>-13699 [001] d..3 11215.509197: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+796:           <...>-13700 [000] d..3 11215.514358: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+806:           <...>-13702 [002] d..3 11215.541832: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13701 grp=1 res=0
+809:           <...>-13701 [000] d..3 11215.542299: signal_generate: sig=17 errno=0 code=262145 comm=sh pid=13486 grp=1 res=0
+
+--- trace around sched_process_exit ---
+12:           <...>-13498 [002] ...1 11213.766682: sched_process_exit: comm=seq pid=13498 prio=120
+19:           <...>-13499 [001] ...1 11213.768310: sched_process_exit: comm=mkdir pid=13499 prio=120
+22:           <...>-13500 [000] ...1 11213.772374: sched_process_exit: comm=grep pid=13500 prio=120
+25:           <...>-13501 [002] ...1 11213.795673: sched_process_exit: comm=killall pid=13501 prio=120
+28:           <...>-13503 [001] ...1 11213.799895: sched_process_exit: comm=pidof pid=13503 prio=120
+31:           <...>-13502 [001] ...1 11213.800409: sched_process_exit: comm=sh pid=13502 prio=120
+34:           <...>-13505 [002] ...1 11213.803823: sched_process_exit: comm=sleep pid=13505 prio=120
+37:           <...>-13506 [001] ...1 11213.807426: sched_process_exit: comm=grep pid=13506 prio=120
+45:           <...>-13508 [002] ...1 11213.836794: sched_process_exit: comm=pidof pid=13508 prio=120
+48:           <...>-13507 [001] ...1 11213.837326: sched_process_exit: comm=sh pid=13507 prio=120
+51:           <...>-13509 [001] ...1 11213.840953: sched_process_exit: comm=sleep pid=13509 prio=120
+54:           <...>-13510 [001] ...1 11213.844597: sched_process_exit: comm=grep pid=13510 prio=120
+65:           <...>-13512 [002] ...1 11213.874793: sched_process_exit: comm=pidof pid=13512 prio=120
+68:           <...>-13511 [001] ...1 11213.875309: sched_process_exit: comm=sh pid=13511 prio=120
+71:           <...>-13513 [001] ...1 11213.879055: sched_process_exit: comm=sleep pid=13513 prio=120
+74:           <...>-13514 [002] ...1 11213.882769: sched_process_exit: comm=grep pid=13514 prio=120
+78:           <...>-13516 [002] ...1 11213.910689: sched_process_exit: comm=pidof pid=13516 prio=120
+81:           <...>-13515 [001] ...1 11213.911121: sched_process_exit: comm=sh pid=13515 prio=120
+84:           <...>-13517 [002] ...1 11213.915357: sched_process_exit: comm=sleep pid=13517 prio=120
+87:           <...>-13518 [001] ...1 11213.919112: sched_process_exit: comm=grep pid=13518 prio=120
+93:           <...>-13520 [001] ...1 11213.945339: sched_process_exit: comm=pidof pid=13520 prio=120
+96:           <...>-13519 [002] ...1 11213.945848: sched_process_exit: comm=sh pid=13519 prio=120
+100:           <...>-13521 [001] ...1 11213.949643: sched_process_exit: comm=sleep pid=13521 prio=120
+103:           <...>-13522 [002] ...1 11213.955178: sched_process_exit: comm=grep pid=13522 prio=120
+109:           <...>-13524 [002] ...1 11213.983466: sched_process_exit: comm=pidof pid=13524 prio=120
+112:           <...>-13523 [001] ...1 11213.983959: sched_process_exit: comm=sh pid=13523 prio=120
+115:           <...>-13525 [002] ...1 11213.987707: sched_process_exit: comm=sleep pid=13525 prio=120
+118:           <...>-13526 [002] ...1 11213.991126: sched_process_exit: comm=grep pid=13526 prio=120
+127:           <...>-13528 [000] ...1 11214.021368: sched_process_exit: comm=pidof pid=13528 prio=120
+130:           <...>-13527 [001] ...1 11214.021832: sched_process_exit: comm=sh pid=13527 prio=120
+133:           <...>-13529 [002] ...1 11214.025385: sched_process_exit: comm=sleep pid=13529 prio=120
+138:           <...>-13530 [001] ...1 11214.029177: sched_process_exit: comm=grep pid=13530 prio=120
+145:           <...>-13532 [000] ...1 11214.063865: sched_process_exit: comm=pidof pid=13532 prio=120
+148:           <...>-13531 [001] ...1 11214.064382: sched_process_exit: comm=sh pid=13531 prio=120
+151:           <...>-13533 [002] ...1 11214.069248: sched_process_exit: comm=sleep pid=13533 prio=120
+154:           <...>-13534 [001] ...1 11214.073041: sched_process_exit: comm=grep pid=13534 prio=120
+159:           <...>-13536 [000] ...1 11214.108982: sched_process_exit: comm=pidof pid=13536 prio=120
+162:           <...>-13535 [001] ...1 11214.109640: sched_process_exit: comm=sh pid=13535 prio=120
+165:           <...>-13537 [000] ...1 11214.114310: sched_process_exit: comm=sleep pid=13537 prio=120
+170:           <...>-13538 [001] ...1 11214.118198: sched_process_exit: comm=grep pid=13538 prio=120
+177:           <...>-13540 [001] ...1 11214.159155: sched_process_exit: comm=pidof pid=13540 prio=120
+180:           <...>-13539 [000] ...1 11214.159712: sched_process_exit: comm=sh pid=13539 prio=120
+183:           <...>-13541 [001] ...1 11214.166050: sched_process_exit: comm=sleep pid=13541 prio=120
+186:           <...>-13542 [000] ...1 11214.194914: sched_process_exit: comm=grep pid=13542 prio=120
+193:           <...>-13544 [001] ...1 11214.228471: sched_process_exit: comm=pidof pid=13544 prio=120
+196:           <...>-13543 [000] ...1 11214.228973: sched_process_exit: comm=sh pid=13543 prio=120
+199:           <...>-13545 [001] ...1 11214.232663: sched_process_exit: comm=sleep pid=13545 prio=120
+202:           <...>-13546 [002] ...1 11214.236640: sched_process_exit: comm=grep pid=13546 prio=120
+205:           <...>-13548 [002] ...1 11214.264207: sched_process_exit: comm=pidof pid=13548 prio=120
+208:           <...>-13547 [000] ...1 11214.264695: sched_process_exit: comm=sh pid=13547 prio=120
+211:           <...>-13549 [001] ...1 11214.268484: sched_process_exit: comm=sleep pid=13549 prio=120
+214:           <...>-13550 [001] ...1 11214.272501: sched_process_exit: comm=grep pid=13550 prio=120
+223:           <...>-13552 [002] ...1 11214.302527: sched_process_exit: comm=pidof pid=13552 prio=120
+226:           <...>-13551 [001] ...1 11214.303043: sched_process_exit: comm=sh pid=13551 prio=120
+229:           <...>-13553 [003] ...1 11214.307293: sched_process_exit: comm=sleep pid=13553 prio=120
+234:           <...>-13554 [003] ...1 11214.310988: sched_process_exit: comm=grep pid=13554 prio=120
+237:           <...>-13556 [001] ...1 11214.338999: sched_process_exit: comm=pidof pid=13556 prio=120
+240:           <...>-13555 [003] ...1 11214.339538: sched_process_exit: comm=sh pid=13555 prio=120
+243:           <...>-13557 [002] ...1 11214.343245: sched_process_exit: comm=sleep pid=13557 prio=120
+246:           <...>-13558 [001] ...1 11214.346945: sched_process_exit: comm=grep pid=13558 prio=120
+257:           <...>-13560 [002] ...1 11214.374915: sched_process_exit: comm=pidof pid=13560 prio=120
+260:           <...>-13559 [003] ...1 11214.375423: sched_process_exit: comm=sh pid=13559 prio=120
+263:           <...>-13561 [001] ...1 11214.379485: sched_process_exit: comm=sleep pid=13561 prio=120
+266:           <...>-13562 [001] ...1 11214.383724: sched_process_exit: comm=grep pid=13562 prio=120
+271:           <...>-13564 [001] ...1 11214.410299: sched_process_exit: comm=pidof pid=13564 prio=120
+274:           <...>-13563 [001] ...1 11214.410773: sched_process_exit: comm=sh pid=13563 prio=120
+277:           <...>-13565 [002] ...1 11214.415984: sched_process_exit: comm=sleep pid=13565 prio=120
+280:           <...>-13566 [001] ...1 11214.419974: sched_process_exit: comm=grep pid=13566 prio=120
+287:           <...>-13568 [002] ...1 11214.447420: sched_process_exit: comm=pidof pid=13568 prio=120
+291:           <...>-13567 [001] ...1 11214.447983: sched_process_exit: comm=sh pid=13567 prio=120
+294:           <...>-13569 [003] ...1 11214.451942: sched_process_exit: comm=sleep pid=13569 prio=120
+297:           <...>-13570 [002] ...1 11214.456726: sched_process_exit: comm=grep pid=13570 prio=120
+302:           <...>-13572 [002] ...1 11214.485174: sched_process_exit: comm=pidof pid=13572 prio=120
+305:           <...>-13571 [003] ...1 11214.485641: sched_process_exit: comm=sh pid=13571 prio=120
+308:           <...>-13573 [001] ...1 11214.489213: sched_process_exit: comm=sleep pid=13573 prio=120
+311:           <...>-13574 [002] ...1 11214.495302: sched_process_exit: comm=grep pid=13574 prio=120
+315:           <...>-13576 [003] ...1 11214.525154: sched_process_exit: comm=pidof pid=13576 prio=120
+318:           <...>-13575 [003] ...1 11214.525647: sched_process_exit: comm=sh pid=13575 prio=120
+324:           <...>-13577 [000] ...1 11214.532284: sched_process_exit: comm=sleep pid=13577 prio=120
+330:           <...>-13578 [001] ...1 11214.541063: sched_process_exit: comm=grep pid=13578 prio=120
+335:           <...>-13580 [001] ...1 11214.567307: sched_process_exit: comm=pidof pid=13580 prio=120
+338:           <...>-13579 [002] ...1 11214.567811: sched_process_exit: comm=sh pid=13579 prio=120
+341:           <...>-13581 [002] ...1 11214.571218: sched_process_exit: comm=sleep pid=13581 prio=120
+344:           <...>-13582 [001] ...1 11214.575435: sched_process_exit: comm=grep pid=13582 prio=120
+350:           <...>-13584 [002] ...1 11214.602567: sched_process_exit: comm=pidof pid=13584 prio=120
+353:           <...>-13583 [001] ...1 11214.603067: sched_process_exit: comm=sh pid=13583 prio=120
+356:           <...>-13585 [002] ...1 11214.606581: sched_process_exit: comm=sleep pid=13585 prio=120
+359:           <...>-13586 [000] ...1 11214.610233: sched_process_exit: comm=grep pid=13586 prio=120
+367:           <...>-13588 [001] ...1 11214.637333: sched_process_exit: comm=pidof pid=13588 prio=120
+370:           <...>-13587 [002] ...1 11214.637874: sched_process_exit: comm=sh pid=13587 prio=120
+373:           <...>-13589 [000] ...1 11214.642042: sched_process_exit: comm=sleep pid=13589 prio=120
+376:           <...>-13590 [002] ...1 11214.645528: sched_process_exit: comm=grep pid=13590 prio=120
+382:           <...>-13592 [000] ...1 11214.674576: sched_process_exit: comm=pidof pid=13592 prio=120
+385:           <...>-13591 [002] ...1 11214.675089: sched_process_exit: comm=sh pid=13591 prio=120
+388:           <...>-13593 [002] ...1 11214.678814: sched_process_exit: comm=sleep pid=13593 prio=120
+391:           <...>-13594 [002] ...1 11214.682874: sched_process_exit: comm=grep pid=13594 prio=120
+399:           <...>-13596 [000] ...1 11214.713941: sched_process_exit: comm=pidof pid=13596 prio=120
+402:           <...>-13595 [000] ...1 11214.714422: sched_process_exit: comm=sh pid=13595 prio=120
+407:           <...>-13597 [001] ...1 11214.718203: sched_process_exit: comm=sleep pid=13597 prio=120
+410:           <...>-13598 [001] ...1 11214.721871: sched_process_exit: comm=grep pid=13598 prio=120
+413:           <...>-13600 [000] ...1 11214.750927: sched_process_exit: comm=pidof pid=13600 prio=120
+416:           <...>-13599 [000] ...1 11214.751463: sched_process_exit: comm=sh pid=13599 prio=120
+419:           <...>-13601 [003] ...1 11214.755895: sched_process_exit: comm=sleep pid=13601 prio=120
+424:           <...>-13602 [003] ...1 11214.759538: sched_process_exit: comm=grep pid=13602 prio=120
+430:           <...>-13604 [002] ...1 11214.790968: sched_process_exit: comm=pidof pid=13604 prio=120
+433:           <...>-13603 [002] ...1 11214.791420: sched_process_exit: comm=sh pid=13603 prio=120
+436:           <...>-13605 [003] ...1 11214.795199: sched_process_exit: comm=sleep pid=13605 prio=120
+439:           <...>-13606 [001] ...1 11214.799142: sched_process_exit: comm=grep pid=13606 prio=120
+442:           <...>-13504 [002] ...1 11214.800404: sched_process_exit: comm=sleep pid=13504 prio=120
+448:           <...>-13609 [000] ...1 11214.807699: sched_process_exit: comm=rm pid=13609 prio=120
+451:           <...>-13610 [003] ...1 11214.811620: sched_process_exit: comm=od pid=13610 prio=120
+454:           <...>-13611 [003] ...1 11214.816368: sched_process_exit: comm=od pid=13611 prio=120
+457:           <...>-13612 [003] ...1 11214.820572: sched_process_exit: comm=od pid=13612 prio=120
+460:           <...>-13614 [000] ...1 11214.826808: sched_process_exit: comm=sed pid=13614 prio=120
+463:           <...>-13608 [001] ...1 11214.827477: sched_process_exit: comm=pidof pid=13608 prio=120
+466:           <...>-13607 [000] ...1 11214.827943: sched_process_exit: comm=sh pid=13607 prio=120
+469:           <...>-13615 [002] ...1 11214.828919: sched_process_exit: comm=tail pid=13615 prio=120
+472:           <...>-13616 [003] ...1 11214.829325: sched_process_exit: comm=tr pid=13616 prio=120
+475:           <...>-13613 [003] ...1 11214.829618: sched_process_exit: comm=ash pid=13613 prio=120
+478:           <...>-13617 [001] ...1 11214.831889: sched_process_exit: comm=sleep pid=13617 prio=120
+482:           <...>-13619 [003] ...1 11214.840087: sched_process_exit: comm=grep pid=13619 prio=120
+485:           <...>-13620 [000] ...1 11214.840368: sched_process_exit: comm=sed pid=13620 prio=120
+488:           <...>-13621 [000] ...1 11214.840733: sched_process_exit: comm=tail pid=13621 prio=120
+491:           <...>-13622 [001] ...1 11214.841033: sched_process_exit: comm=tr pid=13622 prio=120
+494:           <...>-13618 [001] ...1 11214.841287: sched_process_exit: comm=ash pid=13618 prio=120
+500:           <...>-13626 [002] ...1 11214.849258: sched_process_exit: comm=sed pid=13626 prio=120
+503:           <...>-13627 [000] ...1 11214.849854: sched_process_exit: comm=tail pid=13627 prio=120
+506:           <...>-13628 [001] ...1 11214.850096: sched_process_exit: comm=tr pid=13628 prio=120
+509:           <...>-13625 [000] ...1 11214.850448: sched_process_exit: comm=ash pid=13625 prio=120
+517:           <...>-13624 [003] ...1 11214.868538: sched_process_exit: comm=pidof pid=13624 prio=120
+520:           <...>-13623 [001] ...1 11214.869076: sched_process_exit: comm=sh pid=13623 prio=120
+523:           <...>-13631 [000] ...1 11214.873100: sched_process_exit: comm=sleep pid=13631 prio=120
+526:           <...>-13632 [001] ...1 11214.877134: sched_process_exit: comm=grep pid=13632 prio=120
+548:           <...>-13634 [003] ...1 11214.903839: sched_process_exit: comm=pidof pid=13634 prio=120
+551:           <...>-13633 [000] ...1 11214.904348: sched_process_exit: comm=sh pid=13633 prio=120
+554:           <...>-13635 [001] ...1 11214.908265: sched_process_exit: comm=sleep pid=13635 prio=120
+557:           <...>-13636 [001] ...1 11214.912194: sched_process_exit: comm=grep pid=13636 prio=120
+561:           <...>-13638 [003] ...1 11214.938428: sched_process_exit: comm=pidof pid=13638 prio=120
+564:           <...>-13637 [001] ...1 11214.938962: sched_process_exit: comm=sh pid=13637 prio=120
+567:           <...>-13639 [003] ...1 11214.942836: sched_process_exit: comm=sleep pid=13639 prio=120
+570:           <...>-13640 [001] ...1 11214.946932: sched_process_exit: comm=grep pid=13640 prio=120
+577:           <...>-13642 [003] ...1 11214.972733: sched_process_exit: comm=pidof pid=13642 prio=120
+580:           <...>-13641 [001] ...1 11214.973339: sched_process_exit: comm=sh pid=13641 prio=120
+584:           <...>-13643 [001] ...1 11214.977734: sched_process_exit: comm=sleep pid=13643 prio=120
+587:           <...>-13644 [003] ...1 11214.981826: sched_process_exit: comm=grep pid=13644 prio=120
+593:           <...>-13646 [003] ...1 11215.007993: sched_process_exit: comm=pidof pid=13646 prio=120
+596:           <...>-13645 [001] ...1 11215.008681: sched_process_exit: comm=sh pid=13645 prio=120
+599:           <...>-13647 [003] ...1 11215.012844: sched_process_exit: comm=sleep pid=13647 prio=120
+602:           <...>-13648 [001] ...1 11215.017471: sched_process_exit: comm=grep pid=13648 prio=120
+609:           <...>-13650 [000] ...1 11215.048237: sched_process_exit: comm=pidof pid=13650 prio=120
+612:           <...>-13649 [000] ...1 11215.048696: sched_process_exit: comm=sh pid=13649 prio=120
+615:           <...>-13651 [001] ...1 11215.053279: sched_process_exit: comm=sleep pid=13651 prio=120
+622:           <...>-13652 [001] ...1 11215.058278: sched_process_exit: comm=grep pid=13652 prio=120
+625:           <...>-13654 [000] ...1 11215.089145: sched_process_exit: comm=pidof pid=13654 prio=120
+628:           <...>-13653 [001] ...1 11215.089665: sched_process_exit: comm=sh pid=13653 prio=120
+631:           <...>-13655 [002] ...1 11215.094660: sched_process_exit: comm=sleep pid=13655 prio=120
+637:           <...>-13656 [003] ...1 11215.099237: sched_process_exit: comm=grep pid=13656 prio=120
+641:           <...>-13658 [001] ...1 11215.126665: sched_process_exit: comm=pidof pid=13658 prio=120
+644:           <...>-13657 [002] ...1 11215.127144: sched_process_exit: comm=sh pid=13657 prio=120
+647:           <...>-13659 [001] ...1 11215.130933: sched_process_exit: comm=sleep pid=13659 prio=120
+654:           <...>-13660 [001] ...1 11215.148870: sched_process_exit: comm=grep pid=13660 prio=120
+659:           <...>-13662 [000] ...1 11215.183462: sched_process_exit: comm=pidof pid=13662 prio=120
+662:           <...>-13661 [002] ...1 11215.184046: sched_process_exit: comm=sh pid=13661 prio=120
+666:           <...>-13663 [001] ...1 11215.188210: sched_process_exit: comm=sleep pid=13663 prio=120
+669:           <...>-13664 [001] ...1 11215.192349: sched_process_exit: comm=grep pid=13664 prio=120
+674:           <...>-13666 [002] ...1 11215.221776: sched_process_exit: comm=pidof pid=13666 prio=120
+677:           <...>-13665 [001] ...1 11215.222367: sched_process_exit: comm=sh pid=13665 prio=120
+680:           <...>-13667 [002] ...1 11215.226416: sched_process_exit: comm=sleep pid=13667 prio=120
+686:           <...>-13668 [002] ...1 11215.230319: sched_process_exit: comm=grep pid=13668 prio=120
+692:           <...>-13670 [001] ...1 11215.258960: sched_process_exit: comm=pidof pid=13670 prio=120
+695:           <...>-13669 [002] ...1 11215.259618: sched_process_exit: comm=sh pid=13669 prio=120
+698:           <...>-13671 [001] ...1 11215.263882: sched_process_exit: comm=sleep pid=13671 prio=120
+701:           <...>-13672 [001] ...1 11215.269003: sched_process_exit: comm=grep pid=13672 prio=120
+705:           <...>-13674 [002] ...1 11215.305617: sched_process_exit: comm=pidof pid=13674 prio=120
+708:           <...>-13673 [001] ...1 11215.306206: sched_process_exit: comm=sh pid=13673 prio=120
+712:           <...>-13675 [001] ...1 11215.310357: sched_process_exit: comm=sleep pid=13675 prio=120
+715:           <...>-13676 [000] ...1 11215.315541: sched_process_exit: comm=grep pid=13676 prio=120
+721:           <...>-13678 [000] ...1 11215.349720: sched_process_exit: comm=pidof pid=13678 prio=120
+724:           <...>-13677 [001] ...1 11215.350231: sched_process_exit: comm=sh pid=13677 prio=120
+727:           <...>-13679 [001] ...1 11215.354268: sched_process_exit: comm=sleep pid=13679 prio=120
+734:           <...>-13680 [001] ...1 11215.358506: sched_process_exit: comm=grep pid=13680 prio=120
+737:           <...>-13682 [002] ...1 11215.394249: sched_process_exit: comm=pidof pid=13682 prio=120
+740:           <...>-13681 [000] ...1 11215.394776: sched_process_exit: comm=sh pid=13681 prio=120
+744:           <...>-13683 [001] ...1 11215.399018: sched_process_exit: comm=sleep pid=13683 prio=120
+747:           <...>-13684 [001] ...1 11215.402931: sched_process_exit: comm=grep pid=13684 prio=120
+755:           <...>-13686 [002] ...1 11215.430926: sched_process_exit: comm=pidof pid=13686 prio=120
+758:           <...>-13685 [001] ...1 11215.431444: sched_process_exit: comm=sh pid=13685 prio=120
+761:           <...>-13687 [001] ...1 11215.435623: sched_process_exit: comm=sleep pid=13687 prio=120
+764:           <...>-13688 [001] ...1 11215.439770: sched_process_exit: comm=grep pid=13688 prio=120
+771:           <...>-13690 [002] ...1 11215.468569: sched_process_exit: comm=pidof pid=13690 prio=120
+774:           <...>-13689 [001] ...1 11215.469111: sched_process_exit: comm=sh pid=13689 prio=120
+777:           <...>-13691 [001] ...1 11215.472882: sched_process_exit: comm=sleep pid=13691 prio=120
+780:           <...>-13692 [001] ...1 11215.476817: sched_process_exit: comm=grep pid=13692 prio=120
+786:           <...>-13694 [001] ...1 11215.504531: sched_process_exit: comm=pidof pid=13694 prio=120
+789:           <...>-13693 [000] ...1 11215.505032: sched_process_exit: comm=sh pid=13693 prio=120
+792:           <...>-13699 [001] ...1 11215.509135: sched_process_exit: comm=sleep pid=13699 prio=120
+795:           <...>-13700 [000] ...1 11215.513252: sched_process_exit: comm=grep pid=13700 prio=120
+805:           <...>-13702 [002] ...1 11215.541780: sched_process_exit: comm=pidof pid=13702 prio=120
+808:           <...>-13701 [000] ...1 11215.542272: sched_process_exit: comm=sh pid=13701 prio=120
+811:           <...>-13703 [000] ...1 11215.547088: sched_process_exit: comm=sleep pid=13703 prio=120
+814:           <...>-13704 [000] ...1 11215.551304: sched_process_exit: comm=grep pid=13704 prio=120
+822:           <...>-13706 [000] ...1 11215.590860: sched_process_exit: comm=pidof pid=13706 prio=120
+825:           <...>-13705 [001] ...1 11215.591341: sched_process_exit: comm=sh pid=13705 prio=120
+828:           <...>-13707 [001] ...1 11215.595450: sched_process_exit: comm=sleep pid=13707 prio=120
+831:           <...>-13708 [001] ...1 11215.599272: sched_process_exit: comm=grep pid=13708 prio=120
+835:           <...>-13710 [001] ...1 11215.626024: sched_process_exit: comm=pidof pid=13710 prio=120
+838:           <...>-13709 [000] ...1 11215.626562: sched_process_exit: comm=sh pid=13709 prio=120
+841:           <...>-13711 [001] ...1 11215.630174: sched_process_exit: comm=sleep pid=13711 prio=120
+844:           <...>-13712 [001] ...1 11215.633861: sched_process_exit: comm=grep pid=13712 prio=120
+852:           <...>-13714 [001] ...1 11215.661161: sched_process_exit: comm=pidof pid=13714 prio=120
+855:           <...>-13713 [000] ...1 11215.661643: sched_process_exit: comm=sh pid=13713 prio=120
+858:           <...>-13715 [001] ...1 11215.665262: sched_process_exit: comm=sleep pid=13715 prio=120
+861:           <...>-13716 [001] ...1 11215.669033: sched_process_exit: comm=grep pid=13716 prio=120
+870:           <...>-13718 [001] ...1 11215.701314: sched_process_exit: comm=pidof pid=13718 prio=120
+873:           <...>-13717 [001] ...1 11215.701854: sched_process_exit: comm=sh pid=13717 prio=120
+876:           <...>-13719 [001] ...1 11215.705865: sched_process_exit: comm=sleep pid=13719 prio=120
+879:           <...>-13720 [001] ...1 11215.709971: sched_process_exit: comm=grep pid=13720 prio=120
+883:           <...>-13722 [000] ...1 11215.754898: sched_process_exit: comm=pidof pid=13722 prio=120
+886:           <...>-13721 [000] ...1 11215.755424: sched_process_exit: comm=sh pid=13721 prio=120
+891:           <...>-13723 [001] ...1 11215.759451: sched_process_exit: comm=sleep pid=13723 prio=120
+894:           <...>-13724 [001] ...1 11215.763328: sched_process_exit: comm=grep pid=13724 prio=120
+899:           <...>-13726 [001] ...1 11215.791502: sched_process_exit: comm=pidof pid=13726 prio=120
+902:           <...>-13725 [000] ...1 11215.792103: sched_process_exit: comm=sh pid=13725 prio=120
+905:           <...>-13727 [001] ...1 11215.796125: sched_process_exit: comm=sleep pid=13727 prio=120
+912:           <...>-13728 [001] .n.1 11215.800518: sched_process_exit: comm=grep pid=13728 prio=120
+915:           <...>-13730 [000] ...1 11215.834931: sched_process_exit: comm=pidof pid=13730 prio=120
+918:           <...>-13729 [000] ...1 11215.835453: sched_process_exit: comm=sh pid=13729 prio=120
+924:           <...>-7194  [001] ...1 11215.837658: sched_process_exit: comm=kworker/dying pid=7194 prio=120
+926:           <...>-13731 [001] ...1 11215.840041: sched_process_exit: comm=sleep pid=13731 prio=120
+929:           <...>-13732 [001] ...1 11215.844372: sched_process_exit: comm=grep pid=13732 prio=120
+932:           pidof-13734 [003] ...1 11215.870635: sched_process_exit: comm=pidof pid=13734 prio=120
+935:              sh-13733 [001] ...1 11215.871108: sched_process_exit: comm=sh pid=13733 prio=120
+938:           sleep-13735 [003] ...1 11215.874693: sched_process_exit: comm=sleep pid=13735 prio=120
+941:            grep-13736 [003] ...1 11215.878535: sched_process_exit: comm=grep pid=13736 prio=120
+948:           pidof-13738 [003] ...1 11215.904604: sched_process_exit: comm=pidof pid=13738 prio=120
+951:              sh-13737 [001] ...1 11215.905192: sched_process_exit: comm=sh pid=13737 prio=120
+954:           sleep-13739 [003] ...1 11215.909015: sched_process_exit: comm=sleep pid=13739 prio=120
+957:            grep-13740 [001] ...1 11215.912758: sched_process_exit: comm=grep pid=13740 prio=120
+965:           pidof-13742 [003] ...1 11215.939826: sched_process_exit: comm=pidof pid=13742 prio=120
+968:              sh-13741 [001] ...1 11215.940397: sched_process_exit: comm=sh pid=13741 prio=120
+971:           sleep-13743 [003] ...1 11215.944045: sched_process_exit: comm=sleep pid=13743 prio=120
+976:            grep-13744 [003] ...1 11215.947933: sched_process_exit: comm=grep pid=13744 prio=120
+979:  HeapTaskDaemon-13695 [002] ...1 11215.953924: sched_process_exit: comm=HeapTaskDaemon pid=13695 prio=120
+980: ReferenceQueueD-13696 [002] ...1 11215.954415: sched_process_exit: comm=ReferenceQueueD pid=13696 prio=120
+981: FinalizerDaemon-13697 [002] ...1 11215.954736: sched_process_exit: comm=FinalizerDaemon pid=13697 prio=120
+982: FinalizerWatchd-13698 [002] ...1 11215.955044: sched_process_exit: comm=FinalizerWatchd pid=13698 prio=120
+986:           pidof-13746 [000] ...1 11215.980793: sched_process_exit: comm=pidof pid=13746 prio=120
+989:              sh-13745 [001] ...1 11215.981294: sched_process_exit: comm=sh pid=13745 prio=120
+992:           sleep-13747 [001] ...1 11215.985132: sched_process_exit: comm=sleep pid=13747 prio=120
+995:            grep-13748 [003] ...1 11215.989312: sched_process_exit: comm=grep pid=13748 prio=120
+1005:           pidof-13750 [003] ...1 11216.015515: sched_process_exit: comm=pidof pid=13750 prio=120
+1008:              sh-13749 [001] ...1 11216.016268: sched_process_exit: comm=sh pid=13749 prio=120
+1011:           sleep-13751 [000] ...1 11216.022025: sched_process_exit: comm=sleep pid=13751 prio=120
+1014:            grep-13752 [001] ...1 11216.026080: sched_process_exit: comm=grep pid=13752 prio=120
+1018:           pidof-13754 [003] ...1 11216.051639: sched_process_exit: comm=pidof pid=13754 prio=120
+1021:              sh-13753 [001] ...1 11216.052172: sched_process_exit: comm=sh pid=13753 prio=120
+1024:           sleep-13755 [002] ...1 11216.056798: sched_process_exit: comm=sleep pid=13755 prio=120
+1027:            grep-13756 [002] ...1 11216.061368: sched_process_exit: comm=grep pid=13756 prio=120
+1039:           pidof-13758 [001] ...1 11216.089412: sched_process_exit: comm=pidof pid=13758 prio=120
+1042:              sh-13757 [002] ...1 11216.089928: sched_process_exit: comm=sh pid=13757 prio=120
+1045:           sleep-13759 [001] ...1 11216.094015: sched_process_exit: comm=sleep pid=13759 prio=120
+1048:            grep-13760 [002] ...1 11216.099444: sched_process_exit: comm=grep pid=13760 prio=120
+1055:           pidof-13762 [000] ...1 11216.129645: sched_process_exit: comm=pidof pid=13762 prio=120
+1058:              sh-13761 [002] ...1 11216.130186: sched_process_exit: comm=sh pid=13761 prio=120
+1061:           sleep-13763 [001] ...1 11216.135048: sched_process_exit: comm=sleep pid=13763 prio=120
+1065:            grep-13764 [000] ...1 11216.140754: sched_process_exit: comm=grep pid=13764 prio=120
+1069:           pidof-13766 [003] ...1 11216.167743: sched_process_exit: comm=pidof pid=13766 prio=120
+1072:              sh-13765 [000] ...1 11216.168282: sched_process_exit: comm=sh pid=13765 prio=120
+1075:           sleep-13767 [001] ...1 11216.172128: sched_process_exit: comm=sleep pid=13767 prio=120
+1078:            grep-13768 [001] ...1 11216.176969: sched_process_exit: comm=grep pid=13768 prio=120
+1085:           pidof-13770 [000] ...1 11216.207220: sched_process_exit: comm=pidof pid=13770 prio=120
+1089:              sh-13769 [001] ...1 11216.207817: sched_process_exit: comm=sh pid=13769 prio=120
+1092:           sleep-13771 [001] ...1 11216.211536: sched_process_exit: comm=sleep pid=13771 prio=120
+1095:            grep-13772 [001] ...1 11216.216035: sched_process_exit: comm=grep pid=13772 prio=120
+1101:           pidof-13774 [000] ...1 11216.247103: sched_process_exit: comm=pidof pid=13774 prio=120
+1104:              sh-13773 [000] ...1 11216.247631: sched_process_exit: comm=sh pid=13773 prio=120
+1108:           sleep-13775 [000] ...1 11216.253559: sched_process_exit: comm=sleep pid=13775 prio=120
+1114:            grep-13776 [003] ...1 11216.257760: sched_process_exit: comm=grep pid=13776 prio=120
+1117:           pidof-13778 [000] ...1 11216.287783: sched_process_exit: comm=pidof pid=13778 prio=120
+1120:              sh-13777 [001] ...1 11216.288284: sched_process_exit: comm=sh pid=13777 prio=120
+1123:           sleep-13779 [000] ...1 11216.293949: sched_process_exit: comm=sleep pid=13779 prio=120
+1130:            grep-13780 [000] ...1 11216.299434: sched_process_exit: comm=grep pid=13780 prio=120
+1133:           pidof-13782 [003] ...1 11216.326101: sched_process_exit: comm=pidof pid=13782 prio=120
+1136:              sh-13781 [000] ...1 11216.326619: sched_process_exit: comm=sh pid=13781 prio=120
+1139:           sleep-13783 [003] ...1 11216.337395: sched_process_exit: comm=sleep pid=13783 prio=120
+1146:            grep-13784 [003] ...1 11216.349377: sched_process_exit: comm=grep pid=13784 prio=120
+1150:           pidof-13786 [000] ...1 11216.381596: sched_process_exit: comm=pidof pid=13786 prio=120
+1153:              sh-13785 [000] ...1 11216.382064: sched_process_exit: comm=sh pid=13785 prio=120
+1156:           sleep-13787 [003] ...1 11216.385758: sched_process_exit: comm=sleep pid=13787 prio=120
+1160:            grep-13788 [003] ...1 11216.389635: sched_process_exit: comm=grep pid=13788 prio=120
+1165:           pidof-13790 [000] ...1 11216.422142: sched_process_exit: comm=pidof pid=13790 prio=120
+1168:              sh-13789 [001] ...1 11216.422666: sched_process_exit: comm=sh pid=13789 prio=120
+1171:           sleep-13791 [003] ...1 11216.426349: sched_process_exit: comm=sleep pid=13791 prio=120
+1175:            grep-13792 [000] ...1 11216.430494: sched_process_exit: comm=grep pid=13792 prio=120
+1181:           pidof-13794 [000] ...1 11216.463288: sched_process_exit: comm=pidof pid=13794 prio=120
+1184:              sh-13793 [000] ...1 11216.463818: sched_process_exit: comm=sh pid=13793 prio=120
+1187:           sleep-13795 [003] ...1 11216.468164: sched_process_exit: comm=sleep pid=13795 prio=120
+1190:            grep-13796 [000] ...1 11216.473057: sched_process_exit: comm=grep pid=13796 prio=120
+1197:           pidof-13798 [000] ...1 11216.506501: sched_process_exit: comm=pidof pid=13798 prio=120
+1200:              sh-13797 [001] ...1 11216.507041: sched_process_exit: comm=sh pid=13797 prio=120
+1203:           sleep-13799 [003] ...1 11216.510621: sched_process_exit: comm=sleep pid=13799 prio=120
+1206:            grep-13800 [001] ...1 11216.514552: sched_process_exit: comm=grep pid=13800 prio=120
+1213:           pidof-13802 [003] ...1 11216.542248: sched_process_exit: comm=pidof pid=13802 prio=120
+1216:              sh-13801 [001] ...1 11216.542781: sched_process_exit: comm=sh pid=13801 prio=120
+1219:           sleep-13803 [001] ...1 11216.546717: sched_process_exit: comm=sleep pid=13803 prio=120
+1222:            grep-13804 [003] ...1 11216.550623: sched_process_exit: comm=grep pid=13804 prio=120
+1226:           pidof-13806 [003] ...1 11216.584579: sched_process_exit: comm=pidof pid=13806 prio=120
+1229:              sh-13805 [001] ...1 11216.585135: sched_process_exit: comm=sh pid=13805 prio=120
+1233:           sleep-13807 [003] ...1 11216.588989: sched_process_exit: comm=sleep pid=13807 prio=120
+1236:            grep-13808 [001] ...1 11216.592903: sched_process_exit: comm=grep pid=13808 prio=120
+1245:           pidof-13810 [001] ...1 11216.620638: sched_process_exit: comm=pidof pid=13810 prio=120
+1248:              sh-13809 [001] ...1 11216.621149: sched_process_exit: comm=sh pid=13809 prio=120
+1251:           sleep-13811 [003] ...1 11216.625083: sched_process_exit: comm=sleep pid=13811 prio=120
+1255:            grep-13812 [003] ...1 11216.631823: sched_process_exit: comm=grep pid=13812 prio=120
+1261:           pidof-13814 [001] ...1 11216.662744: sched_process_exit: comm=pidof pid=13814 prio=120
+1264:              sh-13813 [001] ...1 11216.663250: sched_process_exit: comm=sh pid=13813 prio=120
+1268:           sleep-13815 [001] ...1 11216.669531: sched_process_exit: comm=sleep pid=13815 prio=120
+1271:            grep-13816 [000] ...1 11216.676447: sched_process_exit: comm=grep pid=13816 prio=120
+1277:           pidof-13818 [003] ...1 11216.704059: sched_process_exit: comm=pidof pid=13818 prio=120
+1280:              sh-13817 [000] ...1 11216.704577: sched_process_exit: comm=sh pid=13817 prio=120
+1283:           sleep-13819 [000] ...1 11216.709529: sched_process_exit: comm=sleep pid=13819 prio=120
+1286:            grep-13820 [003] ...1 11216.713489: sched_process_exit: comm=grep pid=13820 prio=120
+1290:           pidof-13822 [000] ...1 11216.743871: sched_process_exit: comm=pidof pid=13822 prio=120
+1293:              sh-13821 [000] ...1 11216.744362: sched_process_exit: comm=sh pid=13821 prio=120
+1300:           sleep-13823 [000] ...1 11216.749145: sched_process_exit: comm=sleep pid=13823 prio=120
+1303:            grep-13824 [003] ...1 11216.752921: sched_process_exit: comm=grep pid=13824 prio=120
+1309:           pidof-13826 [003] ...1 11216.795307: sched_process_exit: comm=pidof pid=13826 prio=120
+1312:              sh-13825 [000] ...1 11216.795845: sched_process_exit: comm=sh pid=13825 prio=120
+1315:           sleep-13827 [000] ...1 11216.799845: sched_process_exit: comm=sleep pid=13827 prio=120
+1318:            grep-13828 [000] ...1 11216.804123: sched_process_exit: comm=grep pid=13828 prio=120
+1325:           pidof-13830 [003] ...1 11216.831561: sched_process_exit: comm=pidof pid=13830 prio=120
+1328:              sh-13829 [000] ...1 11216.832066: sched_process_exit: comm=sh pid=13829 prio=120
+1331:           sleep-13831 [001] ...1 11216.836276: sched_process_exit: comm=sleep pid=13831 prio=120
+1334:            grep-13832 [003] ...1 11216.840639: sched_process_exit: comm=grep pid=13832 prio=120
+1341:           pidof-13834 [003] ...1 11216.869893: sched_process_exit: comm=pidof pid=13834 prio=120
+1344:              sh-13833 [000] ...1 11216.870402: sched_process_exit: comm=sh pid=13833 prio=120
+1347:           sleep-13835 [000] ...1 11216.876441: sched_process_exit: comm=sleep pid=13835 prio=120
+1350:            grep-13836 [001] ...1 11216.880760: sched_process_exit: comm=grep pid=13836 prio=120
+1357:           pidof-13838 [001] ...1 11216.911555: sched_process_exit: comm=pidof pid=13838 prio=120
+1360:              sh-13837 [001] ...1 11216.912043: sched_process_exit: comm=sh pid=13837 prio=120
+1363:           sleep-13839 [003] ...1 11216.916265: sched_process_exit: comm=sleep pid=13839 prio=120
+1366:            grep-13840 [000] ...1 11216.920681: sched_process_exit: comm=grep pid=13840 prio=120
+1374:           pidof-13842 [001] ...1 11216.952528: sched_process_exit: comm=pidof pid=13842 prio=120
+1377:              sh-13841 [000] ...1 11216.953125: sched_process_exit: comm=sh pid=13841 prio=120
+1380:           sleep-13843 [003] ...1 11216.957256: sched_process_exit: comm=sleep pid=13843 prio=120
+1383:           sleep-13844 [001] ...1 11216.961429: sched_process_exit: comm=sleep pid=13844 prio=120
+
+--- dmesg focused ---
+
+TRACE_SYSTEMSERVER_SIGKILL_CLEAN_DONE

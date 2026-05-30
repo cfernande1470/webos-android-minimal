@@ -509,86 +509,36 @@ accepted writes are visible through Android's shared /dev/__properties__ area
 restart keeps the property bridge working
 ```
 
+### M2: Make Android init lifecycle explicit
+
+Implemented:
+
+- runtime phase markers and pid files for start, stop, and restart;
+- `status.sh`, `stop.sh`, and `restart.sh` as the controlled lifecycle path;
+- `updated_at_utc` in `runtime.state` and a phase timeline in `runtime.timeline`.
+
+### M3: HAL bring-up beyond service managers
+
+Implemented:
+
+- bounded launcher and smoke for non-graphics HALs;
+- `memtrack`, `power`, `graphics.allocator@2.0`, `graphics.allocator@4.0`, and `light` in the resident baseline;
+- `sensors` treated as a bounded oneshot probe;
+- `webos-wayland` kept as the separate graphics/UI path.
+
+### M4: Binder service registration checks
+
+Implemented:
+
+- `service list` / `service check SERVICE` diagnostics;
+- `service call manager 1 s16 activity_task` as a working getService smoke;
+- `binder-registry-smoke.sh` as the dedicated probe;
+- `vndservice list` and `lshal` remain optional diagnostics on this image.
+
 ## Future milestones
 
 The remaining technically hard milestones are M5 and M6.
 M7 is still useful work, but it is operational packaging/recovery rather than a core architecture blocker.
-M2, M3, and M4 are already implemented in the current tree.
-
-### M2: Make Android init lifecycle explicit
-
-Current script uses only enough Android init behavior to seed property/linker state.
-
-First step:
-
-- persist runtime phase markers and pid files so start, stop, and restart are observable without guessing;
-- keep the current controlled bring-up path, then tighten restart semantics before adding a larger init supervisor.
-
-`status.sh`, `stop.sh`, and `restart.sh` now cover that first step.
-
-Current lifecycle state also records `updated_at_utc` in `runtime.state` and appends a phase timeline in `runtime.timeline`, so you can see the last transition sequence directly from the sidecar.
-
-Future work:
-
-- controlled mini-init;
-- bounded Android init phases;
-- service supervision;
-- deterministic stop/restart scripts.
-
-### M3: HAL bring-up beyond service managers
-
-Next low-risk HAL/service probes:
-
-```text
-memtrack
-graphics allocator / mapper
-power
-sensors stub behavior
-input-related services
-```
-
-Each HAL should be tested as a bounded process first, not as part of a full Android boot.
-
-`probe-services.sh` is the first diagnostic for this lane.
-`start-hal-services.sh` is the bounded launcher for the resident HALs.
-`smoke-hal-services.sh` is the first bounded HAL launch test for this lane.
-
-Graphics and UI are not the final target in this repo. The compositor path should move to the separate [`webos-wayland`](https://github.com/cfernande1470/webos-wayland/) project and a native webOS app named `android` that either launches the Android sidecar or serves as an APK compatibility layer on webOS.
-
-Current probe baseline:
-
-- `service list` returns cleanly;
-- `cmd -l` returns cleanly where available;
-- `lshal` is not yet a stable probe on this image;
-- the current runtime does not yet expose the targeted `memtrack`, `power`, `graphics`, or `input` strings in the probe output.
-
-Current HAL smoke baseline:
-
-- `memtrack`, `power`, `graphics.allocator@2.0`, `graphics.allocator@4.0`, and `light` can be launched and stay resident on the current runtime;
-- `sensors` exits cleanly as a bounded probe and is treated as a successful oneshot check;
-- `graphics.composer@2.1` is not part of the Android sidecar baseline; that path belongs to the separate Wayland/webOS app work.
-
-### M4: Binder service registration checks
-
-Add clean diagnostics for:
-
-```text
-service list
-hwservice list
-vndservice list
-addService/getService smoke
-FD transfer smoke against real servicemanager
-```
-
-These should be optional diagnostics, not part of the default installer.
-
-Current state:
-
-- `service list` and `service check SERVICE` are stable on the current image;
-- `service call manager 1 s16 activity_task` is a working getService smoke against the real servicemanager;
-- `vndservice list` and `lshal` remain optional diagnostics because they time out on this image and are not stable enough to gate the install path here.
-
-`scripts/binder-registry-smoke.sh` is the dedicated M4 probe.
 
 ### M5: Replace runtime binary patches with source-level fixes
 

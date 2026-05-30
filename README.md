@@ -55,6 +55,17 @@ Linux 4.4.84-229.1.kavir.2
 aarch64
 ```
 
+Latest full install validation:
+
+```text
+2026-05-30
+TV_IP=192.168.2.121
+USB=/media/internal/android-usb
+ANDROID_USB_PART=/dev/sda1
+FORMAT_USB=1
+CONFIRM_FORMAT_USB=YES
+```
+
 Validated control host:
 
 ```text
@@ -128,9 +139,19 @@ Small static aarch64 helper that creates the host-side `zygote` and `usap_pool_p
 
 This avoids depending on webOS init socket activation for zygote.
 
+### `patch-libandroid-runtime-zssystemserver.sh`
+
+Runtime compatibility patcher for the Android userspace libraries used by zygote and `system_server`.
+
+The installer copies this script to the USB sidecar and runs it against the mounted Android rootfs. The current validated flow patches the known blockers in `libandroid_runtime.so`, `libandroid_servers.so`, and `libprocessgroup.so`.
+
+### `try-zygote-start-system-server-v2.sh`
+
+Launch script copied to the USB sidecar. It prepares the zygote/system_server environment, starts the property-service ACK shim, filters VNDK paths out of the zygote/system_server `LD_LIBRARY_PATH`, uses `zygote_socket_wrap`, and verifies that both `zygote64` and `system_server` stay alive.
+
 ### `install.sh`
 
-Single entry point. It builds the module and helper binaries, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, starts the three Android service managers, patches `libandroid_runtime.so` for the current TV kernel/userspace constraints, and starts `zygote64` plus `system_server`.
+Single entry point. It builds the module and helper binaries, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, starts the three Android service managers, patches the Android runtime/server/processgroup libraries for the current TV kernel/userspace constraints, and starts `zygote64` plus `system_server`.
 
 ## Quick start
 
@@ -156,6 +177,8 @@ FORMAT_USB=1 \
 CONFIRM_FORMAT_USB=YES \
 ./install.sh
 ```
+
+This path is destructive for the selected USB partition. The validated run formatted `/dev/sda1` as ext4, mounted it at `/media/internal/android-usb`, downloaded the Waydroid Android 13 arm64-only system/vendor images, and completed with `zygote64` plus `system_server` alive.
 
 Expected final result:
 
@@ -206,7 +229,7 @@ control host
   └── SSH to TV
         ├── optionally format USB ext4
         ├── mount USB at /media/internal/android-usb
-        ├── copy binder.ko and shim
+        ├── copy binder.ko, property shim, zygote wrapper, and launch/patch scripts
         ├── download Android system/vendor images to USB
         ├── extract system.img and vendor.img
         ├── mount system/vendor/rootfs/data/cache/proc/sys/dev
@@ -220,7 +243,7 @@ control host
         ├── start vndservicemanager
         ├── start servicemanager
         ├── start hwservicemanager
-        ├── bind-mount patched libandroid_runtime.so
+        ├── bind-mount patched Android runtime/server/processgroup libraries
         └── start zygote64 with system_server
 ```
 
@@ -318,6 +341,7 @@ The current clean installer validates:
 
 ```text
 USB ext4 storage
+optional USB formatting with explicit confirmation
 Android system.img/vendor.img download and extraction
 Android rootfs assembly on USB
 /system mount
@@ -337,6 +361,13 @@ binder.ko build and load
 /vendor/bin/vndservicemanager alive
 zygote64 alive
 system_server alive
+```
+
+The latest validated run also confirmed the generated Android classpaths from the mounted image metadata:
+
+```text
+BOOTCLASSPATH generated length: 1624
+SYSTEMSERVERCLASSPATH generated length: 792
 ```
 
 A successful run ends with:
@@ -503,12 +534,16 @@ These should be optional diagnostics, not part of the default installer.
 
 ### M5: Replace runtime binary patches with source-level fixes
 
-The installer currently uses a bounded `libandroid_runtime.so` bind-mount patch for the TV-specific blockers found during zygote/system_server bring-up:
+The installer currently uses bounded bind-mount patches for the TV-specific blockers found during zygote/system_server bring-up:
 
 ```text
+libandroid_runtime.so
+libandroid_servers.so
+libprocessgroup.so
 task profile/runtime abort paths
 file-descriptor allowlist/reopen paths
 seccomp filter helpers
+power stats / stats / memtrack startup blockers
 ```
 
 This is acceptable for reproducing the current milestone, but it should eventually become a cleaner compatibility layer or documented source-level Android userspace patch set.

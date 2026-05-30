@@ -92,7 +92,6 @@ probe_one memtrack "/vendor/bin/hw/android.hardware.memtrack@1.0-service"
 probe_one power "/vendor/bin/hw/android.hardware.power@1.0-service.waydroid"
 probe_one graphics_allocator_2_0 "/vendor/bin/hw/android.hardware.graphics.allocator@2.0-service"
 probe_one graphics_allocator_4_0 "/vendor/bin/hw/android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa"
-probe_one graphics_composer_2_1 "/vendor/bin/hw/android.hardware.graphics.composer@2.1-service"
 probe_one sensors "/vendor/bin/hw/android.hardware.sensors@1.0-service.waydroid"
 probe_one light "/vendor/bin/hw/android.hardware.light@2.0-service.waydroid"
 REMOTE

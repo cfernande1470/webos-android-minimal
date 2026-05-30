@@ -546,6 +546,8 @@ Each HAL should be tested as a bounded process first, not as part of a full Andr
 `probe-services.sh` is the first diagnostic for this lane.
 `smoke-hal-services.sh` is the first bounded HAL launch test for this lane.
 
+Graphics and UI are not the final target in this repo. The compositor path should move to the separate [`webos-wayland`](https://github.com/cfernande1470/webos-wayland/) project and a native webOS app named `android` that either launches the Android sidecar or serves as an APK compatibility layer on webOS.
+
 Current probe baseline:
 
 - `service list` returns cleanly;
@@ -557,7 +559,7 @@ Current HAL smoke baseline:
 
 - `memtrack`, `power`, `graphics.allocator@2.0`, `graphics.allocator@4.0`, and `light` can be launched and stay resident on the current runtime;
 - `sensors` exits cleanly as a bounded probe;
-- `graphics.composer@2.1` still fails in the current environment.
+- `graphics.composer@2.1` is not part of the Android sidecar baseline; that path belongs to the separate Wayland/webOS app work.
 
 ### M4: Binder service registration checks
 
@@ -591,7 +593,9 @@ This is acceptable for reproducing the current milestone, but it should eventual
 
 ### M6: Android UI path through native webOS Wayland
 
-Wayland/EGL already works in the separate `webos-wayland` repository. A future UI milestone should investigate how Android rendering can be bridged to the webOS app lifecycle instead of trying to draw from an unmanaged SSH-launched process.
+Wayland/EGL already works in the separate [`webos-wayland`](https://github.com/cfernande1470/webos-wayland/) repository. A future UI milestone should investigate how Android rendering can be bridged to the webOS app lifecycle instead of trying to draw from an unmanaged SSH-launched process.
+
+The webOS application should be called `android`. It can either launch the Android sidecar on demand or act as the compatibility layer that exposes APK installation and Android-side services inside the webOS app lifecycle.
 
 Possible directions:
 
@@ -599,6 +603,8 @@ Possible directions:
 - native webOS host app for display/input;
 - controlled surface bridge;
 - later SurfaceFlinger experiments only after the service/HAL baseline is ready.
+
+Any concrete Wayland/EGL compositor work belongs in [`webos-wayland`](https://github.com/cfernande1470/webos-wayland/), not in this repository.
 
 ### M7: Packaging and recovery
 

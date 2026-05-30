@@ -496,23 +496,30 @@ servicemanager
 hwservicemanager
 ```
 
-## Future milestones
+## Completed milestones
 
 ### M1: Replace property ACK shim
 
-Implement a real minimal Android property-service bridge or mini-init-managed property service.
+The property-service bridge is now in place for the current runtime.
 
-Current state: Android property socket protocol shim with a sidecar property snapshot and a mirrored shared property area for valid property names.
-
-Desired state:
+Current state:
 
 ```text
-setprop/getprop behavior compatible enough for broader Android services
-persistent property area lifecycle
-clean shutdown/restart
+Android property socket protocol shim
+sidecar property snapshot
+mirrored shared property area for valid property names
+validated restart behavior
 ```
 
-Remaining M1 gap: replace the shim with a proper Android property-service bridge or mini-init-managed property service so lifecycle and persistence follow the upstream model more closely.
+Validation:
+
+```text
+setprop/getprop works for valid property names
+accepted writes are visible through Android's shared /dev/__properties__ area
+restart keeps the property bridge working
+```
+
+## Future milestones
 
 ### M2: Make Android init lifecycle explicit
 

@@ -603,7 +603,6 @@ runtime_state property-linkerconfig
 rm -f "$ROOTFS/dev/socket/property_service" /dev/socket/property_service 2>/dev/null || true
 nohup "$SIDE/bin/property_service_ack_shim" \
   "$ROOTFS/dev/socket/property_service" \
-  "$SIDE/run/property_service.props" \
   </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
 echo $! > "$SIDE/run/property_service_ack_shim.pid"
 

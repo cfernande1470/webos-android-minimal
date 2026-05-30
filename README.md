@@ -138,13 +138,13 @@ dist/binder.ko
 
 Minimal static aarch64 helper that creates `/dev/socket/property_service` inside the Android rootfs.
 
-This is not a full Android property service implementation. It understands the Android `PROP_MSG_SETPROP` and `PROP_MSG_SETPROP2` socket protocols, returns Android property-service status codes, and writes the accepted property state to:
+It understands the Android `PROP_MSG_SETPROP` and `PROP_MSG_SETPROP2` socket protocols, returns Android property-service status codes, and writes the accepted property state to:
 
 ```text
-android-sidecar/run/property_service.props
+/dev/__properties__/u:object_r:default_prop:s0
 ```
 
-That is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write, and gives the next debugging step a concrete property snapshot. Valid property names are also mirrored into Android's shared `/dev/__properties__` area so `getprop` can observe them directly.
+That is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write, and gives the next debugging step a concrete property area that Android itself reads back through `getprop`.
 
 ### `src/zygote_socket_wrap.c`
 
@@ -333,9 +333,7 @@ The file exists, but its interpreter does not.
 
 The installer now ensures that `/apex/com.android.runtime/bin/linker64` is visible before starting Android binaries. It validates this with a minimal `toybox true` check and rechecks APEX again immediately before starting the service managers.
 
-## Property service shim
-
-The current property-service support is intentionally small.
+## Property service bridge
 
 `property_service_ack_shim` creates:
 
@@ -343,16 +341,9 @@ The current property-service support is intentionally small.
 /dev/socket/property_service
 ```
 
-inside the Android rootfs, accepts Android 13 property-set socket messages, validates the basic property name/value shape, returns the same numeric success/error codes used by Android init's property service, and records accepted writes in:
+inside the Android rootfs, accepts Android 13 property-set socket messages, validates the basic property name/value shape, returns the same numeric success/error codes used by Android init's property service, and writes the accepted values into Android's shared property area so `getprop` sees them directly.
 
-```text
-/media/internal/android-usb/android-sidecar/run/property_service.props
-```
-
-This is enough for the current service-manager baseline, but it is not a complete Android property service. A future milestone should replace this shim with either:
-
-- a minimal write-through property service that integrates with Android's full property-service lifecycle; or
-- a controlled mini-init that owns property service and service lifecycle correctly.
+This is enough for the current service-manager baseline, and it is the property bridge used by the current bring-up path.
 
 ## What is working now
 
@@ -506,7 +497,6 @@ Current state:
 
 ```text
 Android property socket protocol shim
-sidecar property snapshot
 mirrored shared property area for valid property names
 validated restart behavior
 ```

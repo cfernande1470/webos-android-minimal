@@ -27,7 +27,6 @@ killall -9 property_service_ack_shim property_servic 2>/dev/null || true
 rm -f "$ROOTFS/dev/socket/property_service" /dev/socket/property_service 2>/dev/null || true
 nohup "$SIDE/bin/property_service_ack_shim" \
   "$ROOTFS/dev/socket/property_service" \
-  "$SIDE/run/property_service.props" \
   "$ROOTFS/dev/__properties__/u:object_r:default_prop:s0" \
   </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
 echo $! > "$SIDE/run/property_service_ack_shim.pid"

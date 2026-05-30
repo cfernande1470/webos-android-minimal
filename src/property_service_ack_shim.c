@@ -27,15 +27,6 @@
 #define PROP_ERROR_INVALID_VALUE 0x0014
 #define PROP_ERROR_INVALID_CMD 0x001B
 
-struct prop_entry {
-    char *name;
-    char *value;
-};
-
-static struct prop_entry *props;
-static size_t prop_count;
-static size_t prop_cap;
-static const char *state_path;
 static const char *prop_area_path;
 
 #define PROP_AREA_MAGIC 0x504f5250
@@ -88,18 +79,6 @@ static inline void store_u32(uint32_t *p, uint32_t v) {
 static void die(const char *m) {
     perror(m);
     exit(1);
-}
-
-static void *xrealloc(void *ptr, size_t size) {
-    void *out = realloc(ptr, size);
-    if (!out) die("realloc");
-    return out;
-}
-
-static char *xstrdup(const char *s) {
-    char *out = strdup(s);
-    if (!out) die("strdup");
-    return out;
 }
 
 static int streqn(const char *a, uint32_t alen, const char *b, uint32_t blen) {
@@ -376,76 +355,8 @@ static uint32_t validate_property(const char *name, const char *value) {
     return PROP_SUCCESS;
 }
 
-static int find_prop(const char *name) {
-    for (size_t i = 0; i < prop_count; i++) {
-        if (strcmp(props[i].name, name) == 0) return (int)i;
-    }
-    return -1;
-}
-
 static void remember_property(const char *name, const char *value) {
-    int idx = find_prop(name);
-
-    if (idx >= 0) {
-        free(props[idx].value);
-        props[idx].value = xstrdup(value);
-        sync_property_area_entry(name, value);
-        return;
-    }
-
-    if (prop_count == prop_cap) {
-        prop_cap = prop_cap ? prop_cap * 2 : 64;
-        props = xrealloc(props, prop_cap * sizeof(*props));
-    }
-
-    props[prop_count].name = xstrdup(name);
-    props[prop_count].value = xstrdup(value);
-    prop_count++;
     sync_property_area_entry(name, value);
-}
-
-static void load_state(void) {
-    FILE *f;
-    char line[8192];
-
-    if (!state_path) return;
-    f = fopen(state_path, "r");
-    if (!f) return;
-
-    while (fgets(line, sizeof(line), f)) {
-        char *eq;
-        char *nl = strchr(line, '\n');
-        if (nl) *nl = '\0';
-        if (line[0] == '#' || line[0] == '\0') continue;
-        eq = strchr(line, '=');
-        if (!eq) continue;
-        *eq++ = '\0';
-        if (legal_prop_name(line)) remember_property(line, eq);
-    }
-
-    fclose(f);
-}
-
-static void save_state(void) {
-    char tmp[PATH_MAX];
-    FILE *f;
-
-    if (!state_path) return;
-    snprintf(tmp, sizeof(tmp), "%s.tmp", state_path);
-
-    f = fopen(tmp, "w");
-    if (!f) return;
-
-    fprintf(f, "# webos-android-minimal property-service snapshot\n");
-    for (size_t i = 0; i < prop_count; i++) {
-        fprintf(f, "%s=%s\n", props[i].name, props[i].value);
-    }
-
-    if (fclose(f) == 0) {
-        rename(tmp, state_path);
-    } else {
-        unlink(tmp);
-    }
 }
 
 static void handle_legacy_setprop(int fd) {
@@ -464,7 +375,6 @@ static void handle_legacy_setprop(int fd) {
     result = validate_property(name, value);
     if (result == PROP_SUCCESS) {
         remember_property(name, value);
-        save_state();
         fprintf(stderr, "setprop legacy %s=%s\n", name, value);
     } else {
         fprintf(stderr, "reject legacy setprop %s=%s result=0x%x\n", name, value, result);
@@ -486,7 +396,6 @@ static void handle_setprop2(int fd) {
     result = validate_property(name, value);
     if (result == PROP_SUCCESS) {
         remember_property(name, value);
-        save_state();
         fprintf(stderr, "setprop2 %s=%s\n", name, value);
     } else {
         fprintf(stderr, "reject setprop2 %s=%s result=0x%x\n", name, value, result);
@@ -522,15 +431,12 @@ static void handle_client(int fd) {
 int main(int argc, char **argv) {
     const char *path = argc > 1 ? argv[1] : "/dev/socket/property_service";
 
-    state_path = argc > 2 ? argv[2] : "/tmp/webos-android-minimal.properties";
-    prop_area_path = argc > 3 ? argv[3] : "/dev/__properties__/u:object_r:default_prop:s0";
+    prop_area_path = argc > 2 ? argv[2] : "/dev/__properties__/u:object_r:default_prop:s0";
     signal(SIGPIPE, SIG_IGN);
 
     if (map_property_area() < 0) {
         fprintf(stderr, "warning: property area not available at %s; getprop will stay stale\n", prop_area_path);
     }
-
-    load_state();
 
     int fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (fd < 0) die("socket");
@@ -553,7 +459,7 @@ int main(int argc, char **argv) {
 
     if (listen(fd, 16) < 0) die("listen");
 
-    fprintf(stderr, "property shim listening on %s state=%s\n", path, state_path);
+    fprintf(stderr, "property shim listening on %s area=%s\n", path, prop_area_path);
 
     for (;;) {
         int c = accept(fd, NULL, NULL);

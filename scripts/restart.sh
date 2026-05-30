@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+TV_IP="${TV_IP:-192.168.2.121}"
+USB="${USB:-/media/internal/android-usb}"
+ANDROID_USB_PART="${ANDROID_USB_PART:-/dev/sda1}"
+FORMAT_USB="${FORMAT_USB:-0}"
+CONFIRM_FORMAT_USB="${CONFIRM_FORMAT_USB:-NO}"
+PATCH_ANDROID_SERVERS="${PATCH_ANDROID_SERVERS:-1}"
+
+TV_USER="${TV_USER:-root}"
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+./scripts/stop.sh
+
+TV_IP="$TV_IP" \
+USB="$USB" \
+ANDROID_USB_PART="$ANDROID_USB_PART" \
+FORMAT_USB="$FORMAT_USB" \
+CONFIRM_FORMAT_USB="$CONFIRM_FORMAT_USB" \
+PATCH_ANDROID_SERVERS="$PATCH_ANDROID_SERVERS" \
+TV_USER="$TV_USER" \
+./install.sh

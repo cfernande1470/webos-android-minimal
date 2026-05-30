@@ -98,6 +98,7 @@ scripts/
   build-zygote-socket-wrap.sh
   status.sh
   stop.sh
+  restart.sh
 
 install.sh
 .gitignore
@@ -515,6 +516,8 @@ First step:
 - persist runtime phase markers and pid files so start, stop, and restart are observable without guessing;
 - keep the current controlled bring-up path, then tighten restart semantics before adding a larger init supervisor.
 
+`status.sh`, `stop.sh`, and `restart.sh` now cover that first step.
+
 Future work:
 
 - controlled mini-init;
@@ -588,7 +591,7 @@ Add:
 ./scripts/collect-logs.sh
 ```
 
-`status.sh` and `stop.sh` now exist as the first operational split-out scripts. The remaining recovery helpers are `clean-mounts.sh` and `collect-logs.sh`.
+`status.sh`, `stop.sh`, and `restart.sh` now exist as the first operational split-out scripts. The remaining recovery helpers are `clean-mounts.sh` and `collect-logs.sh`.
 
 ## Troubleshooting
 

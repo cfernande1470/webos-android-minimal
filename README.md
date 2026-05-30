@@ -156,7 +156,7 @@ This avoids depending on webOS init socket activation for zygote.
 
 Runtime compatibility patcher for the Android userspace libraries used by zygote and `system_server`.
 
-The installer copies this script to the USB sidecar and runs it against the mounted Android rootfs. The current validated flow patches the known blockers in `libandroid_runtime.so`, `libandroid_servers.so`, and `libprocessgroup.so`.
+The installer copies this script to the USB sidecar and runs it against the mounted Android rootfs. The current validated flow patches the known blockers in `libandroid_runtime.so` and `libprocessgroup.so`. `libandroid_servers.so` is left unmodified by default because the current runtime starts cleanly without that patch; `PATCH_ANDROID_SERVERS=1` keeps the old override available if needed again.
 
 ### `try-zygote-start-system-server-v2.sh`
 
@@ -164,7 +164,7 @@ Launch script copied to the USB sidecar. It prepares the zygote/system_server en
 
 ### `install.sh`
 
-Single entry point. It builds the module and helper binaries, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, starts the three Android service managers, patches the Android runtime/server/processgroup libraries for the current TV kernel/userspace constraints, and starts `zygote64` plus `system_server`.
+Single entry point. It builds the module and helper binaries, optionally formats the USB partition, downloads/extracts Android images, mounts the Android rootfs, loads Binder, creates the three device nodes, fixes APEX/linker visibility, prepares linkerconfig/property state, starts the three Android service managers, patches the Android runtime and processgroup libraries for the current TV kernel/userspace constraints, and starts `zygote64` plus `system_server`.
 
 ## Quick start
 
@@ -590,7 +590,6 @@ The installer currently uses bounded bind-mount patches for the TV-specific bloc
 
 ```text
 libandroid_runtime.so
-libandroid_servers.so
 libprocessgroup.so
 task profile/runtime abort paths
 file-descriptor allowlist/reopen paths
@@ -598,7 +597,9 @@ seccomp filter helpers
 power stats / stats / memtrack startup blockers
 ```
 
-This is acceptable for reproducing the current milestone, but it should eventually become a cleaner compatibility layer or documented source-level Android userspace patch set.
+`libandroid_servers.so` is no longer part of the default patch path.
+
+This is acceptable for reproducing the current milestone, but it should eventually become a cleaner compatibility layer or documented source-level Android userspace patch set. The first cleanup step is already done: `libandroid_servers.so` no longer needs a patch in the default path on the current image.
 
 ### M6: Android UI path through native webOS Wayland
 

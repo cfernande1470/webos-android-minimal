@@ -12,7 +12,7 @@ LOGDIR="$SIDE/logs"
 ANDROID_USB_PART="${ANDROID_USB_PART:-/dev/sda1}"
 FORMAT_USB="${FORMAT_USB:-0}"
 CONFIRM_FORMAT_USB="${CONFIRM_FORMAT_USB:-NO}"
-PATCH_ANDROID_SERVERS="${PATCH_ANDROID_SERVERS:-1}"
+PATCH_ANDROID_SERVERS="${PATCH_ANDROID_SERVERS:-0}"
 
 SYSTEM_URL="${SYSTEM_URL:-https://sourceforge.net/projects/waydroid/files/images/system/lineage/waydroid_arm64_only/lineage-20.0-20260403-VANILLA-waydroid_arm64_only-system.zip/download}"
 VENDOR_URL="${VENDOR_URL:-https://sourceforge.net/projects/waydroid/files/images/vendor/waydroid_arm64_only/lineage-20.0-20260403-MAINLINE-waydroid_arm64_only-vendor.zip/download}"

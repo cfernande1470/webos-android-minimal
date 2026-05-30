@@ -96,6 +96,8 @@ scripts/
   build-binder.sh
   build-property-shim.sh
   build-zygote-socket-wrap.sh
+  clean-mounts.sh
+  collect-logs.sh
   status.sh
   stop.sh
   restart.sh
@@ -587,11 +589,12 @@ Add:
 ```text
 ./scripts/status.sh
 ./scripts/stop.sh
+./scripts/restart.sh
 ./scripts/clean-mounts.sh
 ./scripts/collect-logs.sh
 ```
 
-`status.sh`, `stop.sh`, and `restart.sh` now exist as the first operational split-out scripts. The remaining recovery helpers are `clean-mounts.sh` and `collect-logs.sh`.
+`status.sh`, `stop.sh`, `restart.sh`, `clean-mounts.sh`, and `collect-logs.sh` now exist as the first operational split-out scripts.
 
 ## Troubleshooting
 

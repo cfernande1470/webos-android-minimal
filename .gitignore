@@ -1,0 +1,23 @@
+build/
+dist/
+*.log
+
+# Generated artifacts
+/build/
+/dist/
+/work-*/
+/zygote-symbols*/
+/*.out
+/*.log
+/logs/
+/tmp/
+
+# Generated artifacts
+/build/
+/dist/
+/work-*/
+/zygote-symbols*/
+/*.out
+/*.log
+/logs/
+/tmp/

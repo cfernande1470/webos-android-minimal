@@ -98,6 +98,7 @@ scripts/
   build-zygote-socket-wrap.sh
   clean-mounts.sh
   collect-logs.sh
+  probe-services.sh
   status.sh
   stop.sh
   restart.sh
@@ -540,6 +541,15 @@ input-related services
 ```
 
 Each HAL should be tested as a bounded process first, not as part of a full Android boot.
+
+`probe-services.sh` is the first diagnostic for this lane.
+
+Current probe baseline:
+
+- `service list` returns cleanly;
+- `cmd -l` returns cleanly where available;
+- `lshal` is not yet a stable probe on this image;
+- the current runtime does not yet expose the targeted `memtrack`, `power`, `graphics`, or `input` strings in the probe output.
 
 ### M4: Binder service registration checks
 

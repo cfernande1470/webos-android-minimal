@@ -144,7 +144,7 @@ This is not a full Android property service implementation. It understands the A
 android-sidecar/run/property_service.props
 ```
 
-That is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write, and gives the next debugging step a concrete property snapshot. It still does not update Android's shared `/dev/__properties__` property area.
+That is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write, and gives the next debugging step a concrete property snapshot. Valid property names are also mirrored into Android's shared `/dev/__properties__` area so `getprop` can observe them directly.
 
 ### `src/zygote_socket_wrap.c`
 
@@ -351,7 +351,7 @@ inside the Android rootfs, accepts Android 13 property-set socket messages, vali
 
 This is enough for the current service-manager baseline, but it is not a complete Android property service. A future milestone should replace this shim with either:
 
-- a minimal write-through property service that updates Android's shared property area; or
+- a minimal write-through property service that integrates with Android's full property-service lifecycle; or
 - a controlled mini-init that owns property service and service lifecycle correctly.
 
 ## What is working now
@@ -502,7 +502,7 @@ hwservicemanager
 
 Implement a real minimal Android property-service bridge or mini-init-managed property service.
 
-Current state: Android property socket protocol shim with a sidecar property snapshot.
+Current state: Android property socket protocol shim with a sidecar property snapshot and a mirrored shared property area for valid property names.
 
 Desired state:
 
@@ -512,7 +512,7 @@ persistent property area lifecycle
 clean shutdown/restart
 ```
 
-Remaining M1 gap: update Android's shared `/dev/__properties__` area so `getprop` observes property writes directly, instead of only recording them in the sidecar snapshot.
+Remaining M1 gap: replace the shim with a proper Android property-service bridge or mini-init-managed property service so lifecycle and persistence follow the upstream model more closely.
 
 ### M2: Make Android init lifecycle explicit
 

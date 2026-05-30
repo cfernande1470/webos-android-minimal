@@ -28,11 +28,12 @@ rm -f "$ROOTFS/dev/socket/property_service" /dev/socket/property_service 2>/dev/
 nohup "$SIDE/bin/property_service_ack_shim" \
   "$ROOTFS/dev/socket/property_service" \
   "$SIDE/run/property_service.props" \
+  "$ROOTFS/dev/__properties__/u:object_r:default_prop:s0" \
   </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
 echo $! > "$SIDE/run/property_service_ack_shim.pid"
 sleep 1
 ls -l "$ROOTFS/dev/socket/property_service" || exit 1
-chroot "$ROOTFS" /system/bin/setprop webos.android_minimal.property_shim ok 2>/dev/null \
+chroot "$ROOTFS" /system/bin/setprop webos.test ok 2>/dev/null \
   || exit 1
 
 echo

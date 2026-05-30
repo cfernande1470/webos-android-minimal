@@ -99,6 +99,7 @@ scripts/
   clean-mounts.sh
   collect-logs.sh
   probe-services.sh
+  smoke-hal-services.sh
   status.sh
   stop.sh
   restart.sh
@@ -543,6 +544,7 @@ input-related services
 Each HAL should be tested as a bounded process first, not as part of a full Android boot.
 
 `probe-services.sh` is the first diagnostic for this lane.
+`smoke-hal-services.sh` is the first bounded HAL launch test for this lane.
 
 Current probe baseline:
 
@@ -550,6 +552,12 @@ Current probe baseline:
 - `cmd -l` returns cleanly where available;
 - `lshal` is not yet a stable probe on this image;
 - the current runtime does not yet expose the targeted `memtrack`, `power`, `graphics`, or `input` strings in the probe output.
+
+Current HAL smoke baseline:
+
+- `memtrack`, `power`, `graphics.allocator@2.0`, `graphics.allocator@4.0`, and `light` can be launched and stay resident on the current runtime;
+- `sensors` exits cleanly as a bounded probe;
+- `graphics.composer@2.1` still fails in the current environment.
 
 ### M4: Binder service registration checks
 

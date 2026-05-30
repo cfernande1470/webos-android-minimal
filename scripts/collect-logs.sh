@@ -36,7 +36,11 @@ fi
   cat "$SIDE/run/runtime.state" 2>/dev/null || true
   echo
   echo "--- pidof snapshot ---"
-  for n in property_service_ack_shim servicemanager hwservicemanager vndservicemanager zygote64 app_process64 system_server zygote_socket_wrap; do
+  for n in property_service_ack_shim servicemanager hwservicemanager vndservicemanager zygote64 app_process64 system_server zygote_socket_wrap \
+    android.hardware.memtrack@1.0-service android.hardware.power@1.0-service.waydroid \
+    android.hardware.graphics.allocator@2.0-service android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa \
+    android.hardware.graphics.composer@2.1-service android.hardware.sensors@1.0-service.waydroid \
+    android.hardware.light@2.0-service.waydroid; do
     p="$(pidof "$n" 2>/dev/null || true)"
     [ -n "$p" ] && echo "$n: $p"
   done

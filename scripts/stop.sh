@@ -44,6 +44,13 @@ kill_name hwservicemanager
 kill_name vndservicemanager
 kill_name property_service_ack_shim
 kill_name zygote_socket_wrap
+kill_name android.hardware.memtrack@1.0-service
+kill_name android.hardware.power@1.0-service.waydroid
+kill_name android.hardware.graphics.allocator@2.0-service
+kill_name android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa
+kill_name android.hardware.graphics.composer@2.1-service
+kill_name android.hardware.sensors@1.0-service.waydroid
+kill_name android.hardware.light@2.0-service.waydroid
 
 kill_pidfile "$SIDE/run/system_server.pid"
 kill_pidfile "$SIDE/run/zygote64.pid"
@@ -63,6 +70,13 @@ kill_name hwservicemanager
 kill_name vndservicemanager
 kill_name property_service_ack_shim
 kill_name zygote_socket_wrap
+kill_name android.hardware.memtrack@1.0-service
+kill_name android.hardware.power@1.0-service.waydroid
+kill_name android.hardware.graphics.allocator@2.0-service
+kill_name android.hardware.graphics.allocator@4.0-service.minigbm_gbm_mesa
+kill_name android.hardware.graphics.composer@2.1-service
+kill_name android.hardware.sensors@1.0-service.waydroid
+kill_name android.hardware.light@2.0-service.waydroid
 
 rm -f \
   "$SIDE/run/property_service_ack_shim.pid" \

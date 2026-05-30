@@ -13,6 +13,8 @@ ANDROID_USB_PART="${ANDROID_USB_PART:-/dev/sda1}"
 FORMAT_USB="${FORMAT_USB:-0}"
 CONFIRM_FORMAT_USB="${CONFIRM_FORMAT_USB:-NO}"
 PATCH_ANDROID_SERVERS="${PATCH_ANDROID_SERVERS:-0}"
+PATCH_ANDROID_RUNTIME="${PATCH_ANDROID_RUNTIME:-1}"
+PATCH_LIBPROCESSGROUP="${PATCH_LIBPROCESSGROUP:-1}"
 
 SYSTEM_URL="${SYSTEM_URL:-https://sourceforge.net/projects/waydroid/files/images/system/lineage/waydroid_arm64_only/lineage-20.0-20260403-VANILLA-waydroid_arm64_only-system.zip/download}"
 VENDOR_URL="${VENDOR_URL:-https://sourceforge.net/projects/waydroid/files/images/vendor/waydroid_arm64_only/lineage-20.0-20260403-MAINLINE-waydroid_arm64_only-vendor.zip/download}"
@@ -218,7 +220,7 @@ remote "cat > '$SIDE/bin/try-zygote-start-system-server-v2.sh' && chmod +x '$SID
 
 log "instalar Android USB"
 ssh "$TV_USER@$TV_IP" \
-  "USB='$USB' ROOTFS='$ROOTFS' SIDE='$SIDE' LOGDIR='$LOGDIR' SYSTEM_URL='$SYSTEM_URL' VENDOR_URL='$VENDOR_URL' PATCH_ANDROID_SERVERS='$PATCH_ANDROID_SERVERS' sh -s" <<'REMOTE'
+  "USB='$USB' ROOTFS='$ROOTFS' SIDE='$SIDE' LOGDIR='$LOGDIR' SYSTEM_URL='$SYSTEM_URL' VENDOR_URL='$VENDOR_URL' PATCH_ANDROID_SERVERS='$PATCH_ANDROID_SERVERS' PATCH_ANDROID_RUNTIME='$PATCH_ANDROID_RUNTIME' PATCH_LIBPROCESSGROUP='$PATCH_LIBPROCESSGROUP' sh -s" <<'REMOTE'
 set -eu
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
@@ -992,63 +994,71 @@ while mount | grep -q " $RUNTIME_TGT "; do
   umount "$RUNTIME_TGT" 2>/dev/null || break
 done
 
-echo -n "libandroid_runtime source ELF magic before patch: "
-od -An -tx1 -N 4 "$RUNTIME_TGT"
+if [ "${PATCH_ANDROID_RUNTIME:-1}" = "1" ]; then
+  echo -n "libandroid_runtime source ELF magic before patch: "
+  od -An -tx1 -N 4 "$RUNTIME_TGT"
 
-USB="$USB" sh "$SIDE/bin/patch-libandroid-runtime-zssystemserver.sh" \
-  >"$LOGDIR/patch-libandroid-runtime-zssystemserver.log" 2>&1 || {
-    cat "$LOGDIR/patch-libandroid-runtime-zssystemserver.log" 2>/dev/null || true
-    die "falló patch libandroid_runtime para zygote/system_server"
-  }
-
-echo "--- patch libprocessgroup scheduling blockers ---"
-PG_TGT="$ROOTFS/system/lib64/libprocessgroup.so"
-PG_PATCH="$SIDE/overrides/libprocessgroup.sched.so"
-mkdir -p "$SIDE/overrides"
-
-while mount | grep -q " $PG_TGT "; do
-  umount "$PG_TGT" 2>/dev/null || break
-done
-
-echo -n "libprocessgroup source ELF magic: "
-od -An -tx1 -N 4 "$PG_TGT"
-
-PG_MAGIC="$(od -An -tx1 -N 4 "$PG_TGT" | tr -d " \n")"
-if [ "$PG_MAGIC" != "7f454c46" ]; then
-  die "source libprocessgroup.so no es ELF; refusing to patch"
+  USB="$USB" sh "$SIDE/bin/patch-libandroid-runtime-zssystemserver.sh" \
+    >"$LOGDIR/patch-libandroid-runtime-zssystemserver.log" 2>&1 || {
+      cat "$LOGDIR/patch-libandroid-runtime-zssystemserver.log" 2>/dev/null || true
+      die "falló patch libandroid_runtime para zygote/system_server"
+    }
+else
+  echo "--- skip libandroid_runtime patch (PATCH_ANDROID_RUNTIME=0; Codex minimal path) ---"
 fi
 
-rm -f "$PG_PATCH"
-cp "$PG_TGT" "$PG_PATCH" \
-  || die "no pude copiar libprocessgroup.so"
-chmod 644 "$PG_PATCH"
+if [ "${PATCH_LIBPROCESSGROUP:-1}" = "1" ]; then
+  echo "--- patch libprocessgroup scheduling blockers ---"
+  PG_TGT="$ROOTFS/system/lib64/libprocessgroup.so"
+  PG_PATCH="$SIDE/overrides/libprocessgroup.sched.so"
+  mkdir -p "$SIDE/overrides"
 
-patch_pg() {
-  off="$1"
-  bytes="$2"
-  label="$3"
-  echo -n "$label before @ $off: "
-  od -An -tx1 -j "$((off))" -N 8 "$PG_PATCH"
-  printf "$bytes" | dd of="$PG_PATCH" bs=1 seek="$((off))" conv=notrunc 2>/dev/null
-  echo -n "$label after  @ $off: "
-  od -An -tx1 -j "$((off))" -N 8 "$PG_PATCH"
-}
+  while mount | grep -q " $PG_TGT "; do
+    umount "$PG_TGT" 2>/dev/null || break
+  done
 
-# AArch64: mov w0,#1; ret for boolean success.
-patch_pg 0x2b4ac '\040\000\200\122\300\003\137\326' "SetProcessProfiles"
-patch_pg 0x2b4f4 '\040\000\200\122\300\003\137\326' "SetProcessProfilesCached"
-patch_pg 0x2b53c '\040\000\200\122\300\003\137\326' "SetTaskProfiles"
-patch_pg 0x34504 '\040\000\200\122\300\003\137\326' "TaskProfiles::SetProcessProfiles"
-patch_pg 0x34718 '\040\000\200\122\300\003\137\326' "TaskProfiles::SetTaskProfiles"
+  echo -n "libprocessgroup source ELF magic: "
+  od -An -tx1 -N 4 "$PG_TGT"
 
-# AArch64: mov w0,#0; ret for int success.
-patch_pg 0x2ec1c '\000\000\200\122\300\003\137\326' "set_cpuset_policy"
-patch_pg 0x2efb8 '\000\000\200\122\300\003\137\326' "set_sched_policy"
+  PG_MAGIC="$(od -An -tx1 -N 4 "$PG_TGT" | tr -d " \n")"
+  if [ "$PG_MAGIC" != "7f454c46" ]; then
+    die "source libprocessgroup.so no es ELF; refusing to patch"
+  fi
 
-mount --bind "$PG_PATCH" "$PG_TGT" \
-  || die "no pude montar libprocessgroup parcheado"
+  rm -f "$PG_PATCH"
+  cp "$PG_TGT" "$PG_PATCH" \
+    || die "no pude copiar libprocessgroup.so"
+  chmod 644 "$PG_PATCH"
 
-echo "LIBPROCESSGROUP_SCHED_OK"
+  patch_pg() {
+    off="$1"
+    bytes="$2"
+    label="$3"
+    echo -n "$label before @ $off: "
+    od -An -tx1 -j "$((off))" -N 8 "$PG_PATCH"
+    printf "$bytes" | dd of="$PG_PATCH" bs=1 seek="$((off))" conv=notrunc 2>/dev/null
+    echo -n "$label after  @ $off: "
+    od -An -tx1 -j "$((off))" -N 8 "$PG_PATCH"
+  }
+
+  # AArch64: mov w0,#1; ret for boolean success.
+  patch_pg 0x2b4ac '\040\000\200\122\300\003\137\326' "SetProcessProfiles"
+  patch_pg 0x2b4f4 '\040\000\200\122\300\003\137\326' "SetProcessProfilesCached"
+  patch_pg 0x2b53c '\040\000\200\122\300\003\137\326' "SetTaskProfiles"
+  patch_pg 0x34504 '\040\000\200\122\300\003\137\326' "TaskProfiles::SetProcessProfiles"
+  patch_pg 0x34718 '\040\000\200\122\300\003\137\326' "TaskProfiles::SetTaskProfiles"
+
+  # AArch64: mov w0,#0; ret for int success.
+  patch_pg 0x2ec1c '\000\000\200\122\300\003\137\326' "set_cpuset_policy"
+  patch_pg 0x2efb8 '\000\000\200\122\300\003\137\326' "set_sched_policy"
+
+  mount --bind "$PG_PATCH" "$PG_TGT" \
+    || die "no pude montar libprocessgroup parcheado"
+
+  echo "LIBPROCESSGROUP_SCHED_OK"
+else
+  echo "--- skip libprocessgroup patch (PATCH_LIBPROCESSGROUP=0; Codex minimal path) ---"
+fi
 
 if [ "${PATCH_ANDROID_SERVERS:-0}" = "1" ]; then
 echo "--- patch libandroid_servers zygote/system_server blockers ---"

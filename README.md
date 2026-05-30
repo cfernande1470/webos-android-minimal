@@ -156,7 +156,9 @@ This avoids depending on webOS init socket activation for zygote.
 
 Runtime compatibility patcher for the Android userspace libraries used by zygote and `system_server`.
 
-The installer copies this script to the USB sidecar and runs it against the mounted Android rootfs. The current validated flow patches the known blockers in `libandroid_runtime.so` and `libprocessgroup.so`. `libandroid_servers.so` is left unmodified by default because the current runtime starts cleanly without that patch; `PATCH_ANDROID_SERVERS=1` keeps the old override available if needed again.
+The installer copies this script to the USB sidecar and runs it against the mounted Android rootfs. The current validated flow still needs the `libandroid_runtime.so` and `libprocessgroup.so` patches. `libandroid_servers.so` is left unmodified by default because the current runtime starts cleanly without that patch; `PATCH_ANDROID_SERVERS=1` keeps the old override available if needed again.
+
+`PATCH_ANDROID_RUNTIME=0` and `PATCH_LIBPROCESSGROUP=0` are diagnostic switches only. On the current image, disabling either one causes `zygote64` to abort before `system_server` stays alive.
 
 ### `try-zygote-start-system-server-v2.sh`
 
@@ -597,7 +599,7 @@ seccomp filter helpers
 power stats / stats / memtrack startup blockers
 ```
 
-`libandroid_servers.so` is no longer part of the default patch path.
+`libandroid_servers.so` is no longer part of the default patch path. The runtime and processgroup patches remain required on the current image.
 
 This is acceptable for reproducing the current milestone, but it should eventually become a cleaner compatibility layer or documented source-level Android userspace patch set. The first cleanup step is already done: `libandroid_servers.so` no longer needs a patch in the default path on the current image.
 

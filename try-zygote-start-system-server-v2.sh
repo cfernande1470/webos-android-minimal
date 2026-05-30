@@ -4,9 +4,11 @@ SIDE="${SIDE:-$USB/android-sidecar}"
 LOGDIR="${LOGDIR:-$SIDE/logs}"
 WRAP="${WRAP:-$SIDE/bin/zygote_socket_wrap}"
 
-mkdir -p "$LOGDIR"
+mkdir -p "$LOGDIR" "$SIDE/run"
+runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
 
 echo "--- cleanup old zygotes/wrappers ---"
+runtime_state cleanup
 killall -9 ptrace_bt_wrap ptrace_fatal_msg_wrap app_process64 zygote64 system_server zygote_socket_wrap 2>/dev/null || true
 for name in zygote64 app_process64 system_server app_process zygote_socket_wrap; do
   pids="$(pidof "$name" 2>/dev/null || true)"
@@ -17,13 +19,17 @@ rm -f "$ROOTFS/dev/socket/zygote" "$ROOTFS/dev/socket/usap_pool_primary" 2>/dev/
 
 echo
 echo "--- property service shim ---"
+runtime_state property-shim
 mkdir -p "$ROOTFS/dev/socket" /dev/socket
 killall property_service_ack_shim property_servic 2>/dev/null || true
 sleep 1
 killall -9 property_service_ack_shim property_servic 2>/dev/null || true
 rm -f "$ROOTFS/dev/socket/property_service" /dev/socket/property_service 2>/dev/null || true
-nohup "$SIDE/bin/property_service_ack_shim" "$ROOTFS/dev/socket/property_service" \
+nohup "$SIDE/bin/property_service_ack_shim" \
+  "$ROOTFS/dev/socket/property_service" \
+  "$SIDE/run/property_service.props" \
   </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
+echo $! > "$SIDE/run/property_service_ack_shim.pid"
 sleep 1
 ls -l "$ROOTFS/dev/socket/property_service" || exit 1
 chroot "$ROOTFS" /system/bin/setprop webos.android_minimal.property_shim ok 2>/dev/null \
@@ -31,6 +37,7 @@ chroot "$ROOTFS" /system/bin/setprop webos.android_minimal.property_shim ok 2>/d
 
 echo
 echo "--- sanity patches ---"
+runtime_state patching
 TGT="$ROOTFS/system/lib64/libandroid_runtime.so"
 echo -n "storage abort call @ 0x1ca198, should be 1f 20 03 d5: "
 od -An -tx1 -j $((0x1ca198)) -N 4 "$TGT"
@@ -57,6 +64,7 @@ od -An -tx1 -j $((0x1d9afc)) -N 8 "$TGT"
 
 echo
 echo "--- classpath ---"
+runtime_state classpath
 ENVFILE="$ROOTFS/data/system/environ/classpath"
 
 if [ ! -s "$ENVFILE" ]; then
@@ -126,6 +134,7 @@ LOG="$LOGDIR/zygote64.start-system-server.log"
 
 echo
 echo "--- start zygote + system_server ---"
+runtime_state start
 
 LD_PATH="/system/lib64:/system_ext/lib64:/product/lib64"
 LD_PATH="$LD_PATH:/apex/com.android.art/lib64"
@@ -186,6 +195,7 @@ nohup env -i \
       --abi-list=arm64-v8a \
       start-system-server \
   >"$LOG" 2>&1 &
+echo $! > "$SIDE/run/zygote_socket_wrap.pid"
 
 i=0
 while [ "$i" -lt 45 ]; do
@@ -193,6 +203,10 @@ while [ "$i" -lt 45 ]; do
   i=$((i + 1))
   sleep 1
 done
+
+pidof zygote64 >/dev/null 2>&1 && pidof zygote64 > "$SIDE/run/zygote64.pid" || true
+pidof system_server >/dev/null 2>&1 && pidof system_server > "$SIDE/run/system_server.pid" || true
+runtime_state complete
 
 echo
 echo "--- pids ---"

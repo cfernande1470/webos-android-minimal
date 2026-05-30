@@ -74,8 +74,12 @@ ssh "$TV_USER@$TV_IP" \
 set -eu
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
+runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
 
+SIDE="$USB/android-sidecar"
 mkdir -p "$USB"
+mkdir -p "$SIDE/run"
+runtime_state prepare-usb
 
 echo "--- block devices ---"
 cat /proc/partitions || true
@@ -219,6 +223,7 @@ set -eu
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
 log(){ printf '\n-- %s --\n' "$*"; }
+runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
 
 DOWN="$USB/android-downloads"
 IMAGES="$USB/android-images"
@@ -592,9 +597,13 @@ mknod "$ROOTFS/dev/vndbinder" c 10 "$VNDBINDER_MINOR"
 chmod 666 "$ROOTFS/dev/binder" "$ROOTFS/dev/hwbinder" "$ROOTFS/dev/vndbinder"
 
 log "property/linkerconfig"
+runtime_state property-linkerconfig
 rm -f "$ROOTFS/dev/socket/property_service" /dev/socket/property_service 2>/dev/null || true
-nohup "$SIDE/bin/property_service_ack_shim" "$ROOTFS/dev/socket/property_service" \
+nohup "$SIDE/bin/property_service_ack_shim" \
+  "$ROOTFS/dev/socket/property_service" \
+  "$SIDE/run/property_service.props" \
   </dev/null >"$LOGDIR/property_service_ack_shim.log" 2>&1 &
+echo $! > "$SIDE/run/property_service_ack_shim.pid"
 
 sleep 1
 [ -S "$ROOTFS/dev/socket/property_service" ] || die "no se creó property_service socket"
@@ -897,6 +906,7 @@ echo "$SSCP" | grep -q '/system/framework/services.jar' \
   || die "SYSTEMSERVERCLASSPATH no contiene services.jar"
 
 log "service managers"
+runtime_state service-managers
 
 
 
@@ -967,6 +977,7 @@ fi
 echo FINAL_USB_3DOMAIN_BINDER_OK
 
 log "zygote/system_server"
+runtime_state zygote-system-server
 
 echo "PATCH_ANDROID_SERVERS=$PATCH_ANDROID_SERVERS"
 
@@ -1120,6 +1131,7 @@ if ! pidof system_server >/dev/null 2>&1; then
 fi
 
 echo FINAL_ANDROID_ZYGOTE_SYSTEM_SERVER_OK
+runtime_state complete
 REMOTE
 
 echo

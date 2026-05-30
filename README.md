@@ -62,8 +62,7 @@ Latest full install validation:
 TV_IP=192.168.2.121
 USB=/media/internal/android-usb
 ANDROID_USB_PART=/dev/sda1
-FORMAT_USB=1
-CONFIRM_FORMAT_USB=YES
+FORMAT_USB=0
 ```
 
 Validated control host:
@@ -129,9 +128,15 @@ dist/binder.ko
 
 ### `src/property_service_ack_shim.c`
 
-Minimal static aarch64 helper that creates `/dev/socket/property_service` inside the Android rootfs and ACKs property writes.
+Minimal static aarch64 helper that creates `/dev/socket/property_service` inside the Android rootfs.
 
-This is not a full Android property service implementation. It is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write.
+This is not a full Android property service implementation. It understands the Android `PROP_MSG_SETPROP` and `PROP_MSG_SETPROP2` socket protocols, returns Android property-service status codes, and writes the accepted property state to:
+
+```text
+android-sidecar/run/property_service.props
+```
+
+That is enough for the current service-manager bring-up path, especially the `hwservicemanager.ready` property write, and gives the next debugging step a concrete property snapshot. It still does not update Android's shared `/dev/__properties__` property area.
 
 ### `src/zygote_socket_wrap.c`
 
@@ -328,11 +333,15 @@ The current property-service support is intentionally small.
 /dev/socket/property_service
 ```
 
-inside the Android rootfs and returns success for property writes.
+inside the Android rootfs, accepts Android 13 property-set socket messages, validates the basic property name/value shape, returns the same numeric success/error codes used by Android init's property service, and records accepted writes in:
+
+```text
+/media/internal/android-usb/android-sidecar/run/property_service.props
+```
 
 This is enough for the current service-manager baseline, but it is not a complete Android property service. A future milestone should replace this shim with either:
 
-- a minimal write-through property service compatible with Android 13 property protocols; or
+- a minimal write-through property service that updates Android's shared property area; or
 - a controlled mini-init that owns property service and service lifecycle correctly.
 
 ## What is working now
@@ -483,7 +492,7 @@ hwservicemanager
 
 Implement a real minimal Android property-service bridge or mini-init-managed property service.
 
-Current state: ACK-only shim.
+Current state: Android property socket protocol shim with a sidecar property snapshot.
 
 Desired state:
 
@@ -493,9 +502,16 @@ persistent property area lifecycle
 clean shutdown/restart
 ```
 
+Remaining M1 gap: update Android's shared `/dev/__properties__` area so `getprop` observes property writes directly, instead of only recording them in the sidecar snapshot.
+
 ### M2: Make Android init lifecycle explicit
 
 Current script uses only enough Android init behavior to seed property/linker state.
+
+First step:
+
+- persist runtime phase markers and pid files so start, stop, and restart are observable without guessing;
+- keep the current controlled bring-up path, then tighten restart semantics before adding a larger init supervisor.
 
 Future work:
 

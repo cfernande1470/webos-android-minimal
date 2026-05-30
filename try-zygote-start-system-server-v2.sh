@@ -5,7 +5,7 @@ LOGDIR="${LOGDIR:-$SIDE/logs}"
 WRAP="${WRAP:-$SIDE/bin/zygote_socket_wrap}"
 
 mkdir -p "$LOGDIR" "$SIDE/run"
-runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
+runtime_state(){ . "$SIDE/bin/runtime-state.sh"; runtime_state_write "$@"; }
 
 echo "--- cleanup old zygotes/wrappers ---"
 runtime_state cleanup

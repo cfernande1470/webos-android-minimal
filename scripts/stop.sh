@@ -15,6 +15,20 @@ set -eu
 say(){ printf '%s\n' "$*"; }
 state_file="$SIDE/run/runtime.state"
 
+write_runtime_state() {
+  phase="${1:-stopped}"
+  tmp="$state_file.tmp.$$"
+  {
+    printf 'phase=%s\n' "$phase"
+    printf 'updated_at_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    shift || true
+    for kv in "$@"; do
+      printf '%s\n' "$kv"
+    done
+  } > "$tmp"
+  mv "$tmp" "$state_file"
+}
+
 kill_pidfile() {
   file="$1"
   if [ ! -s "$file" ]; then
@@ -101,6 +115,6 @@ for mp in $(awk -v p="$SIDE/" '$2 ~ "^"p {print $2}' /proc/mounts | sort -r); do
   umount -l "$mp" 2>/dev/null || true
 done
 
-printf 'phase=stopped\n' > "$state_file"
+write_runtime_state stopped stopped_by=stop.sh
 say "stopped"
 REMOTE

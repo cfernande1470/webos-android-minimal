@@ -522,6 +522,8 @@ First step:
 
 `status.sh`, `stop.sh`, and `restart.sh` now cover that first step.
 
+Current lifecycle state also records `updated_at_utc` in `runtime.state` and appends a phase timeline in `runtime.timeline`, so you can see the last transition sequence directly from the sidecar.
+
 Future work:
 
 - controlled mini-init;

@@ -15,6 +15,7 @@ set -eu
 
 say(){ printf '%s\n' "$*"; }
 state_file="$SIDE/run/runtime.state"
+timeline_file="$SIDE/run/runtime.timeline"
 
 show_pidfile() {
   label="$1"
@@ -32,7 +33,18 @@ show_pidfile() {
   fi
 }
 
-say "runtime.state: $(cat "$state_file" 2>/dev/null || echo missing)"
+if [ -r "$state_file" ]; then
+  say "--- runtime.state ---"
+  cat "$state_file"
+else
+  say "runtime.state: missing"
+fi
+
+if [ -r "$timeline_file" ]; then
+  say "--- runtime.timeline (tail) ---"
+  tail -n 20 "$timeline_file"
+fi
+
 say "--- pid files ---"
 show_pidfile property_service_ack_shim "$SIDE/run/property_service_ack_shim.pid"
 show_pidfile servicemanager "$SIDE/run/servicemanager.pid"

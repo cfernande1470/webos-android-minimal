@@ -40,12 +40,17 @@ SHIM="$ROOT/build/property_service_ack_shim-aarch64-static"
 ZYGOTE_WRAP="$ROOT/build/zygote_socket_wrap-aarch64-static"
 RUNTIME_PATCH="$ROOT/patch-libandroid-runtime-zssystemserver.sh"
 ZYGOTE_LAUNCH="$ROOT/try-zygote-start-system-server-v2.sh"
+RUNTIME_STATE_LIB="$ROOT/scripts/runtime-state.sh"
 
 test -f "$KO" || die "no existe $KO"
 test -f "$SHIM" || die "no existe $SHIM"
 test -f "$ZYGOTE_WRAP" || die "no existe $ZYGOTE_WRAP"
 test -f "$RUNTIME_PATCH" || die "no existe $RUNTIME_PATCH"
 test -f "$ZYGOTE_LAUNCH" || die "no existe $ZYGOTE_LAUNCH"
+test -f "$RUNTIME_STATE_LIB" || die "no existe $RUNTIME_STATE_LIB"
+
+remote "mkdir -p '$SIDE/bin'"
+remote "cat > '$SIDE/bin/runtime-state.sh' && chmod +x '$SIDE/bin/runtime-state.sh'" < "$RUNTIME_STATE_LIB"
 
 log "validar scripts zygote/system_server reproducibles"
 
@@ -76,7 +81,7 @@ ssh "$TV_USER@$TV_IP" \
 set -eu
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
-runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
+runtime_state(){ . "$SIDE/bin/runtime-state.sh"; runtime_state_write "$@"; }
 
 SIDE="$USB/android-sidecar"
 mkdir -p "$USB"
@@ -225,7 +230,7 @@ set -eu
 
 die(){ echo "ERROR: $*" >&2; exit 1; }
 log(){ printf '\n-- %s --\n' "$*"; }
-runtime_state(){ printf 'phase=%s\n' "$1" > "$SIDE/run/runtime.state"; }
+runtime_state(){ . "$SIDE/bin/runtime-state.sh"; runtime_state_write "$@"; }
 
 DOWN="$USB/android-downloads"
 IMAGES="$USB/android-images"

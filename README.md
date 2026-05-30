@@ -511,6 +511,10 @@ restart keeps the property bridge working
 
 ## Future milestones
 
+The remaining technically hard milestones are M5 and M6.
+M7 is still useful work, but it is operational packaging/recovery rather than a core architecture blocker.
+M2, M3, and M4 are already implemented in the current tree.
+
 ### M2: Make Android init lifecycle explicit
 
 Current script uses only enough Android init behavior to seed property/linker state.
@@ -631,6 +635,7 @@ Add:
 ```
 
 `status.sh`, `stop.sh`, `restart.sh`, `clean-mounts.sh`, and `collect-logs.sh` now exist as the first operational split-out scripts.
+This is the recovery/tooling layer, not the hard architecture work.
 
 ## Troubleshooting
 

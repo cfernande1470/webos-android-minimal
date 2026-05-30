@@ -96,6 +96,7 @@ scripts/
   build-binder.sh
   build-property-shim.sh
   build-zygote-socket-wrap.sh
+  binder-registry-smoke.sh
   clean-mounts.sh
   collect-logs.sh
   probe-services.sh
@@ -574,6 +575,14 @@ FD transfer smoke against real servicemanager
 ```
 
 These should be optional diagnostics, not part of the default installer.
+
+Current state:
+
+- `service list` and `service check SERVICE` are stable on the current image;
+- `service call manager 1 s16 activity_task` is a working getService smoke against the real servicemanager;
+- `vndservice list` and `lshal` remain optional diagnostics because they time out on this image and are not stable enough to gate the install path here.
+
+`scripts/binder-registry-smoke.sh` is the dedicated M4 probe.
 
 ### M5: Replace runtime binary patches with source-level fixes
 

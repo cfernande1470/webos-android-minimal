@@ -96,6 +96,8 @@ scripts/
   build-binder.sh
   build-property-shim.sh
   build-zygote-socket-wrap.sh
+  status.sh
+  stop.sh
 
 install.sh
 .gitignore
@@ -586,7 +588,7 @@ Add:
 ./scripts/collect-logs.sh
 ```
 
-The installer is currently the main entry point. Operational scripts should be split out once the base remains stable.
+`status.sh` and `stop.sh` now exist as the first operational split-out scripts. The remaining recovery helpers are `clean-mounts.sh` and `collect-logs.sh`.
 
 ## Troubleshooting
 
